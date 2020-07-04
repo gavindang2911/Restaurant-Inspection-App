@@ -2,7 +2,12 @@ package cmpt276.sample.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< Final_project/app/src/main/java/cmpt276/sample/project/MainActivity.java
+import android.view.View;
+import android.widget.Button;
+=======
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,6 +18,7 @@ import java.nio.charset.Charset;
 
 import cmpt276.sample.project.model.Restaurant;
 import cmpt276.sample.project.model.RestaurantManager;
+>>>>>>> Final_project/app/src/main/java/cmpt276/sample/project/MainActivity.java
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     public  void readRestaurantData(){
