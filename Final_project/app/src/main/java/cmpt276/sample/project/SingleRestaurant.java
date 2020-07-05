@@ -23,10 +23,14 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Violation;
 
 public class SingleRestaurant extends AppCompatActivity {
+    private static final String RESTAURANT_POSITION = "Position";
+    private int positionRestaurant;
     InspectionManager inspectionManager = InspectionManager.getInstance();
 
-    public static Intent makeIntentForSingleRestaurant(Context context) {
-        return new Intent(context, SingleRestaurant.class);
+    public static Intent makeIntentForSingleRestaurant(Context context, int restaurantPosition) {
+        Intent intent = new Intent(context, SingleRestaurant.class);
+        intent.putExtra(RESTAURANT_POSITION, restaurantPosition);
+        return intent;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class SingleRestaurant extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         readInspectionData();
+        extractDataFromIntent();
     }
 
     private void readInspectionData() {
@@ -106,5 +111,11 @@ public class SingleRestaurant extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    private void extractDataFromIntent()
+    {
+        Intent intent = getIntent();
+        positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, 0);
     }
 }
