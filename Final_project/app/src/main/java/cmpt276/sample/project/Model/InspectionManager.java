@@ -3,6 +3,8 @@ package cmpt276.sample.project.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.sort;
+
 public class InspectionManager {
     private List<Inspection> inspections;
     /*
@@ -24,5 +26,6 @@ public class InspectionManager {
 
     public void add(Inspection inspection) {
         inspections.add(inspection);
+//        sort(inspections);
     }
 }

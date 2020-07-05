@@ -1,4 +1,4 @@
-package cmpt276.sample.project.model;
+package cmpt276.sample.project.Model;
 
 public class Restaurant {
     private String trackingNumber;
