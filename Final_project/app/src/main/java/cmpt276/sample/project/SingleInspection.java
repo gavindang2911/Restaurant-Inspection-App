@@ -19,9 +19,11 @@ public class SingleInspection extends AppCompatActivity {
     }
 
     private void populateInspectionList() {
-        myInspection.add(new Inspection(0, "description", "violation", 0));
-
+        myInspection.add(new Inspection(R.drawable.bang, "description", "violation", R.drawable.bang));
+        myInspection.add(new Inspection(R.drawable.bang, "description", "violation", R.drawable.bang));
     }
+
+
 
 
 }
