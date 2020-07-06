@@ -15,13 +15,13 @@ public class SingleInspection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
-        populateInspectionList();
+//        populateInspectionList();
     }
 
-    private void populateInspectionList() {
-        myInspection.add(new Inspection(0, "description", "violation", 0));
-
-    }
+//    private void populateInspectionList() {
+//        myInspection.add(new Inspection(0, "description", "violation", 0));
+//
+//    }
 
 
 }
