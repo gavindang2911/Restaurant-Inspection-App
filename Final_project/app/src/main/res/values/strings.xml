@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Project</string>
-    <string name="restaurantName">Name</string>
     <string name="NameDateOfInspection">Inspection Date: </string>
     <string name="DateOfInspection">22-Jan-2020</string>
     <string name="NameInspType">Inspection Type:</string>
@@ -12,5 +11,10 @@
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
     <string name="name">Name</string>
+    <string name="restaurantName">restaurantName</string>
+    <string name="restaurantAddress">12808 King George Blvd, Surrey</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="title_activity_restaurant">Restaurant</string>
 
 </resources>
