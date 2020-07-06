@@ -3,6 +3,7 @@ package cmpt276.sample.project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,14 +77,30 @@ public class SingleInspection extends AppCompatActivity {
             }
             Violation currentViolation = myViolation.get(position);
 
-            if(currentViolation.getViolationNum() == 201 || currentViolation.getViolationNum() == 202){
-                ImageView imageViewNature = (ImageView)itemView.findViewById(R.id.imageViewNature);
-                imageViewNature.setImageResource(R.drawable.red_circle);
+            int number = currentViolation.getViolationNum();
+
+            //https://icons8.com/icon/set/food/color
+            //https://icons8.com/icons/set/equipment
+            //https://icons8.com/icons/set/utensils
+            //https://icons8.com/icons/set/restaurant-facility
+            //https://icons8.com/icons/set/law
+            //https://icons8.com/icons/set/water
+            //https://icons8.com/icons/set/pest
+
+            if(number == 201 || number == 202){
+                ImageView imageViewNature1 = (ImageView)itemView.findViewById(R.id.imageViewNature1);
+                imageViewNature1.setImageResource(R.drawable.employee);
+
+                ImageView imageViewNature2 = (ImageView)itemView.findViewById(R.id.imageViewNature2);
+                imageViewNature2.setImageResource(R.drawable.food);
 
 
 
                 ImageView imageViewSeverity = (ImageView)itemView.findViewById(R.id.imageViewSeverity);
-                imageViewSeverity.setImageResource(R.drawable.bang);
+                imageViewSeverity.setImageResource(R.drawable.red_circle);
+
+                TextView severity = (TextView)itemView.findViewById(R.id.textViewSeverity);
+                severity.setTextColor(Color.parseColor("#C6170B"));
             }
 
 
