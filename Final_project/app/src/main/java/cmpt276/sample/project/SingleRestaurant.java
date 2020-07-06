@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
@@ -51,10 +53,24 @@ public class SingleRestaurant extends AppCompatActivity {
         readInspectionData();
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
+        displayRecyclerViewInspection();
+    }
+
+    private void displayRecyclerViewInspection() {
+        RecyclerView  recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Single_Restaurant_inspection);
+
     }
 
     private void displayRestaurantInfo() {
-        Restaurant
+        TextView textRestaurantName = (TextView) findViewById(R.id.textView_Single_Restaurant_Name);
+        TextView textRestaurantAddress = (TextView) findViewById(R.id.textView_Single_Restaurant_Address);
+        TextView textRestaurantLatitude = (TextView) findViewById(R.id.textView_Single_Restaurant_latitude);
+        TextView textRestaurantLongitude = (TextView) findViewById(R.id.textView_Single_Restaurant_longitude);
+
+        textRestaurantName.setText(restaurant.getName());
+        textRestaurantAddress.setText(restaurant.getAddress());
+        textRestaurantLatitude.setText("" + restaurant.getLatitude());
+        textRestaurantLongitude.setText("" + restaurant.getLongitude());
     }
 
     private void readInspectionData() {
