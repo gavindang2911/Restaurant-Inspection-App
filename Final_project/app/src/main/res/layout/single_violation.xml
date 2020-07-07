@@ -10,9 +10,10 @@
         android:id="@+id/textViewDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="16dp"
         android:text="Food premises not maintained in a sanitary condition."
-        android:textSize="30sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewNature1" />
 
@@ -20,6 +21,7 @@
         android:id="@+id/imageViewNature1"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +35,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/imageViewNature1"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/menuitem_background" />
+        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
     <ImageView
         android:id="@+id/imageViewNature3"
@@ -43,13 +45,13 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/imageViewNature2"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/menuitem_background" />
+        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
     <ImageView
         android:id="@+id/imageViewSeverity"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="294dp"
+        android:layout_marginStart="285dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
