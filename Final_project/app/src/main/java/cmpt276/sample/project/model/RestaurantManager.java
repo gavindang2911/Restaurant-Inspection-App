@@ -3,9 +3,10 @@ package cmpt276.sample.project.Model;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class RestaurantManager{
+public class RestaurantManager implements Iterable<Restaurant>{
     private List<Restaurant> restaurantList = new ArrayList<>();
     private int account;
 
@@ -30,4 +31,9 @@ public class RestaurantManager{
 
     public Restaurant getRestaurant(int n){return restaurantList.get(n);}
     public int getAccount(){return account;}
+
+    @Override
+    public Iterator<Restaurant> iterator() {
+        return restaurantList.iterator();
+    }
 }
