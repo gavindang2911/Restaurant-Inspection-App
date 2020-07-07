@@ -66,8 +66,24 @@ public class SingleRestaurant extends AppCompatActivity {
         displayRecyclerViewInspection();
     }
 
+    // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
     private void displayRecyclerViewInspection() {
         RecyclerView  recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Single_Restaurant_inspection);
+        InspectionAdapter adapter = new InspectionAdapter(positionRestaurant);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+//        adapter.setOnItemClickListener(new InspectionAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(int inspectionPosition) {
+//                Intent intent = SingleInspection.makeLaunchIntent(
+//                        InspectionActivity.this, restaurantPosition, inspectionPosition
+//                );
+//                startActivity(intent);
+//            }
+//        });
 
     }
 

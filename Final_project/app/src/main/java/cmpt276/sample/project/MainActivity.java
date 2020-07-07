@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.util.Log;
@@ -31,6 +32,7 @@ import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int ACTIVITY_RESULT_CALCULATE = 103;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<Restaurant> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.restaurantListView);
         list.setAdapter(adapter);
+
     }
 
     private class MyListAdapter extends ArrayAdapter<Restaurant>{

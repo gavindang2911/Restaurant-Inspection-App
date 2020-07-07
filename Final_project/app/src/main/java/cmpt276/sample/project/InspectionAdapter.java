@@ -1,6 +1,7 @@
 package cmpt276.sample.project;
 
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.RestaurantManager;
 
@@ -65,16 +68,38 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
         return new InspectionViewHolder(view, inspectionListener);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull InspectionViewHolder holder, int position) {
         Inspection inspection = inspectionList.get(position);
 
-        holder.textViewDate.setText();
+        holder.textViewDate.setText (
+                Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate())
+        );
+        holder.textViewNumOfCritical.setText (
+                String.valueOf(inspection.getNumOfCritical())
+        );
+        holder.textViewNumOfNonCritical.setText (
+                String.valueOf(inspection.getNumOfNonCritical())
+        );
+
+        switch (inspection.getHazardRating()) {
+            case "Low" :
+                holder.imageViewForHazardLevel.setImageResource(R.drawable.green_circle);
+                break;
+            case "Moderate" :
+                holder.imageViewForHazardLevel.setImageResource(R.drawable.orange_circle);
+                break;
+            case "High" :
+                holder.imageViewForHazardLevel.setImageResource(R.drawable.red_circle);
+                break;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return inspectionList.size();
     }
 
 
@@ -82,5 +107,8 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
         void onItemClick(int position);
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        inspectionListener = listener;
+    }
 
 }
