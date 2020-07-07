@@ -4,6 +4,13 @@ import cmpt276.sample.project.Model.Violation;
 
 import java.util.List;
 
+enum HazardRating
+{
+    LOW,
+    MODERATE,
+    HIGH
+}
+
 public class Inspection implements Comparable<Inspection> {
     private String trackingNumber;
     private int inspectionDate;
@@ -43,14 +50,23 @@ public class Inspection implements Comparable<Inspection> {
         return numOfNonCritical;
     }
 
-    public String getHazardRating() {
-        return hazardRating;
+    public HazardRating getHazardRating() {
+        String rate = this.hazardRating;
+        switch (rate) {
+            case "Low":
+                return HazardRating.LOW;
+            case "Moderate":
+                return HazardRating.MODERATE;
+            case "High":
+                return HazardRating.HIGH;
+            default:
+                return null;
+        }
     }
 
     public List<Violation> getViolations() {
         return violations;
     }
-
 
 
     @Override
