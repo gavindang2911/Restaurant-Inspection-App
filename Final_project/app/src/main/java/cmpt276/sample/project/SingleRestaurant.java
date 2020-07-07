@@ -59,7 +59,7 @@ public class SingleRestaurant extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        readInspectionData();
+
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
 
@@ -86,79 +86,6 @@ public class SingleRestaurant extends AppCompatActivity {
 
     }
 
-
-    private void readInspectionData() {
-        InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);
-
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(inputStream, Charset.forName("UTF-8"))
-        );
-        String csvLine = "";
-        try {
-            reader.readLine();
-            while ((csvLine = reader.readLine()) != null)
-            {
-                String[] data = csvLine.split("[,|]");
-                for (int i = 0; i < data.length; i++) {
-                    data[i] = data[i].replaceAll("^\"|\"$", "");
-                    Log.i("i : ", ""+i);
-                    Log.i("data : ", data[i]);
-                }
-
-                List<Violation> violations = getViolation(data);
-//
-                Inspection inspection = new Inspection(
-                        data[0],
-                        Integer.parseInt(data[1]),
-                        data[2],
-                        Integer.parseInt(data[3]),
-                        Integer.parseInt(data[4]),
-                        data[5],
-                        violations
-                );
-
-                inspectionManager.add(inspection);
-
-                for (Restaurant res : restaurantMan) {
-                    if (res.getTrackingNumber() == inspection.getTrackingNumber()) {
-                        res.addInspection(inspection);
-                    }
-                }
-
-                Log.d("My Activity", "just created: " + inspection );
-            }
-        }
-        catch (IOException e) {
-            Log.wtf("InspectionManager", "Error reading file on line " + csvLine, e);
-            e.printStackTrace();
-        }
-    }
-
-    private List<Violation> getViolation(String[] data) {
-        List<Violation> result = new ArrayList<>();
-        final int START = 6;
-        final int COMPONENT_PER_VIOLATION = 4;
-
-        for (int i = START; i < data.length; i += COMPONENT_PER_VIOLATION) {
-            int violationNum = 0;
-            try {
-                violationNum = Integer.parseInt(data[i]);
-            } catch (Exception e) {
-                Log.wtf("InspectionManager",
-                        "Error when converting string " + data[i] + " to int");
-                e.getStackTrace();
-            }
-
-            result.add(new Violation(
-                    violationNum,
-                    data[i + 1],
-                    data[i + 2],
-                    data[i + 3]
-            ));
-        }
-
-        return result;
-    }
 
     private void extractDataFromIntent(Intent intent)
     {
