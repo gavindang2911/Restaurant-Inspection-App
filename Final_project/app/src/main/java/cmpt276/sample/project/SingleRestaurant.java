@@ -9,6 +9,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +22,15 @@ import java.util.regex.Pattern;
 
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
+import cmpt276.sample.project.Model.Restaurant;
+import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
 public class SingleRestaurant extends AppCompatActivity {
     private static final String RESTAURANT_POSITION = "Position";
     private int positionRestaurant;
     InspectionManager inspectionManager = InspectionManager.getInstance();
+    private Restaurant restaurant = null;
 
     public static Intent makeIntentForSingleRestaurant(Context context, int restaurantPosition) {
         Intent intent = new Intent(context, SingleRestaurant.class);
@@ -38,12 +43,18 @@ public class SingleRestaurant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         readInspectionData();
-        extractDataFromIntent();
+        extractDataFromIntent(this.getIntent());
+        displayRestaurantInfo();
+    }
+
+    private void displayRestaurantInfo() {
+        Restaurant
     }
 
     private void readInspectionData() {
@@ -113,9 +124,10 @@ public class SingleRestaurant extends AppCompatActivity {
         return result;
     }
 
-    private void extractDataFromIntent()
+    private void extractDataFromIntent(Intent intent)
     {
-        Intent intent = getIntent();
-        positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, 0);
+        positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, -1);
+        RestaurantManager restaurantMan = RestaurantManager.getInstance();
+        restaurant = restaurantMan.getRestaurant(positionRestaurant);
     }
 }

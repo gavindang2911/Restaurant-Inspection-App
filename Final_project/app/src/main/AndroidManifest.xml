@@ -20,7 +20,8 @@
 
         <activity
             android:name=".SingleRestaurant"
-            android:label="Restaurant">
+            android:label="@string/title_activity_restaurant"
+            android:theme="@style/AppTheme.NoActionBar">
 <!--            android:parentActivityName=".MainActivity"-->
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

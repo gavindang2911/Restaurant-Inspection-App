@@ -10,6 +10,7 @@
     <string name="NumNonCritical">3</string>
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
+<<<<<<< Final_project/app/src/main/res/values/strings.xml
     <string name="violation101">Building not in accordance with the Regulation.</string>
     <string name="violation102">Operation of an unapproved food premises.</string>
     <string name="violation103">Failure to hold a valid permit.</string>
@@ -46,4 +47,13 @@
     <string name="violation404">Employee smoking in food preparation/processing/storage areas.</string>
     <string name="violation501">Operator does not have FOODSAFE Level 1 or Equivalent.</string>
     <string name="violation502">In operator’s absence no staff on duty has FOODSAFE Level 1 or equivalent.</string>
+=======
+    <string name="name">Name</string>
+    <string name="restaurantName">restaurantName</string>
+    <string name="restaurantAddress">12808 King George Blvd, Surrey</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="title_activity_restaurant">Restaurant</string>
+
+>>>>>>> Final_project/app/src/main/res/values/strings.xml
 </resources>
