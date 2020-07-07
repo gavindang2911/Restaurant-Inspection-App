@@ -123,7 +123,7 @@
         android:layout_marginTop="8dp"
         android:drawableLeft="@android:drawable/radiobutton_off_background"
         android:text="@string/Hazard"
-        android:textColor="#FFC107"
+        android:textColor="#459E48"
         android:textSize="18sp"
         app:drawableTint="#C6170B"
         app:layout_constraintStart_toEndOf="@+id/textViewHazardLevelN"

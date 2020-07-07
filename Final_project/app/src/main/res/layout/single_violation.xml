@@ -10,9 +10,9 @@
         android:id="@+id/textViewDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Operation of an unapproved food premise"
-        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:text="Food premises not maintained in a sanitary condition."
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewNature1" />
 

@@ -36,6 +36,8 @@ public class SingleInspection extends AppCompatActivity {
         myViolation.add(new Violation(201,"Critical", "description", "repeat"));
         myViolation.add(new Violation(202,"Critical", "descriptionaaa", "repeat"));
         myViolation.add(new Violation(202,"NotCritical", "descriptionooo", "NotRepeat"));
+        myViolation.add(new Violation(202,"NotCritical", "descriptionooo", "NotRepeat"));
+        myViolation.add(new Violation(202,"NotCritical", "descriptionooo", "NotRepeat"));
 
         myInspection.add(new Inspection("SDFO", 20191002, "Routine",
                 0, 0, "Low", myViolation));
@@ -79,36 +81,52 @@ public class SingleInspection extends AppCompatActivity {
 
             int number = currentViolation.getViolationNum();
 
-            //https://icons8.com/icon/set/food/color
-            //https://icons8.com/icons/set/equipment
-            //https://icons8.com/icons/set/utensils
-            //https://icons8.com/icons/set/restaurant-facility
-            //https://icons8.com/icons/set/law
-            //https://icons8.com/icons/set/water
-            //https://icons8.com/icons/set/pest
+            TextView description = (TextView)itemView.findViewById(R.id.textViewDescription);
+            description.setText(currentViolation.getDescription());
 
-            if(number == 201 || number == 202){
+            TextView severity = (TextView)itemView.findViewById(R.id.textViewSeverity);
+            severity.setText(currentViolation.getCriticalOrNon());
+
+            /*
+            site for image
+            https://icons8.com/icon/set/food/color
+            https://icons8.com/icons/set/equipment
+            https://icons8.com/icons/set/utensils
+            https://icons8.com/icons/set/restaurant-facility
+            https://icons8.com/icons/set/law
+            https://icons8.com/icons/set/water
+            https://icons8.com/icons/set/pest
+
+             */
+            if(number == 101 || number == 102 || number == 103 || number == 104){
+                ImageView imageViewNature1 = (ImageView)itemView.findViewById(R.id.imageViewNature1);
+                imageViewNature1.setImageResource(R.drawable.premises );
+
+                ImageView imageViewSeverity = (ImageView)itemView.findViewById(R.id.imageViewSeverity);
+                imageViewSeverity.setImageResource(R.drawable.green_circle);
+
+                //set text to green color
+                severity.setTextColor(Color.parseColor("#459E48"));
+
+                if(number == 101){
+                    severity.setText("Building ");
+                }
+
+
+            }else if(number == 201 || number == 202){
                 ImageView imageViewNature1 = (ImageView)itemView.findViewById(R.id.imageViewNature1);
                 imageViewNature1.setImageResource(R.drawable.employee);
 
                 ImageView imageViewNature2 = (ImageView)itemView.findViewById(R.id.imageViewNature2);
                 imageViewNature2.setImageResource(R.drawable.food);
 
-
-
                 ImageView imageViewSeverity = (ImageView)itemView.findViewById(R.id.imageViewSeverity);
                 imageViewSeverity.setImageResource(R.drawable.red_circle);
 
-                TextView severity = (TextView)itemView.findViewById(R.id.textViewSeverity);
+                //set text to red color
                 severity.setTextColor(Color.parseColor("#C6170B"));
             }
 
-
-            TextView description = (TextView)itemView.findViewById(R.id.textViewDescription);
-            description.setText(currentViolation.getDescription());
-
-            TextView severity = (TextView)itemView.findViewById(R.id.textViewSeverity);
-            severity.setText(currentViolation.getCriticalOrNon());
 
             return itemView;
         }
