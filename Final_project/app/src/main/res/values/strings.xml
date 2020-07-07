@@ -10,4 +10,6 @@
     <string name="NumNonCritical">3</string>
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
+    <string name="all_restaurantTextView">All Restaurants</string>
+    <string name="restaurantName">restaurantName</string>
 </resources>
