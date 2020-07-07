@@ -1,13 +1,23 @@
 package cmpt276.sample.project;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 
@@ -31,6 +41,7 @@ public class SingleRestaurant extends AppCompatActivity {
     private int positionRestaurant;
     InspectionManager inspectionManager = InspectionManager.getInstance();
     private Restaurant restaurant = null;
+    private static RestaurantManager restaurantMan = RestaurantManager.getInstance();
 
     public static Intent makeIntentForSingleRestaurant(Context context, int restaurantPosition) {
         Intent intent = new Intent(context, SingleRestaurant.class);
@@ -51,11 +62,30 @@ public class SingleRestaurant extends AppCompatActivity {
         readInspectionData();
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
+
+        displayRecyclerViewInspection();
     }
 
-    private void displayRestaurantInfo() {
-        Restaurant
+    private void displayRecyclerViewInspection() {
+        RecyclerView  recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Single_Restaurant_inspection);
+
     }
+
+
+
+    private void displayRestaurantInfo() {
+        TextView textRestaurantName = (TextView) findViewById(R.id.textView_Single_Restaurant_Name);
+        TextView textRestaurantAddress = (TextView) findViewById(R.id.textView_Single_Restaurant_Address);
+        TextView textRestaurantLatitude = (TextView) findViewById(R.id.textView_Single_Restaurant_latitude);
+        TextView textRestaurantLongitude = (TextView) findViewById(R.id.textView_Single_Restaurant_longitude);
+
+        textRestaurantName.setText(restaurant.getName());
+        textRestaurantAddress.setText(restaurant.getAddress());
+        textRestaurantLatitude.setText("" + restaurant.getLatitude());
+        textRestaurantLongitude.setText("" + restaurant.getLongitude());
+
+    }
+
 
     private void readInspectionData() {
         InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);
@@ -88,6 +118,12 @@ public class SingleRestaurant extends AppCompatActivity {
                 );
 
                 inspectionManager.add(inspection);
+
+                for (Restaurant res : restaurantMan) {
+                    if (res.getTrackingNumber() == inspection.getTrackingNumber()) {
+                        res.addInspection(inspection);
+                    }
+                }
 
                 Log.d("My Activity", "just created: " + inspection );
             }
@@ -127,7 +163,9 @@ public class SingleRestaurant extends AppCompatActivity {
     private void extractDataFromIntent(Intent intent)
     {
         positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, -1);
-        RestaurantManager restaurantMan = RestaurantManager.getInstance();
+
+        restaurantMan = RestaurantManager.getInstance();
+
         restaurant = restaurantMan.getRestaurant(positionRestaurant);
     }
 }

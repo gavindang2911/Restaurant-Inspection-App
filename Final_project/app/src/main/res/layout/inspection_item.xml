@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView_Single_Restaurant_hazard_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="4.5dp"
+            android:layout_marginTop="4.5dp"
+            android:contentDescription="@string/single_restaurant_hazard_icon"
+            android:padding="2.5dp" />
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_NumOfCritical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_of_critical_found"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
+            android:layout_marginStart="13dp"/>
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_NumOfCritical_Found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:layout_toEndOf="@+id/textView_Single_Restaurant_NumOfCritical" />
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_NumOfNonCritical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_of_noncritical_found"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/textView_Single_Restaurant_NumOfCritical"
+            android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
+            android:layout_marginStart="13dp"/>
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_NumOfNonCritical_Found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:layout_below="@+id/textView_Single_Restaurant_NumOfCritical_Found"
+            android:layout_toEndOf="@+id/textView_Single_Restaurant_NumOfNonCritical" />
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/textView_Single_Restaurant_NumOfNonCritical"
+            android:layout_marginStart="13dp"
+            android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
+            android:text="@string/last_inspection"
+             />
+
+        <TextView
+            android:id="@+id/textView_Single_Restaurant_Date_Found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:layout_below="@+id/textView_Single_Restaurant_NumOfNonCritical"
+            android:layout_toEndOf="@+id/textView_Single_Restaurant_Date" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

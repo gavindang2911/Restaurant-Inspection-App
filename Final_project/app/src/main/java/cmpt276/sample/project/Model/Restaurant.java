@@ -1,13 +1,33 @@
 package cmpt276.sample.project.Model;
 
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Collections.sort;
+
 public class Restaurant {
     private String trackingNumber;
     private String name;
     private String address;
+    private String city;
     private String type;
     private double latitude;
     private double longitude;
+   private String iconName;
     private int icon;
+    private List<Inspection> inspections;
+    private int numOfViolations;
+
+    public void addInspection(Inspection inspection)
+    {
+        inspections.add(inspection);
+        sort(inspections, Collections.<Inspection>reverseOrder());
+        numOfViolations += inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
+    }
+
+    public List<Inspection> getInspections() {
+        return inspections;
+    }
 
     public String getTrackingNumber() {
         return trackingNumber;
@@ -33,6 +53,10 @@ public class Restaurant {
         this.address = address;
     }
 
+    public String getCity() { return city; }
+
+    public void setCity(String city) { this.city = city; }
+
     public String getType() {
         return type;
     }
@@ -49,9 +73,7 @@ public class Restaurant {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
+    public double getLongitude() { return longitude; }
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
@@ -63,5 +85,23 @@ public class Restaurant {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public String getIconName() { return iconName; }
+
+    public void setIconName(String iconName) { this.iconName = iconName; }
+
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "trackingNumber='" + trackingNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", type='" + type + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 }
