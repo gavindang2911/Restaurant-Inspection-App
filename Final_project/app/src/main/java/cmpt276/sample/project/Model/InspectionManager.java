@@ -24,8 +24,18 @@ public class InspectionManager {
         return instance;
     }
 
+    public List<Inspection> getInspections() {
+        return inspections;
+    }
+
+    public void setInspections(List<Inspection> inspections) {
+        this.inspections = inspections;
+    }
+
     public void add(Inspection inspection) {
         inspections.add(inspection);
 //        sort(inspections);
+
+
     }
 }

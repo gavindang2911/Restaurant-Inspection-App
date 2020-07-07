@@ -5,6 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import android.view.View;
@@ -22,8 +26,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 
@@ -31,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
+    private InspectionManager inspectionManager = InspectionManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         readRestaurantData();
+        sortRestaurants();
         restaurantListView();
 
     }
@@ -110,16 +119,15 @@ public class MainActivity extends AppCompatActivity {
 
             //fill the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-
-            int width = imageView.getWidth();
-            imageView.setMinimumWidth(width);
-            imageView.setMaxWidth(width);
-
-            int height = imageView.getHeight();
-            imageView.setMaxHeight(height);
-            imageView.setMinimumHeight(height);
-
             imageView.setImageResource(currentRestaurant.getIcon());
+
+//            int newWidth = imageView.getWidth();
+//            int newHeight = imageView.getHeight();
+//            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(),R.id.item_image);
+//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap,newWidth,newHeight,true);
+//            Resources resources = getResources();
+//            imageView.setBackground(new BitmapDrawable(resources,scaledBitmap));
+
 
             //set Name
             TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);
@@ -129,11 +137,33 @@ public class MainActivity extends AppCompatActivity {
             TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
             addressText.setText(currentRestaurant.getAddress());
 
+            //set number of issues
 
+            //set icon of hazard level
+//            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
+//            if(currentRestaurant.getInspections().get(0).getHazardRating()=="Low"){
+//                imageIcon.setImageResource(R.drawable.green_circle);
+//            }
+//            else if (currentRestaurant.getInspections().get(0).getHazardRating()=="Moderate"){
+//                imageIcon.setImageResource(R.drawable.orange_circle);
+//            }
+//            else{
+//                imageIcon.setImageResource(R.drawable.red_circle);
+//            }
             //set .....
 
             return itemView;
         }
+    }
+
+    public void sortRestaurants(){
+        List<Restaurant> restaurantList = restaurantManager.getRestaurantList();
+        Collections.sort(restaurantList,new Comparator(){
+            public int compare(Object restaurantOne, Object restaurantTwo){
+                return ((Restaurant)restaurantOne).getName().compareTo(((Restaurant)restaurantTwo).getName());
+            }
+        });
+        restaurantManager.setRestaurantList(restaurantList);
     }
 
 
