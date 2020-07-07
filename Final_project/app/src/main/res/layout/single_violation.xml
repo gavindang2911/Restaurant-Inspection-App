@@ -35,7 +35,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/imageViewNature1"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/menuitem_background" />
+        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
     <ImageView
         android:id="@+id/imageViewNature3"
@@ -45,7 +45,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/imageViewNature2"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/menuitem_background" />
+        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
     <ImageView
         android:id="@+id/imageViewSeverity"

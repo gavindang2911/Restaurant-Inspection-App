@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class SingleInspection extends AppCompatActivity {
         setContentView(R.layout.activity_single_inspection);
         populateInspectionList();
         populateListView();
+        registerClickCallback();
         //setText();
         //populateInspection();
     }
@@ -63,6 +66,21 @@ public class SingleInspection extends AppCompatActivity {
         ArrayAdapter<Violation> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.ListView);
         list.setAdapter(adapter);
+    }
+
+    private void registerClickCallback() {
+        ListView list = (ListView) findViewById(R.id.ListView);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked,
+                                    int position, long id) {
+
+                Violation clickedViolation = myViolation.get(position);
+                String message = clickedViolation.getDescription() + ", " +
+                        clickedViolation.getRepeat();
+                Toast.makeText(SingleInspection.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private class MyListAdapter extends ArrayAdapter<Violation> {
