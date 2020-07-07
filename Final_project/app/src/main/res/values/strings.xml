@@ -50,7 +50,7 @@
     <string name="violation501">Operator does not have FOODSAFE Level 1 or Equivalent.</string>
     <string name="violation502">In operator’s absence no staff on duty has FOODSAFE Level 1 or equivalent.</string>
     <string name="name1">Name</string>
-    
+
     <string name="all_restaurantTextView">All Restaurants</string>
     <string name="restaurantName">restaurantName</string>
     <string name="name2">Name</string>
