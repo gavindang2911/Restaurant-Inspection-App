@@ -5,6 +5,13 @@ import cmpt276.sample.project.Model.Violation;
 import java.util.List;
 
 public class Inspection implements Comparable<Inspection> {
+    public enum HazardRating
+    {
+        LOW,
+        MODERATE,
+        HIGH
+    }
+
     private String trackingNumber;
     private int inspectionDate;
     private String inspectionType;
@@ -50,7 +57,6 @@ public class Inspection implements Comparable<Inspection> {
     public List<Violation> getViolations() {
         return violations;
     }
-
 
 
     @Override
