@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
-    InspectionManager inspectionManager = InspectionManager.getInstance();
+    private InspectionManager inspectionManager = InspectionManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         readRestaurantData();
         readInspectionData();
         restaurantListView();
-
+        Log.i("Harazeaaaaaaaaaaaaa ",""+ restaurantManager.getRestaurant(0).getInspections().get(0).getHazardRating());
     }
 
     public  void readRestaurantData(){
@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //Read the data
                 Restaurant restaurant = new Restaurant();
-                restaurant.setTrackingNumber(tokens[0]);
-                restaurant.setName(tokens[1]);
-                restaurant.setAddress(tokens[2]);
-                restaurant.setCity(tokens[3]);
-                restaurant.setType(tokens[4]);
+                restaurant.setTrackingNumber(tokens[0].replace("\"", ""));
+                restaurant.setName(tokens[1].replace("\"", ""));
+                restaurant.setAddress(tokens[2].replace("\"", ""));
+                restaurant.setCity(tokens[3].replace("\"", ""));
+                restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
@@ -155,12 +155,10 @@ public class MainActivity extends AppCompatActivity {
                 String[] data = csvLine.split("[,|]");
                 for (int i = 0; i < data.length; i++) {
                     data[i] = data[i].replaceAll("^\"|\"$", "");
-                    Log.i("i : ", ""+i);
-                    Log.i("data : ", data[i]);
                 }
 
                 List<Violation> violations = getViolation(data);
-//
+
                 Inspection inspection = new Inspection(
                         data[0],
                         Integer.parseInt(data[1]),
@@ -173,13 +171,14 @@ public class MainActivity extends AppCompatActivity {
 
                 inspectionManager.add(inspection);
 
+                restaurantManager = RestaurantManager.getInstance();
                 for (Restaurant res : restaurantManager) {
-                    if (res.getTrackingNumber() == inspection.getTrackingNumber()) {
+                    if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
                         res.addInspection(inspection);
                     }
                 }
 
-                Log.d("My Activity", "just created: " + inspection );
+//                Log.d("My Activity", "just created: " + inspection );
             }
         }
         catch (IOException e) {
