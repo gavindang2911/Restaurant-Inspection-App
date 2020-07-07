@@ -10,6 +10,7 @@
     <string name="NumNonCritical">3</string>
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
+    <string name="ViolationName">violation</string>
 
 
 
@@ -44,11 +45,11 @@
     <string name="violation314">Operator has not provided acceptable procedures.</string>
     <string name="violation315">Equipments lack accurate thermometers.</string>
     <string name="violation401">No enough handwashing stations for employees.</string>
-    <string name="violation402">Employee does not wash hands properly or at adequate frequency.</string>
-    <string name="violation403">Employee lacks good personal hygiene clean clothing and hair control.</string>
-    <string name="violation404">Employee smoking in food preparation/processing/storage areas.</string>
-    <string name="violation501">Operator does not have FOODSAFE Level 1 or Equivalent.</string>
-    <string name="violation502">In operator’s absence no staff on duty has FOODSAFE Level 1 or equivalent.</string>
+    <string name="violation402">Employee does not wash hands properly.</string>
+    <string name="violation403">Employee lacks good personal hygiene.</string>
+    <string name="violation404">Employee smoking in food preparation.</string>
+    <string name="violation501">Operator does not have FOODSAFE Level 1.</string>
+    <string name="violation502">In operator’s absence no staff has FOODSAFE Level 1.</string>
     <string name="name1">Name</string>
 
     <string name="all_restaurantTextView">All Restaurants</string>
