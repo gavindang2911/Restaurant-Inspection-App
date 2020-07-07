@@ -1,5 +1,10 @@
 package cmpt276.sample.project.Model;
 
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Collections.sort;
+
 public class Restaurant {
     private String trackingNumber;
     private String name;
@@ -10,6 +15,19 @@ public class Restaurant {
     private double longitude;
    private String iconName;
     private int icon;
+    private List<Inspection> inspections;
+    private int numOfViolations;
+
+    public void addInspection(Inspection inspection)
+    {
+        inspections.add(inspection);
+        sort(inspections, Collections.<Inspection>reverseOrder());
+        numOfViolations += inspection.getNumOfCritical() + inspection.getNumOfNonCritical();
+    }
+
+    public List<Inspection> getInspections() {
+        return inspections;
+    }
 
     public String getTrackingNumber() {
         return trackingNumber;
