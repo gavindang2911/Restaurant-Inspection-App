@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //Read the data
                 Restaurant restaurant = new Restaurant();
-                restaurant.setTrackingNumber(tokens[0]);
-                restaurant.setName(tokens[1]);
-                restaurant.setAddress(tokens[2]);
-                restaurant.setCity(tokens[3]);
-                restaurant.setType(tokens[4]);
+                restaurant.setTrackingNumber(tokens[0].replace("\"", ""));
+                restaurant.setName(tokens[1].replace("\"", ""));
+                restaurant.setAddress(tokens[2].replace("\"", ""));
+                restaurant.setCity(tokens[3].replace("\"", ""));
+                restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
@@ -120,14 +120,6 @@ public class MainActivity extends AppCompatActivity {
             //fill the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
             imageView.setImageResource(currentRestaurant.getIcon());
-
-//            int newWidth = imageView.getWidth();
-//            int newHeight = imageView.getHeight();
-//            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(),R.id.item_image);
-//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap,newWidth,newHeight,true);
-//            Resources resources = getResources();
-//            imageView.setBackground(new BitmapDrawable(resources,scaledBitmap));
-
 
             //set Name
             TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);

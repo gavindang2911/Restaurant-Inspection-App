@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="2.5"
             android:orientation="horizontal">
 
             <ImageView
@@ -31,6 +31,8 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:gravity="left"
+                android:maxWidth="80dp"
+                android:maxHeight="80dp"
                 app:srcCompat="@drawable/bar2" />
 
             <LinearLayout
