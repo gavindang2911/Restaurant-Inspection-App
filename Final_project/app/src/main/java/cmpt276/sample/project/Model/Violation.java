@@ -12,4 +12,20 @@ public class Violation {
         this.description = description;
         this.repeat = repeat;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getViolationNum() {
+        return violationNum;
+    }
+
+    public String getCriticalOrNon() {
+        return criticalOrNon;
+    }
+
+    public String getRepeat() {
+        return repeat;
+    }
 }
