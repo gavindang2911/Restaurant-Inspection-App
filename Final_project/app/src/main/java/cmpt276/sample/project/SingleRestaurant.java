@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +62,7 @@ public class SingleRestaurant extends AppCompatActivity {
         readInspectionData();
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
+
         displayRecyclerViewInspection();
     }
 
@@ -80,7 +83,9 @@ public class SingleRestaurant extends AppCompatActivity {
         textRestaurantAddress.setText(restaurant.getAddress());
         textRestaurantLatitude.setText("" + restaurant.getLatitude());
         textRestaurantLongitude.setText("" + restaurant.getLongitude());
+
     }
+
 
     private void readInspectionData() {
         InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);
@@ -158,6 +163,9 @@ public class SingleRestaurant extends AppCompatActivity {
     private void extractDataFromIntent(Intent intent)
     {
         positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, -1);
+
+        restaurantMan = RestaurantManager.getInstance();
+
         restaurant = restaurantMan.getRestaurant(positionRestaurant);
     }
 }
