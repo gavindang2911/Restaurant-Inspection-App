@@ -62,12 +62,21 @@ public class SingleRestaurant extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
 
-        extractDataFromIntent(this.getIntent());
+
+        restaurant = new Restaurant();
+        restaurant.setTrackingNumber("NOSU-CHNUM");
+        restaurant.setName("The Unfindable Bar");
+        restaurant.setAddress("12345 67 Ave");
+        restaurant.setCity("Surrey");
+        restaurant.setType("Restaurant");
+        restaurant.setLatitude(49.14214908);
+        restaurant.setLongitude(-122.86815856);
+
+//        extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
 
-        displayRecyclerViewInspection();
+//        displayRecyclerViewInspection();
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example

@@ -57,8 +57,8 @@
     <string name="name2">Name</string>
     <string name="restaurantNameSingleRestaurant">restaurantName</string>
     <string name="restaurantAddress">12808 King George Blvd, Surrey</string>
-    <string name="latitude">latitude</string>
-    <string name="longitude">longitude</string>
+    <string name="latitude">Latitude: </string>
+    <string name="longitude">Longitude: </string>
     <string name="title_activity_restaurant">Restaurant</string>
     <string name="single_restaurant_hazard_icon">single_restaurant_hazard_icon</string>
     <string name="num_of_critical_found"># critical issues found</string>
