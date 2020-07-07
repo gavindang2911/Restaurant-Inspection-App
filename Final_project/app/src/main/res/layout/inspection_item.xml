@@ -28,7 +28,7 @@
             android:textStyle="bold"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="13dp"/>
 
         <TextView
             android:id="@+id/textView_Single_Restaurant_NumOfCritical_Found"
@@ -46,7 +46,7 @@
             android:textStyle="bold"
             android:layout_below="@+id/textView_Single_Restaurant_NumOfCritical"
             android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="13dp"/>
 
         <TextView
             android:id="@+id/textView_Single_Restaurant_NumOfNonCritical_Found"
