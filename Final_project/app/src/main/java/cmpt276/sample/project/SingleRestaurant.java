@@ -16,11 +16,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+/*
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +72,8 @@ public class SingleRestaurant extends AppCompatActivity {
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
     private void displayRecyclerViewInspection() {
-        RecyclerView  recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Single_Restaurant_inspection);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView_Single_Restaurant_inspection);
         InspectionAdapter adapter = new InspectionAdapter(positionRestaurant);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
@@ -83,6 +89,7 @@ public class SingleRestaurant extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
+
 
     }
 
