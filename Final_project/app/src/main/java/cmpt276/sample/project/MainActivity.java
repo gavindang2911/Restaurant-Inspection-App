@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.util.Log;
@@ -30,11 +31,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+
+import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
+import cmpt276.sample.project.Model.Violation;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int ACTIVITY_RESULT_CALCULATE = 103;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         readRestaurantData();
         sortRestaurants();
+        readInspectionData();
         restaurantListView();
 
     }
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<Restaurant> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.restaurantListView);
         list.setAdapter(adapter);
+
     }
 
     private class MyListAdapter extends ArrayAdapter<Restaurant>{
@@ -132,16 +139,21 @@ public class MainActivity extends AppCompatActivity {
             //set number of issues
 
             //set icon of hazard level
-//            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
-//            if(currentRestaurant.getInspections().get(0).getHazardRating()=="Low"){
-//                imageIcon.setImageResource(R.drawable.green_circle);
-//            }
-//            else if (currentRestaurant.getInspections().get(0).getHazardRating()=="Moderate"){
-//                imageIcon.setImageResource(R.drawable.orange_circle);
-//            }
-//            else{
-//                imageIcon.setImageResource(R.drawable.red_circle);
-//            }
+            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
+            TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
+            if(currentRestaurant.getInspections().size()!=0) {
+                hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
+                if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
+                    imageIcon.setImageResource(R.drawable.green_circle);
+                } else if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Moderate")) {
+                    imageIcon.setImageResource(R.drawable.orange_circle);
+                } else {
+                    imageIcon.setImageResource(R.drawable.red_circle);
+                }
+            }
+            else {
+                hazardLevelText.setText("Unknown");
+            }
             //set .....
 
             return itemView;
@@ -159,5 +171,76 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void readInspectionData() {
+        InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(inputStream, Charset.forName("UTF-8"))
+        );
+        String csvLine = "";
+        try {
+            reader.readLine();
+            while ((csvLine = reader.readLine()) != null)
+            {
+                String[] data = csvLine.split("[,|]");
+                for (int i = 0; i < data.length; i++) {
+                    data[i] = data[i].replaceAll("^\"|\"$", "");
+                }
+
+                List<Violation> violations = getViolation(data);
+
+                Inspection inspection = new Inspection(
+                        data[0],
+                        Integer.parseInt(data[1]),
+                        data[2],
+                        Integer.parseInt(data[3]),
+                        Integer.parseInt(data[4]),
+                        data[5],
+                        violations
+                );
+
+                inspectionManager.add(inspection);
+
+                restaurantManager = RestaurantManager.getInstance();
+                for (Restaurant res : restaurantManager) {
+                    if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                        res.addInspection(inspection);
+                    }
+                }
+
+//                Log.d("My Activity", "just created: " + inspection );
+            }
+        }
+        catch (IOException e) {
+            Log.wtf("InspectionManager", "Error reading file on line " + csvLine, e);
+            e.printStackTrace();
+        }
+    }
+
+    private List<Violation> getViolation(String[] data) {
+        List<Violation> result = new ArrayList<>();
+        final int START = 6;
+        final int COMPONENT_PER_VIOLATION = 4;
+
+        for (int i = START; i < data.length; i += COMPONENT_PER_VIOLATION) {
+            int violationNum = 0;
+            try {
+                violationNum = Integer.parseInt(data[i]);
+            } catch (Exception e) {
+                Log.wtf("InspectionManager",
+                        "Error when converting string " + data[i] + " to int");
+                e.getStackTrace();
+            }
+
+            result.add(new Violation(
+                    violationNum,
+                    data[i + 1],
+                    data[i + 2],
+                    data[i + 3]
+            ));
+        }
+
+        return result;
+    }
 
 }

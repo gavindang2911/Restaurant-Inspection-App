@@ -1,5 +1,6 @@
 package cmpt276.sample.project.Model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Restaurant {
     private double longitude;
    private String iconName;
     private int icon;
-    private List<Inspection> inspections;
+    private List<Inspection> inspections = new ArrayList<>();
     private int numOfViolations;
 
     public void addInspection(Inspection inspection)
