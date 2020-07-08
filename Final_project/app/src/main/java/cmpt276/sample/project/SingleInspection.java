@@ -92,17 +92,17 @@ public class SingleInspection extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
-        TextView date = (TextView)findViewById(R.id.textViewDescription);
+        TextView date = (TextView)findViewById(R.id.textViewDate);
         date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
 
         TextView type = (TextView)findViewById(R.id.textViewType);
         type.setText(inspection.getInspectionType());
 
         TextView numCritical = (TextView)findViewById(R.id.textViewNumCritical);
-        numCritical.setText(inspection.getNumOfCritical());
+        numCritical.setText(String.valueOf(inspection.getNumOfCritical()));
 
         TextView numNotCritical = (TextView)findViewById(R.id.textViewNumNonCr);
-        numNotCritical.setText(inspection.getNumOfNonCritical());
+        numNotCritical.setText(String.valueOf(inspection.getNumOfNonCritical()));
 
         TextView hazardLevel = (TextView)findViewById(R.id.textViewHazardLevel);
         hazardLevel.setText(inspection.getHazardRating());
@@ -126,6 +126,7 @@ public class SingleInspection extends AppCompatActivity {
     private void populateListView() {
         ArrayAdapter<Violation> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.ListView);
+       // list.setEmptyView(findViewById(R.id.textViewEmpty));
         list.setAdapter(adapter);
     }
 

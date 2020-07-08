@@ -11,6 +11,7 @@
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
     <string name="ViolationName">violation</string>
+    <string name="emptyStatus">No Violation!</string>
 
 
 
