@@ -2,6 +2,7 @@ package cmpt276.sample.project;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -72,6 +73,9 @@ public class SingleInspection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
+        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
+        setSupportActionBar(toolbar);
+
 
         extractDataFromSecondIntent(this.getIntent());
         Log.i("inspecc", ""+inspection);
@@ -96,9 +100,8 @@ public class SingleInspection extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
-        restaurantMan = RestaurantManager.getInstance();
-        inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
-        Log.i("inspecc", ""+inspection);
+//        restaurantMan = RestaurantManager.getInstance();
+//        inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
 
         TextView date = (TextView)findViewById(R.id.textViewDate);
         date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));

@@ -13,7 +13,7 @@
 
 
         <activity android:name=".MainActivity"
-            android:label="ALL RESTAURANT"
+            android:label="@string/ProjectTitle"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SingleInspection">
+        <activity android:name=".SingleInspection"
+            android:label="@string/InspectionTitle"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
 
         </activity>
 
         <activity
             android:name=".SingleRestaurant"
             android:label="@string/title_activity_restaurant"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            >
 
         </activity>
     </application>

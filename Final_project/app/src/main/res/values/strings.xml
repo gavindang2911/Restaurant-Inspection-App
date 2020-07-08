@@ -64,6 +64,8 @@
     <string name="num_of_critical_found"># critical issues found: </string>
     <string name="num_of_noncritical_found"># non-critical issues found: </string>
     <string name="last_inspection">Last inspection: </string>
+    <string name="ProjectTitle">ALL RESTAURANT</string>
+    <string name="InspectionTitle">Inspection</string>
 
 
 </resources>

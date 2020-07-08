@@ -28,6 +28,7 @@
             android:textStyle="bold"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/imageView_Single_Restaurant_hazard_icon"
+            android:layout_marginStart="13dp"
             />
 
         <TextView

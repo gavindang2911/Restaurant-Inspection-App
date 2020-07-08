@@ -62,7 +62,7 @@ public class SingleRestaurant extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
         extractDataFromIntent(this.getIntent());
