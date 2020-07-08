@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -63,6 +64,7 @@ public class SingleInspection extends AppCompatActivity {
         inspectionManager = InspectionManager.getInstance();
 
         inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
+
         myViolation = inspection.getViolations();
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -72,9 +74,11 @@ public class SingleInspection extends AppCompatActivity {
         setContentView(R.layout.activity_single_inspection);
 
         extractDataFromSecondIntent(this.getIntent());
+        Log.i("inspecc", ""+inspection);
+        setText();
         populateListView();
         registerClickCallback();
-        setText();
+
     }
 
     private void populateInspectionList() {
@@ -92,20 +96,24 @@ public class SingleInspection extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
-        TextView date = (TextView)findViewById(R.id.textViewDescription);
+        restaurantMan = RestaurantManager.getInstance();
+        inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
+        Log.i("inspecc", ""+inspection);
+
+        TextView date = (TextView)findViewById(R.id.textViewDate);
         date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
 
         TextView type = (TextView)findViewById(R.id.textViewType);
         type.setText(inspection.getInspectionType());
 
         TextView numCritical = (TextView)findViewById(R.id.textViewNumCritical);
-        numCritical.setText(inspection.getNumOfCritical());
+        numCritical.setText(String.valueOf(inspection.getNumOfCritical()));
 
         TextView numNotCritical = (TextView)findViewById(R.id.textViewNumNonCr);
-        numNotCritical.setText(inspection.getNumOfNonCritical());
+        numNotCritical.setText(String.valueOf(inspection.getNumOfNonCritical()));
 
         TextView hazardLevel = (TextView)findViewById(R.id.textViewHazardLevel);
-        hazardLevel.setText(inspection.getHazardRating());
+        hazardLevel.setText(String.valueOf(inspection.getHazardRating()));
 
         ImageView hazardIcon = (ImageView)findViewById(R.id.imageViewHazardLevel);
         if(inspection.getHazardRating().equals("Low")){
