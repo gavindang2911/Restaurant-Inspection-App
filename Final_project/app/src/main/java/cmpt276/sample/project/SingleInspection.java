@@ -1,5 +1,6 @@
 package cmpt276.sample.project;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -9,6 +10,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -70,6 +74,7 @@ public class SingleInspection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         extractDataFromSecondIntent(this.getIntent());
         populateListView();
@@ -77,18 +82,16 @@ public class SingleInspection extends AppCompatActivity {
         setText();
     }
 
-    private void populateInspectionList() {
-        myViolation.add(new Violation(102,"Critical", "description", "repeat"));
-        myViolation.add(new Violation(212,"Critical", "descriptionaaa", "repeat"));
-        myViolation.add(new Violation(302,"NotCritical", "descriptionooo", "NotRepeat"));
-        myViolation.add(new Violation(305,"NotCritical", "descriptionooo", "NotRepeat"));
-        myViolation.add(new Violation(404,"NotCritical", "descriptionooo", "NotRepeat"));
 
-        myInspection.add(new Inspection("SDFO", 20191002, "Routine",
-                0, 0, "Low", myViolation));
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
@@ -126,7 +129,7 @@ public class SingleInspection extends AppCompatActivity {
     private void populateListView() {
         ArrayAdapter<Violation> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.ListView);
-       // list.setEmptyView(findViewById(R.id.textViewEmpty));
+        list.setEmptyView(findViewById(R.id.textViewEmpty));
         list.setAdapter(adapter);
     }
 

@@ -12,7 +12,7 @@
     <string name="Hazard">Moderate</string>
     <string name="ViolationName">violation</string>
     <string name="emptyStatus">No Violation!</string>
-
+    <string name="inspectionTitleName">Violations of Inspection</string>
 
 
     <string name="violation101">Building not in accordance with the Regulation.</string>

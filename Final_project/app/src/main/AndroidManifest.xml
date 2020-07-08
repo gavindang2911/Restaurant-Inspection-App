@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SingleInspection">
+        <activity android:name=".SingleInspection"
+            android:label="@string/inspectionTitleName"
+            android:launchMode="singleTop">
 
         </activity>
 
