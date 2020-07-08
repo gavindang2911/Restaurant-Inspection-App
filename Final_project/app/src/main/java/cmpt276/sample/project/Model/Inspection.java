@@ -5,12 +5,6 @@ import cmpt276.sample.project.Model.Violation;
 import java.util.List;
 
 public class Inspection implements Comparable<Inspection> {
-    public enum HazardRating
-    {
-        LOW,
-        MODERATE,
-        HIGH
-    }
 
     private String trackingNumber;
     private int inspectionDate;

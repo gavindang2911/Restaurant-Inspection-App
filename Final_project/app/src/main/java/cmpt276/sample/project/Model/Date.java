@@ -44,8 +44,8 @@ public enum Date {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static LocalDate convertIntDateToLocalDate(int date) {
         int n = date;
-        int year = n/1000;
-        n %= 1000;
+        int year = n/10000;
+        n %= 10000;
         int month = n/100;
         n %= 100;
         int day = n;
