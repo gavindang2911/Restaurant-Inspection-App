@@ -20,31 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".SingleInspection">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".SingleRestaurant"
             android:label="@string/title_activity_restaurant"
             android:theme="@style/AppTheme.NoActionBar">
-<!--            android:parentActivityName=".MainActivity"-->
-
-<!--        <intent-filter>-->
-<!--            <action android:name="android.intent.action.MAIN" />-->
-
-<!--            <category android:name="android.intent.category.LAUNCHER" />-->
-<!--        </intent-filter>-->
-
-<!--                <intent-filter>-->
-<!--                    <action android:name="android.intent.action.MAIN" />-->
-
-<!--                    <category android:name="android.intent.category.LAUNCHER" />-->
-<!--                </intent-filter>-->
-
 
         </activity>
     </application>

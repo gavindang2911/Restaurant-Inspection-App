@@ -61,9 +61,9 @@
     <string name="longitude">Longitude: </string>
     <string name="title_activity_restaurant">Restaurant</string>
     <string name="single_restaurant_hazard_icon">single_restaurant_hazard_icon</string>
-    <string name="num_of_critical_found"># critical issues found</string>
-    <string name="num_of_noncritical_found"># non-critical issues found</string>
-    <string name="last_inspection">Last inspection</string>
+    <string name="num_of_critical_found"># critical issues found: </string>
+    <string name="num_of_noncritical_found"># non-critical issues found: </string>
+    <string name="last_inspection">Last inspection: </string>
 
 
 </resources>

@@ -14,7 +14,7 @@ public class Restaurant {
     private String type;
     private double latitude;
     private double longitude;
-   private String iconName;
+    private String iconName;
     private int icon;
     private List<Inspection> inspections = new ArrayList<>();
     private int numOfViolations;

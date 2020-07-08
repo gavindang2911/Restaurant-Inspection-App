@@ -42,9 +42,10 @@ import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
 public class SingleRestaurant extends AppCompatActivity {
+    private static final int ACTIVITY_RESULT_CALCULATE = 103;
     private static final String RESTAURANT_POSITION = "Position";
     private int positionRestaurant;
-    InspectionManager inspectionManager = InspectionManager.getInstance();
+    private InspectionManager inspectionManager = InspectionManager.getInstance();
     private Restaurant restaurant = null;
     private static RestaurantManager restaurantMan = RestaurantManager.getInstance();
 
@@ -64,19 +65,10 @@ public class SingleRestaurant extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        restaurant = new Restaurant();
-        restaurant.setTrackingNumber("NOSU-CHNUM");
-        restaurant.setName("The Unfindable Bar");
-        restaurant.setAddress("12345 67 Ave");
-        restaurant.setCity("Surrey");
-        restaurant.setType("Restaurant");
-        restaurant.setLatitude(49.14214908);
-        restaurant.setLongitude(-122.86815856);
-
-//        extractDataFromIntent(this.getIntent());
+        extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
 
-//        displayRecyclerViewInspection();
+        displayRecyclerViewInspection();
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
@@ -89,16 +81,15 @@ public class SingleRestaurant extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-//        adapter.setOnItemClickListener(new InspectionAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int inspectionPosition) {
-//                Intent intent = SingleInspection.makeLaunchIntent(
-//                        InspectionActivity.this, restaurantPosition, inspectionPosition
-//                );
-//                startActivity(intent);
-//            }
-//        });
-
+        adapter.setOnItemClickListener(new InspectionAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int positionInspection) {
+                Intent intent = SingleInspection.makeIntentForSingleInspection(
+                        SingleRestaurant.this, positionInspection, positionRestaurant
+                );
+                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+            }
+        });
 
     }
 

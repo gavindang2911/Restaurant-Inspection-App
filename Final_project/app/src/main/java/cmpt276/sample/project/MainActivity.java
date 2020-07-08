@@ -105,7 +105,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<Restaurant> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.restaurantListView);
         list.setAdapter(adapter);
-
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
+                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+            }
+        });
     }
 
     private class MyListAdapter extends ArrayAdapter<Restaurant>{

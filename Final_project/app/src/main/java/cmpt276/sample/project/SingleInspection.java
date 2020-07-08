@@ -3,6 +3,8 @@ package cmpt276.sample.project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -19,16 +21,53 @@ import java.util.List;
 
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
+import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
 public class SingleInspection extends AppCompatActivity {
+
+    private static final String INSPECTION_POSITION = "Position";
+    private static final String RESTAURANT_POSITION = "Position";
+
+    private int positionInspection;
+    private int positionRestaurant;
+
+
+    private InspectionManager inspectionManager = InspectionManager.getInstance();
+    private static RestaurantManager restaurantMan = RestaurantManager.getInstance();
+
     private List<Inspection> myInspection = new ArrayList<Inspection>();
     private List<Violation> myViolation = new ArrayList<Violation>();
+
+    private Inspection inspection;
+
+
+    public static Intent makeIntentForSingleInspection(Context context, int inspectionPosition, int restaurantPosition) {
+        Intent intent = new Intent(context, SingleInspection.class);
+        intent.putExtra(INSPECTION_POSITION, inspectionPosition);
+        intent.putExtra(RESTAURANT_POSITION, restaurantPosition);
+        return intent;
+    }
+    private void extractDataFromSecondIntent(Intent intent)
+    {
+        positionInspection = intent.getIntExtra(INSPECTION_POSITION, -1);
+        positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, -1);
+
+        restaurantMan = RestaurantManager.getInstance();
+        inspectionManager = InspectionManager.getInstance();
+
+        inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
+        myViolation = inspection.getViolations();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
-        populateInspectionList();
+
+
+
+        extractDataFromSecondIntent(this.getIntent());
+        //populateInspectionList();
         populateListView();
         registerClickCallback();
         //setText();
