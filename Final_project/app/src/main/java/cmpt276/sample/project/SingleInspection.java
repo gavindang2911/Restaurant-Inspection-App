@@ -67,7 +67,7 @@ public class SingleInspection extends AppCompatActivity {
 
 
         extractDataFromSecondIntent(this.getIntent());
-        populateInspectionList();
+        //populateInspectionList();
         populateListView();
         registerClickCallback();
         //setText();

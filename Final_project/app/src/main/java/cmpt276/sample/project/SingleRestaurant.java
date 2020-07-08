@@ -91,15 +91,6 @@ public class SingleRestaurant extends AppCompatActivity {
             }
         });
 
-//        adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = SingleInspection.makeIntentForSingleInspection(SingleRestaurant.this, position, positionRestaurant);
-//                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
-//            }
-//        });
-
-
     }
 
 
