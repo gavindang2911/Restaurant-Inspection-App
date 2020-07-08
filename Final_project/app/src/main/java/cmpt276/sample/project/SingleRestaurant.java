@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -45,9 +47,8 @@ public class SingleRestaurant extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_CALCULATE = 103;
     private static final String RESTAURANT_POSITION = "Position";
     private int positionRestaurant;
-    private InspectionManager inspectionManager = InspectionManager.getInstance();
     private Restaurant restaurant = null;
-    private static RestaurantManager restaurantMan = RestaurantManager.getInstance();
+    private RestaurantManager restaurantMan;
 
     public static Intent makeIntentForSingleRestaurant(Context context, int restaurantPosition) {
         Intent intent = new Intent(context, SingleRestaurant.class);
@@ -62,6 +63,8 @@ public class SingleRestaurant extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
 
@@ -69,6 +72,17 @@ public class SingleRestaurant extends AppCompatActivity {
         displayRestaurantInfo();
 
         displayRecyclerViewInspection();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example

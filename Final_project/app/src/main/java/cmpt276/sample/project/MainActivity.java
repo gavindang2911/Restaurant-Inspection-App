@@ -53,12 +53,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
         setSupportActionBar(toolbar);
 
-
+        Log.i("avbc", ""+restaurantList);
+//        restaurantList.clear();
+//        restaurantManager.getRestaurantList().clear();
+//        inspectionManager.getInspections().clear();
         readRestaurantData();
         sortRestaurants();
         readInspectionData();
         restaurantListView();
-
+        for ( int i=0; i <restaurantList.size(); i++) {
+            Log.i("avbcaaaaaaaaa", "" + restaurantList.get(i).getName());
+        }
     }
 
     public  void readRestaurantData(){

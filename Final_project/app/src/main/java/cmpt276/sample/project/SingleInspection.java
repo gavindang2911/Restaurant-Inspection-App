@@ -1,5 +1,6 @@
 package cmpt276.sample.project;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
@@ -75,6 +78,7 @@ public class SingleInspection extends AppCompatActivity {
         setContentView(R.layout.activity_single_inspection);
         Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         extractDataFromSecondIntent(this.getIntent());
@@ -82,18 +86,15 @@ public class SingleInspection extends AppCompatActivity {
         setText();
         populateListView();
         registerClickCallback();
-
     }
-
-    private void populateInspectionList() {
-        myViolation.add(new Violation(102,"Critical", "description", "repeat"));
-        myViolation.add(new Violation(212,"Critical", "descriptionaaa", "repeat"));
-        myViolation.add(new Violation(302,"NotCritical", "descriptionooo", "NotRepeat"));
-        myViolation.add(new Violation(305,"NotCritical", "descriptionooo", "NotRepeat"));
-        myViolation.add(new Violation(404,"NotCritical", "descriptionooo", "NotRepeat"));
-
-        myInspection.add(new Inspection("SDFO", 20191002, "Routine",
-                0, 0, "Low", myViolation));
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

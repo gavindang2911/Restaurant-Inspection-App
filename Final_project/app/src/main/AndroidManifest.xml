@@ -24,7 +24,9 @@
         <activity android:name=".SingleInspection"
             android:label="@string/InspectionTitle"
             android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:launchMode="singleTop">
+<!--            android:parentActivityName=".SingleRestaurant"-->
+
 
         </activity>
 
@@ -32,7 +34,7 @@
             android:name=".SingleRestaurant"
             android:label="@string/title_activity_restaurant"
             android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:launchMode="singleTop">
 
         </activity>
     </application>
