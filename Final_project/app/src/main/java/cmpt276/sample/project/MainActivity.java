@@ -5,6 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import android.view.View;
@@ -23,7 +27,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
 
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
@@ -45,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         readRestaurantData();
+        sortRestaurants();
         readInspectionData();
         restaurantListView();
-        Log.i("Harazeaaaaaaaaaaaaa ",""+ restaurantManager.getRestaurant(0).getInspections().get(0).getHazardRating());
+
     }
 
     public  void readRestaurantData(){
@@ -124,15 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
             //fill the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-
-            int width = imageView.getWidth();
-            imageView.setMinimumWidth(width);
-            imageView.setMaxWidth(width);
-
-            int height = imageView.getHeight();
-            imageView.setMaxHeight(height);
-            imageView.setMinimumHeight(height);
-
             imageView.setImageResource(currentRestaurant.getIcon());
 
             //set Name
@@ -143,12 +142,40 @@ public class MainActivity extends AppCompatActivity {
             TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
             addressText.setText(currentRestaurant.getAddress());
 
+            //set number of issues
 
+            //set icon of hazard level
+            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
+            TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
+            if(currentRestaurant.getInspections().size()!=0) {
+                hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
+                if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
+                    imageIcon.setImageResource(R.drawable.green_circle);
+                } else if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Moderate")) {
+                    imageIcon.setImageResource(R.drawable.orange_circle);
+                } else {
+                    imageIcon.setImageResource(R.drawable.red_circle);
+                }
+            }
+            else {
+                hazardLevelText.setText("Unknown");
+            }
             //set .....
 
             return itemView;
         }
     }
+
+    public void sortRestaurants(){
+        List<Restaurant> restaurantList = restaurantManager.getRestaurantList();
+        Collections.sort(restaurantList,new Comparator(){
+            public int compare(Object restaurantOne, Object restaurantTwo){
+                return ((Restaurant)restaurantOne).getName().compareTo(((Restaurant)restaurantTwo).getName());
+            }
+        });
+        restaurantManager.setRestaurantList(restaurantList);
+    }
+
 
     private void readInspectionData() {
         InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);

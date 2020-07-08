@@ -33,7 +33,7 @@ public class SingleInspection extends AppCompatActivity {
     private int positionRestaurant;
 
 
-    InspectionManager inspectionManager = InspectionManager.getInstance();
+    private InspectionManager inspectionManager = InspectionManager.getInstance();
     private static RestaurantManager restaurantMan = RestaurantManager.getInstance();
 
     private List<Inspection> myInspection = new ArrayList<Inspection>();
