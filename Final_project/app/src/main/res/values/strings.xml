@@ -5,9 +5,9 @@
     <string name="NameInspType">Inspection Type:</string>
     <string name="InspType">Routine</string>
     <string name="NameNumCritical">Number of Critical Issues Found:</string>
-    <string name="NumCritical">2</string>
+    <string name="NumCritical">0</string>
     <string name="NameNumNonCritical">Number of Non-Critical Issues Found:</string>
-    <string name="NumNonCritical">3</string>
+    <string name="NumNonCritical">0</string>
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
     <string name="ViolationName">violation</string>

@@ -1,11 +1,13 @@
 package cmpt276.sample.project;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.RestaurantManager;
@@ -26,8 +31,8 @@ import cmpt276.sample.project.Model.Violation;
 
 public class SingleInspection extends AppCompatActivity {
 
-    private static final String INSPECTION_POSITION = "Position";
-    private static final String RESTAURANT_POSITION = "Position";
+    private static final String INSPECTION_POSITION = "Inspection";
+    private static final String RESTAURANT_POSITION = "Restaurant";
 
     private int positionInspection;
     private int positionRestaurant;
@@ -48,6 +53,7 @@ public class SingleInspection extends AppCompatActivity {
         intent.putExtra(RESTAURANT_POSITION, restaurantPosition);
         return intent;
     }
+
     private void extractDataFromSecondIntent(Intent intent)
     {
         positionInspection = intent.getIntExtra(INSPECTION_POSITION, -1);
@@ -59,19 +65,16 @@ public class SingleInspection extends AppCompatActivity {
         inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
         myViolation = inspection.getViolations();
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
 
-
-
         extractDataFromSecondIntent(this.getIntent());
-        //populateInspectionList();
         populateListView();
         registerClickCallback();
-        //setText();
-        //populateInspection();
+        setText();
     }
 
     private void populateInspectionList() {
@@ -85,21 +88,40 @@ public class SingleInspection extends AppCompatActivity {
                 0, 0, "Low", myViolation));
     }
 
-    /*
-    private InspectionManager populateInspection(){
-        InspectionManager myInspection = new InspectionManager();
-        myInspection.add(new Inspection("SDFO", 20191002, "Routine",
-                0, 0, "Low", myViolation));
-        return myInspection;
-    }
 
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
         TextView date = (TextView)findViewById(R.id.textViewDescription);
-        date.setText();
+        date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
+
+        TextView type = (TextView)findViewById(R.id.textViewType);
+        type.setText(inspection.getInspectionType());
+
+        TextView numCritical = (TextView)findViewById(R.id.textViewNumCritical);
+        numCritical.setText(inspection.getNumOfCritical());
+
+        TextView numNotCritical = (TextView)findViewById(R.id.textViewNumNonCr);
+        numNotCritical.setText(inspection.getNumOfNonCritical());
+
+        TextView hazardLevel = (TextView)findViewById(R.id.textViewHazardLevel);
+        hazardLevel.setText(inspection.getHazardRating());
+
+        ImageView hazardIcon = (ImageView)findViewById(R.id.imageViewHazardLevel);
+        if(inspection.getHazardRating().equals("Low")){
+            hazardIcon.setImageResource(R.drawable.green_circle);
+            hazardLevel.setTextColor(Color.parseColor("#459E48"));
+
+        }else if(inspection.getHazardRating().equals("High")){
+            hazardIcon.setImageResource(R.drawable.red_circle);
+            hazardLevel.setTextColor(Color.parseColor("#C6170B"));
+
+        }else{
+            hazardIcon.setImageResource(R.drawable.orange_circle);
+            hazardLevel.setTextColor(Color.parseColor("#FF5722"));
+        }
     }
-*/
+
 
     private void populateListView() {
         ArrayAdapter<Violation> adapter = new MyListAdapter();
@@ -166,10 +188,12 @@ public class SingleInspection extends AppCompatActivity {
             https://icons8.com/icons/set/chemical-cleanser
 
              */
+
             // Find image id
             ImageView imageViewNature1 = (ImageView)itemView.findViewById(R.id.imageViewNature1);
             ImageView imageViewNature2 = (ImageView)itemView.findViewById(R.id.imageViewNature2);
             ImageView imageViewNature3 = (ImageView)itemView.findViewById(R.id.imageViewNature3);
+
             //Set icon to permit
             if(number == 101 || number == 102 || number == 103 || number == 104 || number == 311){
 
