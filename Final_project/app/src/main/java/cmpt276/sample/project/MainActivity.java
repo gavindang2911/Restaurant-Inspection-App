@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -54,13 +55,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
+        setSupportActionBar(toolbar);
 
-
+        Log.i("avbc", ""+restaurantList);
+//        restaurantList.clear();
+//        restaurantManager.getRestaurantList().clear();
+//        inspectionManager.getInspections().clear();
         readRestaurantData();
         sortRestaurants();
         readInspectionData();
         restaurantListView();
-
+        for ( int i=0; i <restaurantList.size(); i++) {
+            Log.i("avbcaaaaaaaaa", "" + restaurantList.get(i).getName());
+        }
     }
 
     public  void readRestaurantData(){

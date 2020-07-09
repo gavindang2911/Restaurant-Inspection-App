@@ -4,51 +4,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_single_restaurant"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/CustomPopupStyle" />
-
-    <TextView
-        android:id="@+id/textView_Single_Restaurant_Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="363dp"
-        android:text="@string/restaurantNameSingleRestaurant"
-        android:textSize="33sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.077"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar_single_restaurant"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?attr/colorPrimary"-->
+<!--        android:minHeight="?attr/actionBarSize"-->
+<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:popupTheme="@style/CustomPopupStyle" />-->
 
 
     <TextView
         android:id="@+id/textView_Single_Restaurant_Address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="112dp"
+        android:layout_width="407dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical|center_horizontal"
         android:text="@string/restaurantAddress"
-        android:textAlignment="textStart"
+        android:textAlignment="center"
+        android:textColor="#fff"
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Name" />
+
+    <TextView
+        android:id="@+id/textView_Single_Restaurant_Name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/restaurantNameSingleRestaurant"
+        android:textColor="#fff"
+        android:textSize="33sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_Single_Restaurant_Long"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/longitude"
+        android:textColor="#fff"
+        android:textSize="20sp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Address" />
+
+    <TextView
+        android:id="@+id/textView_Single_Restaurant_Lat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/latitude"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Long" />
 
     <TextView
         android:id="@+id/textView_Single_Restaurant_latitude"
@@ -58,7 +82,8 @@
         android:layout_marginTop="8dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Address" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Address"
+        android:textColor="#fff"/>
 
     <TextView
         android:id="@+id/textView_Single_Restaurant_longitude"
@@ -67,43 +92,23 @@
         android:layout_marginStart="184dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_latitude" />
-
-    <TextView
-        android:id="@+id/textView_Single_Restaurant_Long"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="9dp"
-        android:text="@string/longitude"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Address" />
-
-    <TextView
-        android:id="@+id/textView_Single_Restaurant_Lat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/latitude"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Long" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_latitude"
+        android:textColor="#fff"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_Single_Restaurant_inspection"
-        android:layout_width="409dp"
-        android:layout_height="395dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="382dp"
+        android:layout_height="408dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="10dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Lat"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
