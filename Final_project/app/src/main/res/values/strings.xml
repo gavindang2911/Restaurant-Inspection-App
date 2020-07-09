@@ -71,7 +71,8 @@
     <string name="lastDateInspection">TextView</string>
     <string name="ProjectTitle">Restaurant App</string>
     <string name="InspectionTitle">Inspection</string>
-
+    <string name="food_premises_not_maintained_in_a_sanitary_condition">Food premises not maintained in a sanitary condition.</string>
+    <string name="not_critical">Not Critical</string>
 
 
 </resources>
