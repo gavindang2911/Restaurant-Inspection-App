@@ -22,10 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SingleInspection"
-            android:label="@string/InspectionTitle"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/inspectionTitleName"
             android:launchMode="singleTop">
-<!--            android:parentActivityName=".SingleRestaurant"-->
 
 
         </activity>
@@ -33,8 +31,8 @@
         <activity
             android:name=".SingleRestaurant"
             android:label="@string/title_activity_restaurant"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop">
+<!--            android:theme="@style/AppTheme.NoActionBar"-->
 
         </activity>
     </application>

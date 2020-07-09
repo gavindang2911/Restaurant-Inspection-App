@@ -61,8 +61,8 @@ public class SingleRestaurant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

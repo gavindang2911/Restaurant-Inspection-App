@@ -11,7 +11,8 @@
     <string name="NameHazard">Hazard Level:</string>
     <string name="Hazard">Moderate</string>
     <string name="ViolationName">violation</string>
-
+    <string name="emptyStatus">No Violation!</string>
+    <string name="inspectionTitleName">Violations of Inspection</string>
 
 
     <string name="violation101">Building not in accordance with the Regulation.</string>
@@ -59,13 +60,14 @@
     <string name="restaurantAddress">12808 King George Blvd, Surrey</string>
     <string name="latitude">Latitude: </string>
     <string name="longitude">Longitude: </string>
-    <string name="title_activity_restaurant">Restaurant</string>
+    <string name="title_activity_restaurant">Restaurant Detail</string>
     <string name="single_restaurant_hazard_icon">single_restaurant_hazard_icon</string>
     <string name="num_of_critical_found"># critical issues found: </string>
     <string name="num_of_noncritical_found"># non-critical issues found: </string>
     <string name="last_inspection">Last inspection: </string>
-    <string name="ProjectTitle">ALL RESTAURANT</string>
+    <string name="ProjectTitle">Restaurant App</string>
     <string name="InspectionTitle">Inspection</string>
+
 
 
 </resources>

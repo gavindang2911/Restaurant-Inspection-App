@@ -3,7 +3,6 @@ package cmpt276.sample.project;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -11,7 +10,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
 import android.util.Log;
+
+import android.view.ActionMode;
+import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +72,6 @@ public class SingleInspection extends AppCompatActivity {
         inspectionManager = InspectionManager.getInstance();
 
         inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
-
         myViolation = inspection.getViolations();
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -76,17 +79,19 @@ public class SingleInspection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_inspection);
-        Toolbar toolbar = findViewById(R.id.toolbar_single_restaurant);
-        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+
         extractDataFromSecondIntent(this.getIntent());
-        Log.i("inspecc", ""+inspection);
-        setText();
         populateListView();
         registerClickCallback();
+        setText();
     }
+
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -97,13 +102,8 @@ public class SingleInspection extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
-//        restaurantMan = RestaurantManager.getInstance();
-//        inspection = restaurantMan.getRestaurant(positionRestaurant).getInspections().get(positionInspection);
-
         TextView date = (TextView)findViewById(R.id.textViewDate);
         date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
 
@@ -117,7 +117,7 @@ public class SingleInspection extends AppCompatActivity {
         numNotCritical.setText(String.valueOf(inspection.getNumOfNonCritical()));
 
         TextView hazardLevel = (TextView)findViewById(R.id.textViewHazardLevel);
-        hazardLevel.setText(String.valueOf(inspection.getHazardRating()));
+        hazardLevel.setText(inspection.getHazardRating());
 
         ImageView hazardIcon = (ImageView)findViewById(R.id.imageViewHazardLevel);
         if(inspection.getHazardRating().equals("Low")){
@@ -138,6 +138,7 @@ public class SingleInspection extends AppCompatActivity {
     private void populateListView() {
         ArrayAdapter<Violation> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.ListView);
+        list.setEmptyView(findViewById(R.id.textViewEmpty));
         list.setAdapter(adapter);
     }
 
