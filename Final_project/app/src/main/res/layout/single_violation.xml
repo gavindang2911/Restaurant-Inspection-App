@@ -52,7 +52,7 @@
         android:id="@+id/imageViewSeverity"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="285dp"
+        android:layout_marginStart="270dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -62,9 +62,12 @@
         android:id="@+id/textViewSeverity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="13dp"
+        android:layout_marginEnd="20dp"
         android:text="Not Critical"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewSeverity"
         app:layout_constraintTop_toTopOf="parent" />
 

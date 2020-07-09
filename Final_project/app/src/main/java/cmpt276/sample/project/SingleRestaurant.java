@@ -61,7 +61,10 @@ public class SingleRestaurant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
+
+
+
+
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
 
