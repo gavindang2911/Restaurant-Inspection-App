@@ -2,13 +2,16 @@ package cmpt276.sample.project;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.view.View;
@@ -30,8 +33,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 
+import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
@@ -94,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
 
+//                ini = true;
+
             }
         } catch (IOException e) {
             Log.wtf("MyActivity", "Error reading data file on line" + line, e);
@@ -120,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             super(MainActivity.this,R.layout.item_view,restaurantList);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -134,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
             imageView.setImageResource(currentRestaurant.getIcon());
 
+
             //set Name
             TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);
             nameText.setText(currentRestaurant.getName());
@@ -142,25 +151,48 @@ public class MainActivity extends AppCompatActivity {
             TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
             addressText.setText(currentRestaurant.getAddress());
 
-            //set number of issues
 
-            //set icon of hazard level
+
+            //set icon of hazard level and date of inspection
             ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
             TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
+            TextView lastDateOfInspection = (TextView) itemView.findViewById(R.id.lastDateInspectionTextView);
+            TextView numberOfIssues = (TextView) itemView.findViewById(R.id.numberOfIssuesTextView);
             if(currentRestaurant.getInspections().size()!=0) {
+                //set number of issues
+                int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
+                numberOfIssues.setText(numberOfIssuesFound+" issues found");
+
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
+                long date = Date.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+                if(date<=30){
+                    lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
+                }
+                else if(date<365){
+                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                }
+                else{
+                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
+                    hazardLevelText.setTextColor(Color.parseColor("#459E48"));
                 } else if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Moderate")) {
                     imageIcon.setImageResource(R.drawable.orange_circle);
+                    hazardLevelText.setTextColor(Color.parseColor("#FF6722"));
                 } else {
                     imageIcon.setImageResource(R.drawable.red_circle);
+                    hazardLevelText.setTextColor(Color.parseColor("#C6170B"));
                 }
             }
             else {
                 hazardLevelText.setText("Unknown");
+                imageIcon.setImageResource(R.drawable.gray_circle);
+                lastDateOfInspection.setText("No Inspections");
+                numberOfIssues.setText("0 issues found");
             }
-            //set .....
+
+
 
             return itemView;
         }

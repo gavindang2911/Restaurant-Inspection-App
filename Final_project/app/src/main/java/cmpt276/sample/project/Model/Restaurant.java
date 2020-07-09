@@ -92,6 +92,9 @@ public class Restaurant {
 
     public void setIconName(String iconName) { this.iconName = iconName; }
 
+    public int getNumOfViolations() { return numOfViolations; }
+
+    public void setNumOfViolations(int numOfViolations) { this.numOfViolations = numOfViolations; }
 
     @Override
     public String toString() {

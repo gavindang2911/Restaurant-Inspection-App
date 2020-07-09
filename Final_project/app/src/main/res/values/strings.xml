@@ -64,6 +64,10 @@
     <string name="num_of_critical_found"># critical issues found: </string>
     <string name="num_of_noncritical_found"># non-critical issues found: </string>
     <string name="last_inspection">Last inspection: </string>
+    <string name="restaurantAddressTextView">TextView</string>
+    <string name="numberOfIssuesFound">TextView</string>
+    <string name="hazardLevel">TextView</string>
+    <string name="lastDateInspection">TextView</string>
 
 
 </resources>
