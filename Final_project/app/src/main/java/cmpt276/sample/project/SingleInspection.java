@@ -38,6 +38,7 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
+
 public class SingleInspection extends AppCompatActivity {
 
     private static final String INSPECTION_POSITION = "Inspection";
@@ -91,7 +92,7 @@ public class SingleInspection extends AppCompatActivity {
     }
 
 
-
+    // site of code https://stackoverflow.com/questions/24487327/android-going-back-to-old-activity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -200,7 +201,10 @@ public class SingleInspection extends AppCompatActivity {
             https://icons8.com/icons/set/water
             https://icons8.com/icons/set/pest
             https://icons8.com/icons/set/chemical-cleanser
-
+            https://icons8.com/icons/set/grey-circle
+            https://icons8.com/icons/set/red-circle
+            https://icons8.com/icons/set/green-circle
+            https://icons8.com/icons/set/orange-circle
              */
 
             // Find image id

@@ -1,5 +1,6 @@
 package cmpt276.sample.project.Model;
 
+
 public class Violation {
     private int violationNum;
     private String criticalOrNon;
