@@ -1,20 +1,14 @@
-package cmpt276.sample.project;
+package cmpt276.sample.project.UI;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.util.Log;
-
-import android.view.ActionMode;
-import android.view.Menu;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -26,17 +20,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
+import cmpt276.sample.project.R;
 
 public class SingleInspection extends AppCompatActivity {
 

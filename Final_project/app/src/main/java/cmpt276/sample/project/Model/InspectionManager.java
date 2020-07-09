@@ -7,9 +7,7 @@ import static java.util.Collections.sort;
 
 public class InspectionManager {
     private List<Inspection> inspections;
-    /*
-      Singleton Support
-   */
+
     private static InspectionManager instance;
 
     private InspectionManager() {
@@ -34,7 +32,6 @@ public class InspectionManager {
 
     public void add(Inspection inspection) {
         inspections.add(inspection);
-//        sort(inspections);
 
 
     }
