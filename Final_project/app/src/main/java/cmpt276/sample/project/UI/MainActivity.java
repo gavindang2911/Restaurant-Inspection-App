@@ -1,17 +1,13 @@
-package cmpt276.sample.project;
+
+package cmpt276.sample.project.UI;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,6 +38,7 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
+import cmpt276.sample.project.R;
 /**
  * MainActivity class is the first screen of the app, which displays the list
  * of all restaurants to the screen after reading data from CSV files
@@ -62,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         readRestaurantData();
         sortRestaurants();
@@ -105,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setIcon(id);
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
-
-//                ini = true;
 
             }
         } catch (IOException e) {
@@ -252,8 +245,6 @@ public class MainActivity extends AppCompatActivity {
                         res.addInspection(inspection);
                     }
                 }
-
-//                Log.d("My Activity", "just created: " + inspection );
             }
         }
         catch (IOException e) {
@@ -289,3 +280,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+

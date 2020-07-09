@@ -1,4 +1,4 @@
-package cmpt276.sample.project;
+package cmpt276.sample.project.UI;
 
 
 import android.os.Build;
@@ -26,6 +26,28 @@ import cmpt276.sample.project.Model.RestaurantManager;
  * @author Lu Xi Wang, lxwang
  * @author Shan Qing, sqing
  */
+
+
+
+
+import android.os.Build;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.Inspection;
+import cmpt276.sample.project.Model.RestaurantManager;
+import cmpt276.sample.project.R;
+
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
 public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.InspectionViewHolder> {
     private List<Inspection> inspectionList;
@@ -119,3 +141,4 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
     }
 
 }
+

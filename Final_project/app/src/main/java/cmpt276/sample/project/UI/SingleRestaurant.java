@@ -1,21 +1,14 @@
-package cmpt276.sample.project;
 
-import android.app.Activity;
+package cmpt276.sample.project.UI;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 /*
@@ -28,20 +21,10 @@ import com.google.android.material.appbar.AppBarLayout;
 
 
  */
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
-import cmpt276.sample.project.Model.Inspection;
-import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
-import cmpt276.sample.project.Model.Violation;
+import cmpt276.sample.project.R;
 /**
  * SingleRestaurant class is the second screen of the app, which displays the detail
  * of the specific restaurant when user click on from first screen. It also shows
@@ -69,9 +52,6 @@ public class SingleRestaurant extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
 
         extractDataFromIntent(this.getIntent());
         displayRestaurantInfo();
@@ -137,3 +117,4 @@ public class SingleRestaurant extends AppCompatActivity {
         restaurant = restaurantMan.getRestaurant(positionRestaurant);
     }
 }
+

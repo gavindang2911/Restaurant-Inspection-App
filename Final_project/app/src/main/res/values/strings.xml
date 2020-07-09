@@ -13,7 +13,6 @@
     <string name="ViolationName">violation</string>
     <string name="emptyStatus">No Violation!</string>
     <string name="inspectionTitleName">Violations of Inspection</string>
-    <string name="stringOfCritical"> </string>
 
     <string name="violation101">Building not in accordance with the Regulation.</string>
     <string name="violation102">Operation of an unapproved food premises.</string>
@@ -73,7 +72,6 @@
     <string name="ProjectTitle">Restaurant App</string>
     <string name="InspectionTitle">Inspection</string>
 
->>>>>>> 5e05e901c067e6b0f449aeb16fe54b8efeccab8f
 
 
 </resources>

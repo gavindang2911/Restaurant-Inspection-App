@@ -1,6 +1,7 @@
 package cmpt276.sample.project.Model;
 
 
+
 /**
  * Violation class which holds the detail for a specific inspection
  *
@@ -8,6 +9,7 @@ package cmpt276.sample.project.Model;
  * @author Lu Xi Wang, lxwang
  * @author Shan Qing, sqing
  */
+
 public class Violation {
     private int violationNum;
     private String criticalOrNon;
