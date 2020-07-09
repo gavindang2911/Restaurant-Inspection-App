@@ -175,6 +175,7 @@ public class SingleInspection extends AppCompatActivity {
                 //set text to green color
                 severity.setTextColor(Color.parseColor("#459E48"));
                 imageViewSeverity.setImageResource(R.drawable.green_circle);
+                severity.setText(currentViolation.getCriticalOrNon() + "        ");
             }else{
                 //set text to red color
                 severity.setTextColor(Color.parseColor("#C6170B"));
