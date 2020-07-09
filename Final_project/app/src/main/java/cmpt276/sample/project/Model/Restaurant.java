@@ -6,6 +6,14 @@ import java.util.List;
 
 import static java.util.Collections.sort;
 
+/**
+ * Restaurant class which holds the information of a restaurant (id, name, address,..)
+ * It also has an array list for it's own inspections
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class Restaurant {
     private String trackingNumber;
     private String name;

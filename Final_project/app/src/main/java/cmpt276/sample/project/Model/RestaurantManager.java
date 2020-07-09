@@ -5,7 +5,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+/**
+ * RestaurantManager class which holds the array list of all restaurants extract from CSV file
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class RestaurantManager implements Iterable<Restaurant>{
     private List<Restaurant> restaurantList = new ArrayList<>();
     private int account;

@@ -83,17 +83,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_Single_Restaurant_inspection"
-        android:layout_width="382dp"
-        android:layout_height="408dp"
+        android:layout_width="379dp"
+        android:layout_height="371dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_Lat"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_longitude"
         app:layout_constraintVertical_bias="1.0" />
 
 

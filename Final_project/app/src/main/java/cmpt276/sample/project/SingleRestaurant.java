@@ -42,7 +42,15 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
-
+/**
+ * SingleRestaurant class is the second screen of the app, which displays the detail
+ * of the specific restaurant when user click on from first screen. It also shows
+ * the list of inspections of the restaurant
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class SingleRestaurant extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_CALCULATE = 103;
     private static final String RESTAURANT_POSITION = "Position";

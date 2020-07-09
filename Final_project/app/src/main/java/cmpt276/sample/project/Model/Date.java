@@ -8,6 +8,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * A enum class for converting date into String data type and LocalDate data type,
+ * which others classes can get the date by calling DAY_MONTH or
+ * DAY_MONTH_YEAR
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public enum Date {
     DAY_MONTH{
         @RequiresApi(api = Build.VERSION_CODES.O)

@@ -4,6 +4,15 @@ import cmpt276.sample.project.Model.Violation;
 
 import java.util.List;
 
+
+/**
+ * Inspection class which holds the detail of an inspection of a restaurant (id, date, hazard rating,..)
+ * Including the compare method for sorting by date for inspection
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class Inspection implements Comparable<Inspection> {
 
     private String trackingNumber;

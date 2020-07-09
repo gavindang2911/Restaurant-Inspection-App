@@ -38,6 +38,16 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 
+
+/**
+ * SingleInspection class is the third screen of the app, which displays detail of
+ * the specific inspection when user click on from second screen. It also shows
+ * the list of violations for that inspection of a restaurant
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class SingleInspection extends AppCompatActivity {
 
     private static final String INSPECTION_POSITION = "Inspection";
@@ -183,6 +193,7 @@ public class SingleInspection extends AppCompatActivity {
                 //set text to green color
                 severity.setTextColor(Color.parseColor("#459E48"));
                 imageViewSeverity.setImageResource(R.drawable.green_circle);
+                severity.setText(currentViolation.getCriticalOrNon() + "        ");
             }else{
                 //set text to red color
                 severity.setTextColor(Color.parseColor("#C6170B"));

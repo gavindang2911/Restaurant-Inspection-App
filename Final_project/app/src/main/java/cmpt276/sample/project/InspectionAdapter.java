@@ -18,7 +18,14 @@ import java.util.List;
 import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.RestaurantManager;
-
+/**
+ * InspectionAdapter class is the helper class Recycler View for
+ * the second screen display the list of inspections to the screen.
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
 public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.InspectionViewHolder> {
     private List<Inspection> inspectionList;

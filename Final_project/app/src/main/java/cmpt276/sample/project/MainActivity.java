@@ -43,7 +43,14 @@ import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
-
+/**
+ * MainActivity class is the first screen of the app, which displays the list
+ * of all restaurants to the screen after reading data from CSV files
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_CALCULATE = 103;
 
