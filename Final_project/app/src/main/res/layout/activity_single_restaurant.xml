@@ -7,20 +7,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_color">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_single_restaurant"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:popupTheme="@style/CustomPopupStyle" />-->
-
-
     <TextView
         android:id="@+id/textView_Single_Restaurant_Address"
         android:layout_width="407dp"

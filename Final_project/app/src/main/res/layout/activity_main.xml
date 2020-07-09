@@ -9,25 +9,12 @@
 
     <ListView
         android:id="@+id/restaurantListView"
-        android:layout_width="wrap_content"
-        android:layout_height="661dp"
+        android:layout_width="391dp"
+        android:layout_height="591dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_single_restaurant"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/CustomPopupStyle"  />
 
     <!--    <TextView-->
 <!--        android:id="@+id/allRestaurantTextView"-->
