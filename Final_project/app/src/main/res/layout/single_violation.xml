@@ -1,72 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/food_premises_not_maintained_in_a_sanitary_condition"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewNature1" />
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/food_premises_not_maintained_in_a_sanitary_condition"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewNature1" />
 
-    <ImageView
-        android:id="@+id/imageViewNature1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/menuitem_background" />
+        <ImageView
+            android:id="@+id/imageViewNature1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/menuitem_background" />
 
-    <ImageView
-        android:id="@+id/imageViewNature2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/imageViewNature1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
+        <ImageView
+            android:id="@+id/imageViewNature2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toEndOf="@+id/imageViewNature1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
-    <ImageView
-        android:id="@+id/imageViewNature3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/imageViewNature2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?android:attr/activatedBackgroundIndicator" />
+        <ImageView
+            android:id="@+id/imageViewNature3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toEndOf="@+id/imageViewNature2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="?android:attr/activatedBackgroundIndicator" />
 
-    <ImageView
-        android:id="@+id/imageViewSeverity"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/textViewSeverity"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        <ImageView
+            android:id="@+id/imageViewSeverity"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/textViewSeverity"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
 
-    <TextView
-        android:id="@+id/textViewSeverity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="17dp"
-        android:text="@string/not_critical"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textViewSeverity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@+id/imageViewSeverity"
+            android:text="@string/not_critical"
+            android:textAlignment="textEnd"
+            android:layout_gravity="end"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

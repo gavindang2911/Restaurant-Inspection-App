@@ -94,7 +94,8 @@
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_longitude"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

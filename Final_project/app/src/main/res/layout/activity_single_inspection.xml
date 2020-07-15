@@ -80,7 +80,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewViolationName"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/textViewViolationName"
+        android:divider="@null"
+        android:dividerHeight="10dp"></ListView>
 
     <TextView
         android:id="@+id/textViewDate"
