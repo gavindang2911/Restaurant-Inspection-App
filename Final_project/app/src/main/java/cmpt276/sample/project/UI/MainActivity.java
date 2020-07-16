@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 
 
-import cmpt276.sample.project.MapsActivity;
 import cmpt276.sample.project.Model.Date;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;

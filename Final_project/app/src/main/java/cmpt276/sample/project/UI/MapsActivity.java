@@ -1,4 +1,4 @@
-package cmpt276.sample.project;
+package cmpt276.sample.project.UI;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import cmpt276.sample.project.Model.CustomInfoAdapter;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
+import cmpt276.sample.project.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
