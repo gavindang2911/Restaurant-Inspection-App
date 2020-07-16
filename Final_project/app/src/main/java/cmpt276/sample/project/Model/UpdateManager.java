@@ -15,4 +15,10 @@ public class UpdateManager {
 
     public void setLastModifiedRestaurants(String last_modified) {
     }
+
+    public void setLastModifiedInspectionsFirstTime(String last_modified_inspection) {
+    }
+
+    public void setLastModifiedInspections(String last_modified_inspection) {
+    }
 }

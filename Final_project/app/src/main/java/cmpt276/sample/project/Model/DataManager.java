@@ -2,6 +2,7 @@ package cmpt276.sample.project.Model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
@@ -9,6 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -24,6 +28,8 @@ public class DataManager {
 
     private String url1 = "http://data.surrey.ca/api/3/action/package_show?id=restaurants"; // URL for restaurant
     private String url2 = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports"; // URL for inspection
+    private String urlForRestaurantCSV;
+    private String urlForInspectionCSV;
 
     public static DataManager getInstance(){
         if (instance == null) {
@@ -80,7 +86,7 @@ public class DataManager {
                             tmp = tmp.replace("http", "https");
                         }
 
-                        String last_modified = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+                        String last_modified_restaurant = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
                         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
                         // Set default for the last_modified_restaurant to null
@@ -88,10 +94,12 @@ public class DataManager {
                                 null);
 
                         if (saved_last_modified_restaurant == null) {
-                            updateManager.setLastModifiedRestaurantsFirstTime(last_modified);
+                            updateManager.setLastModifiedRestaurantsFirstTime(last_modified_restaurant);
                         } else {
-                            updateManager.setLastModifiedRestaurants(last_modified);
+                            updateManager.setLastModifiedRestaurants(last_modified_restaurant);
                         }
+
+                        urlForRestaurantCSV = tmp;
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -103,10 +111,10 @@ public class DataManager {
 
     private void readInspectionsURL() {
         OkHttpClient client2 = new OkHttpClient();
-        Request request3 = new Request.Builder()
+        Request request2 = new Request.Builder()
                 .url(url2)
                 .build();
-        client2.newCall(request3).enqueue(new Callback() {
+        client2.newCall(request2).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -115,9 +123,8 @@ public class DataManager {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " +  response);
-                }
-                else {
+                    throw new IOException("Unexpected code " + response);
+                } else {
                     final String myResponse = response.body().string();
                     try {
                         JSONObject obj2 = new JSONObject(myResponse);
@@ -126,18 +133,64 @@ public class DataManager {
                             tmp2 = tmp2.replace("http", "https");
                         }
 
-                        String last_modified = obj2.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+                        String last_modified_inspection = obj2.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
                         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
                         // Set default for the last_modified_restaurant to null
-                        String saved_last_modified_restaurant = pref.getString("last_modified_restaurants",
-                                null);
+                        String saved_last_modified_inspection = pref.getString("last_modified_inspections", null);
+                        if (saved_last_modified_inspection == null) {
+                            updateManager.setLastModifiedInspectionsFirstTime(last_modified_inspection);
+                        } else {
+                            updateManager.setLastModifiedInspections(last_modified_inspection);
+                        }
 
+                        urlForInspectionCSV = tmp2;
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+    }
+    public void readURLForCSVFile() {
+        OkHttpClient client3 = new OkHttpClient();
+        Request request3 = new Request.Builder()
+                .url(urlForRestaurantCSV)
+                .build();
+        client3.newCall(request3).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+                else {
+                    final String restaurantCSV = response.body().string();
+
+                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File file = new File(path, "new_update_restaurant.csv");
+
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+                    try {
+
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                        writer.write(restaurantCSV);
+                        writer.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Unable to write to File " + e);
+                    }
+                }
+            }
         });
     }
 
