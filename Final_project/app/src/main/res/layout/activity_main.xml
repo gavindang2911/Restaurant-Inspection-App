@@ -11,12 +11,20 @@
         android:id="@+id/restaurantListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:divider="@null"
-        android:dividerHeight="10dp"/>
+        android:dividerHeight="10dp" />
+
+    <Button
+        android:id="@+id/goToMapButton"
+        android:layout_width="121dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/map" />
 
     <!--    <TextView-->
 <!--        android:id="@+id/allRestaurantTextView"-->

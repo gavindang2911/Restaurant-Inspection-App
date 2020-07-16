@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         sortRestaurants();
         readInspectionData();
         restaurantListView();
+        setUpMap();
     }
 
     public  void readRestaurantData(){
@@ -277,6 +279,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    private void setUpMap(){
+        Button button = (Button) findViewById(R.id.goToMapButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
     }
 
 }
