@@ -22,6 +22,7 @@ import com.google.android.material.appbar.AppBarLayout;
 
  */
 
+import cmpt276.sample.project.Adapter.InspectionAdapter;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;

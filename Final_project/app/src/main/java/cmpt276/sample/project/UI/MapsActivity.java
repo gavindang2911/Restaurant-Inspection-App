@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import cmpt276.sample.project.Model.CustomInfoAdapter;
+import cmpt276.sample.project.Adapter.CustomInfoAdapter;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;

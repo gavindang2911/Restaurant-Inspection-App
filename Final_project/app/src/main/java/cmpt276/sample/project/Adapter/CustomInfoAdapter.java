@@ -1,4 +1,4 @@
-package cmpt276.sample.project.Model;
+package cmpt276.sample.project.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
