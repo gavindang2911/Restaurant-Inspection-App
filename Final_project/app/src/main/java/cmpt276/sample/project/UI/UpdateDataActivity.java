@@ -1,7 +1,9 @@
 package cmpt276.sample.project.UI;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -19,8 +21,7 @@ public class UpdateDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_data);
 
-//        Button btnCancel = (Button) findViewById(R.id.button_cancel_popup);
-        
+
         setPopUpSize();
         setUpUpdateButton();
         setUpCancelButton();
@@ -38,6 +39,13 @@ public class UpdateDataActivity extends AppCompatActivity {
     }
 
     private void setUpCancelButton() {
+        Button btnCancel = (Button) findViewById(R.id.button_cancel_popup);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setUpUpdateButton() {
@@ -49,6 +57,16 @@ public class UpdateDataActivity extends AppCompatActivity {
                 startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
             }
         });
+    }
+    // Gets called when the Lens Details activity we started, finishes.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle Cancel Button
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return;
+        }
 
     }
 }

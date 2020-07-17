@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cmpt276.sample.project">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -15,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.DownloadingDataActivity"></activity>
+<!--        <activity android:name=".UI.DownloadingDataActivity"></activity>-->
         <activity android:name=".UI.UpdateDataActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -35,11 +36,11 @@
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/ProjectTitle">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".UI.SingleInspection"
@@ -51,6 +52,17 @@
             android:launchMode="singleTop">
 
             <!-- android:theme="@style/AppTheme.NoActionBar" -->
+
+        </activity>
+
+        <activity android:name=".UI.DownloadingDataActivity"
+            tools:ignore="DuplicateActivity"
+            android:label="Downloading">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
     </application>
