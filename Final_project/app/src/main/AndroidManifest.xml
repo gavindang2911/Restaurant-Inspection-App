@@ -31,7 +31,7 @@
 
         <activity
             android:name=".UI.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/ProjectTitle">
@@ -44,7 +44,7 @@
         <activity
             android:name=".UI.SingleInspection"
             android:label="@string/inspectionTitleName"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
         <activity
             android:name=".UI.SingleRestaurant"
             android:label="@string/title_activity_restaurant"
