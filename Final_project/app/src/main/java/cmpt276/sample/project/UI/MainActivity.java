@@ -94,12 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
-                String iconName = image + Integer.toString(i++);
-                restaurant.setIconName(iconName);
 
-
-                int id = getResources().getIdentifier(iconName,"drawable",getPackageName());
-                restaurant.setIcon(id);
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
 
@@ -140,9 +135,50 @@ public class MainActivity extends AppCompatActivity {
 
             Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
 
-            //fill the view
+            //set the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-            imageView.setImageResource(currentRestaurant.getIcon());
+
+            switch (currentRestaurant.getName()) {
+                case "Boston Pizza":
+                    imageView.setImageResource(R.drawable.boston_pizza);
+                    break;
+                case "7-Eleven":
+                    imageView.setImageResource(R.drawable.seven_eleven);
+                    break;
+                case "Safeway":
+                    imageView.setImageResource(R.drawable.safeway);
+                    break;
+                case "Tim Hortons":
+                    imageView.setImageResource(R.drawable.tim_hortons);
+                    break;
+                case "Domino's Pizza":
+                    imageView.setImageResource(R.drawable.dominos_pizza);
+                    break;
+                case "McDonald's":
+                    imageView.setImageResource(R.drawable.mcdonalds);
+                    break;
+                case "KFC":
+                    imageView.setImageResource(R.drawable.kfc);
+                    break;
+                case "Starbucks":
+                    imageView.setImageResource(R.drawable.starbucks);
+                    break;
+                case "Burger King":
+                    imageView.setImageResource(R.drawable.burger_king);
+                    break;
+                case "Blenz Coffee":
+                    imageView.setImageResource(R.drawable.blenz_coffee);
+                    break;
+                case "Save On Foods":
+                    imageView.setImageResource(R.drawable.save_on_foods);
+                    break;
+                case "Freshslice Pizza":
+                    imageView.setImageResource(R.drawable.fresh_slice_pizza);
+                    break;
+                default:
+                    imageView.setImageResource(R.drawable.restaurant);
+            }
+
 
 
             //set Name
