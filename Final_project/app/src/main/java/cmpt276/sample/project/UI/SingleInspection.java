@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.RestaurantManager;
@@ -108,7 +108,7 @@ public class SingleInspection extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setText(){
         TextView date = (TextView)findViewById(R.id.textViewDate);
-        date.setText(Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
+        date.setText(DateUtils.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate()));
 
         TextView type = (TextView)findViewById(R.id.textViewType);
         type.setText(inspection.getInspectionType());

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.RestaurantManager;
 /**
@@ -84,7 +84,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
         Inspection inspection = inspectionList.get(position);
 
         holder.textViewDate.setText (
-                Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate())
+                DateUtils.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate())
         );
         holder.textViewNumOfCritical.setText (
                 String.valueOf(inspection.getNumOfCritical())

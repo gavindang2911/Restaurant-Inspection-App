@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
@@ -168,15 +168,15 @@ public class MainActivity extends AppCompatActivity {
                 numberOfIssues.setText(numberOfIssuesFound+" issues found");
 
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
-                long date = Date.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+                long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
                 if(date<=30){
                     lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
                 }
                 else if(date<365){
-                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 else{
-                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);

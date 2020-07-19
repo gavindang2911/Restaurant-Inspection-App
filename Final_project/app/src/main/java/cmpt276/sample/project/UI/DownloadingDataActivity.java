@@ -1,9 +1,11 @@
 package cmpt276.sample.project.UI;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -31,6 +33,7 @@ import cmpt276.sample.project.R;
 public class DownloadingDataActivity extends AppCompatActivity {
     private DataManager dataManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,17 +42,23 @@ public class DownloadingDataActivity extends AppCompatActivity {
         DataManager.init(this);
         dataManager = DataManager.getInstance();
 
+
+
         setDownloadingData();
-        try {
-            Log.i("enter", "abc");
-            printRes();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        boolean x = dataManager.check20hour();
+        Log.i("AA", "AAAAAAAAAAAAA" + x);
+//        try {
+//            Log.i("enter", "abc");
+//            printRes();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setDownloadingData() {
         dataManager.readRestaurantURL();
+//        dataManager.setLastUpdateTime();
     }
 
     public static Intent makeIntentForDownloadingData(Context context){

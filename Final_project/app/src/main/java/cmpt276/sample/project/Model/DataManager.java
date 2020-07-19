@@ -27,9 +27,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import cmpt276.sample.project.R;
 import okhttp3.Call;
@@ -42,12 +46,17 @@ public class DataManager {
     private Context context;
     private static DataManager instance;
 
-    private String url1; // URL for restaurant
-    private String url2; // URL for inspection
-
+    private String urlForRestaurant; // URL for restaurant
+    private String urlForInspection; // URL for inspection
 
     private String lastTimeModifiedRestaurants;
     private String lastTimeModifiedInspections;
+
+    private boolean updated = false;
+
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
+    }
 
 
     public void setLastTimeModifiedRestaurants(String lastTimeModifiedRestaurants) {
@@ -76,8 +85,8 @@ public class DataManager {
 
     private DataManager(Context context) {
         this.context = context;
-        this.url1 = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
-        this.url2 = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+        this.urlForRestaurant = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
+        this.urlForInspection = "https://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
 
         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
         SharedPreferences.Editor editor = pref.edit();
@@ -110,7 +119,7 @@ public class DataManager {
 
         /** To hold request **/
         final Request request = new Request.Builder()
-                .url(url1)
+                .url(urlForRestaurant)
                 .build();
 
         /** Make get request **/
@@ -135,25 +144,24 @@ public class DataManager {
 
 
                         /** Get real url to read actual data. **/
-                        String tmp = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("url").toString();
+                        String urlReturn = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("url").toString();
 
-                        String urlReturn = tmp;
-                        if (!urlReturn.contains("https")) {
-                            urlReturn = urlReturn.replace("http", "https");
-                        }
+//                        if (!urlReturn.contains("https")) {
+//                            urlReturn = urlReturn.replace("http", "https");
+//                        }
 
-                        String last_modified_restaurant_from_server = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+                        String lastModifiedRestaurantFromServer = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
                         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
 
 
                         SharedPreferences.Editor editor = pref.edit();
 
-                        editor.putString("last_modified_restaurants", last_modified_restaurant_from_server);
+                        editor.putString("last_modified_restaurants", lastModifiedRestaurantFromServer);
                         editor.apply();
 
-                        setLastTimeModifiedRestaurants(last_modified_restaurant_from_server);
-                        Log.i("lasttime", "abc" + last_modified_restaurant_from_server);
+                        setLastTimeModifiedRestaurants(lastModifiedRestaurantFromServer);
+                        Log.i("lasttime", "abc" + lastModifiedRestaurantFromServer);
                         Log.i("lasttimelocal", "abc" + lastTimeModifiedRestaurants);
 
 
@@ -209,10 +217,10 @@ public class DataManager {
     }
 
 
-    private void readInspectionsURL() {
+    public void readInspectionsURL() {
         OkHttpClient client2 = new OkHttpClient();
         Request request2 = new Request.Builder()
-                .url(url2)
+                .url(urlForInspection)
                 .build();
         client2.newCall(request2).enqueue(new Callback() {
             @Override
@@ -301,14 +309,63 @@ public class DataManager {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setLastUpdateTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'-'MM'-'dd'T'hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'-'MM'-'dd'T'hh:mm:ss");
         LocalDateTime today = LocalDateTime.now();
         String todayString = formatter.format(today);
 
         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putString("last_updated", lastUpdatedDate);
+        editor.putString("last_updated", todayString);
         editor.apply();
+
+        String lastUpdate = pref.getString("last_updated", null);
+//        Log.i("Time now", "isaaaaaaaaaaa"+ todayString);
+//        Log.i("Last update", "iszzzzzzzzzzzzz"+ lastUpdate);
+
+        setUpdated(true);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean check20hour() {
+
+        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+        String[] lastUpdateDate = pref.getString("last_updated", null).replace("T", " ").replace("-", "").split(" ");
+
+
+        long dateFromCurrent = DateUtils.dayFromCurrent(Integer.parseInt(lastUpdateDate[0]));
+        if (dateFromCurrent >= 1) {
+            return true;
+        }
+        else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'-'MM'-'dd'T'hh:mm:ss");
+            LocalDateTime currentTime = LocalDateTime.now();
+            String[] currentTimeString = formatter.format(currentTime).replace("T"," ").replace("-","").split(" ");
+            String end = currentTimeString[1];
+            String start = lastUpdateDate[1];
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            for (String s: lastUpdateDate) {
+                Log.i("Time now", "isssssaa "+ s);
+            }
+            for (String ss: currentTimeString) {
+                Log.i("Time now", "isssssaa "+ ss);
+            }
+            try {
+                Date date1 = format.parse(start);
+                Date date2 = format.parse(end);
+
+                long difference = date2.getTime() - date1.getTime();
+                int hours = (int) TimeUnit.MILLISECONDS.toHours(difference);
+
+                /** Adjusted 3 hours for EST conversion of Server time **/
+                if (hours >= 17) {
+                    return true;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }
