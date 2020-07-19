@@ -39,17 +39,25 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class DataManager {
-    private UpdateManager updateManager = UpdateManager.getInstance();
     private Context context;
     private static DataManager instance;
 
     private String url1; // URL for restaurant
     private String url2; // URL for inspection
-    private String urlForRestaurantCSV;
-    private String urlForInspectionCSV;
 
-    public DataManager() {
+
+    private String lastTimeModifiedRestaurants;
+    private String lastTimeModifiedInspections;
+
+
+    public void setLastTimeModifiedRestaurants(String lastTimeModifiedRestaurants) {
+        this.lastTimeModifiedRestaurants = lastTimeModifiedRestaurants;
     }
+
+    public void setLastTimeModifiedInspections(String lastTimeModifiedInspections) {
+        this.lastTimeModifiedInspections = lastTimeModifiedInspections;
+    }
+
 
     public static DataManager getInstance() {
         if (instance == null) {
@@ -70,17 +78,30 @@ public class DataManager {
         this.context = context;
         this.url1 = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
         this.url2 = "http://data.surrey.ca/api/3/action/package_show?id=fraser-health-restaurant-inspection-reports";
+
+        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+        SharedPreferences.Editor editor = pref.edit();
+
+        /** Set some default last updated date **/
+        if (pref.getString("last_modified_restaurants", null) == null) {
+            editor.putString("last_modified_restaurants", "2010-01-01 00:00:00");
+        }
+
+        if (pref.getString("last_modified_inspections", null) == null) {
+            editor.putString("last_modified_inspections", "2010-01-01 00:00:00");
+        }
+
+        if (pref.getString("last_updated", null) == null) {
+            editor.putString("last_updated", "2020-07-18 00:00:00");
+        }
+
+        editor.apply();
+
 //        readRestaurantURL();
 //        readInspectionsURL();
     }
 
-    private void setURLForRestaurantCSV(String urlReturn) {
-        this.urlForRestaurantCSV = urlForRestaurantCSV;
-    }
 
-    private void setURLForInspectionCSV(String urlReturn) {
-        this.urlForInspectionCSV = urlReturn;
-    }
 
     public void readRestaurantURL() {
 
@@ -112,7 +133,6 @@ public class DataManager {
                         /** Read whole file as a JsonObject **/
                         JSONObject obj = new JSONObject(myResponse);
 
-                        Log.i("dataaa", "abc" + obj.getJSONObject("result"));
 
                         /** Get real url to read actual data. **/
                         String tmp = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("url").toString();
@@ -122,20 +142,64 @@ public class DataManager {
                             urlReturn = urlReturn.replace("http", "https");
                         }
 
-                        String last_modified_restaurant = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+                        String last_modified_restaurant_from_server = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
                         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
-                        //  Set default for the last_modified_restaurant to null
-                        String saved_last_modified_restaurant = pref.getString("last_modified_restaurants",
-                                null);
 
-                        if (saved_last_modified_restaurant == null) {
-                            updateManager.setLastModifiedRestaurantsFirstTime(last_modified_restaurant);
-                        } else {
-                            updateManager.setLastModifiedRestaurants(last_modified_restaurant);
-                        }
 
-                        setURLForRestaurantCSV(urlReturn);
+                        SharedPreferences.Editor editor = pref.edit();
+
+                        editor.putString("last_modified_restaurants", last_modified_restaurant_from_server);
+                        editor.apply();
+
+                        setLastTimeModifiedRestaurants(last_modified_restaurant_from_server);
+                        Log.i("lasttime", "abc" + last_modified_restaurant_from_server);
+                        Log.i("lasttimelocal", "abc" + lastTimeModifiedRestaurants);
+
+
+                        Request request3 = new Request.Builder()
+                                .url(urlReturn)
+                                .build();
+
+                        OkHttpClient client3 = new OkHttpClient();
+
+                        client3.newCall(request3).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected errors " + response);
+                                } else {
+                                    final String restaurantCSV = response.body().string();
+
+                                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+                                    File file = new File(path, "update_restaurants.csv");
+
+                                    try {
+                                        file.createNewFile();
+                                    } catch (IOException e) {
+                                        System.out.println("Can not create files.");
+                                        e.printStackTrace();
+                                    }
+                                    try {
+
+                                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                        writer.write(restaurantCSV);
+                                        writer.close();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException("Unable to write to File " + e);
+
+                                    }
+
+                                }
+                            }
+                        });
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -171,18 +235,59 @@ public class DataManager {
                             urlReturn = urlReturn.replace("http", "https");
                         }
 
-                        String last_modified_inspection = obj2.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+                        String last_modified_inspection_from_server = obj2.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
-//                        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
-//                        // Set default for the last_modified_restaurant to null
-//                        String saved_last_modified_inspection = pref.getString("last_modified_inspections", null);
-//                        if (saved_last_modified_inspection == null) {
-//                            updateManager.setLastModifiedInspectionsFirstTime(last_modified_inspection);
-//                        } else {
-//                            updateManager.setLastModifiedInspections(last_modified_inspection);
-//                        }
+                        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
 
-                        setURLForInspectionCSV(urlReturn);
+                        SharedPreferences.Editor editor = pref.edit();
+
+                        editor.putString("last_modified_inspections",last_modified_inspection_from_server);
+                        editor.apply();
+
+                       setLastTimeModifiedInspections(last_modified_inspection_from_server);
+
+
+                        OkHttpClient client4 = new OkHttpClient();
+                        Request request4 = new Request.Builder()
+                                .url(urlReturn)
+                                .build();
+                        client4.newCall(request4).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected errors " + response);
+                                } else {
+                                    final String inspectionCSV = response.body().string();
+
+                                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+
+                                    File file = new File(path, "update_inspections.csv");
+
+                                    try {
+                                        file.createNewFile();
+                                    } catch (IOException e) {
+                                        System.out.println("Can not create files.");
+                                        e.printStackTrace();
+                                    }
+                                    try {
+
+                                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                        writer.write(inspectionCSV);
+                                        writer.close();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException("Unable to write to File " + e);
+
+                                    }
+                                }
+                            }
+                        });
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -192,101 +297,18 @@ public class DataManager {
         });
     }
 
-    public void readURLForRestaurantCSVFile() {
-        OkHttpClient client3 = new OkHttpClient();
-        Request request3 = new Request.Builder()
-                .url(urlForRestaurantCSV)
-                .build();
-        client3.newCall(request3).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected errors " + response);
-                } else {
-                    final String restaurantCSV = response.body().string();
-//                    Log.i("HHHHHHHHHH", "this is write"+restaurantCSV);
-
-                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-
-                    File file = new File(path, "update_restaurants.csv");
-
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        System.out.println("Can not create files.");
-                        e.printStackTrace();
-                    }
-                    try {
-
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                        writer.write(restaurantCSV);
-                        writer.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Unable to write to File " + e);
-
-                    }
-
-                }
-            }
-        });
-    }
-
-    public void readURLForInspectionCSVFile() {
-        OkHttpClient client4 = new OkHttpClient();
-        Request request4 = new Request.Builder()
-                .url(urlForInspectionCSV)
-                .build();
-        client4.newCall(request4).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected errors " + response);
-                } else {
-                    final String inspectionCSV = response.body().string();
-//                    Log.i("HHHHHHHHHH", "this is write"+restaurantCSV);
-
-                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-
-                    File file = new File(path, "update_inspections.csv");
-
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        System.out.println("Can not create files.");
-                        e.printStackTrace();
-                    }
-                    try {
-
-                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                        writer.write(inspectionCSV);
-                        writer.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Unable to write to File " + e);
-
-                    }
-                }
-            }
-        });
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setLastUpdateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy'-'MM'-'dd'T'hh:mm");
         LocalDateTime today = LocalDateTime.now();
         String todayString = formatter.format(today);
-        updateManager.setLastUpdate(todayString);
+
+        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString("last_updated", lastUpdatedDate);
+        editor.apply();
     }
 }

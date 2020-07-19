@@ -40,11 +40,16 @@ public class DownloadingDataActivity extends AppCompatActivity {
         dataManager = DataManager.getInstance();
 
         setDownloadingData();
+        try {
+            Log.i("enter", "abc");
+            printRes();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setDownloadingData() {
         dataManager.readRestaurantURL();
-        dataManager.readURLForRestaurantCSVFile();
     }
 
     public static Intent makeIntentForDownloadingData(Context context){
@@ -94,7 +99,7 @@ public class DownloadingDataActivity extends AppCompatActivity {
                 restaurant.setIconName(iconName);
 
                 restaurantManager.add(restaurant);
-                Log.i("HHHHHHHHHH", "this is write" + restaurant);
+//                Log.i("AAAAAAA", "this is write" + restaurant);
 
             }
         } catch (IOException e) {
