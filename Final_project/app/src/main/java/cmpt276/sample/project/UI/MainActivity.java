@@ -136,6 +136,24 @@ public class MainActivity extends AppCompatActivity {
             Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
 
             //set the view
+            /*
+            Site fr image
+            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
+            https://fontmeme.com/mcdonalds-font/
+            https://1000logos.net/starbucks-logo/
+            https://www.facebook.com/Freshslice/
+            https://www.facebook.com/BlenzCoffee/
+            https://logos.fandom.com/wiki/Safeway
+            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
+            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
+            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
+            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
+            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
+            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
+            https://www.vippng.com/ps/restaurant-icon/
+
+             */
+
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
 
             switch (currentRestaurant.getName()) {
