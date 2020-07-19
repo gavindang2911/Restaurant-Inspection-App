@@ -26,7 +26,7 @@ import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
-import cmpt276.sample.project.Model.UpdateManager;
+//import cmpt276.sample.project.Model.UpdateManager;
 import cmpt276.sample.project.Model.Violation;
 import cmpt276.sample.project.R;
 
@@ -45,19 +45,14 @@ public class DownloadingDataActivity extends AppCompatActivity {
 
 
         setDownloadingData();
-        boolean x = dataManager.check20hour();
-        Log.i("AA", "AAAAAAAAAAAAA" + x);
-//        try {
-//            Log.i("enter", "abc");
-//            printRes();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+//        boolean x = dataManager.check20hour();
+//        Log.i("AA", "AAAAAAAAAAAAA" + x);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setDownloadingData() {
         dataManager.readRestaurantURL();
+        dataManager.readInspectionsURL();
 //        dataManager.setLastUpdateTime();
     }
 
@@ -108,7 +103,6 @@ public class DownloadingDataActivity extends AppCompatActivity {
                 restaurant.setIconName(iconName);
 
                 restaurantManager.add(restaurant);
-//                Log.i("AAAAAAA", "this is write" + restaurant);
 
             }
         } catch (IOException e) {
@@ -130,33 +124,77 @@ public class DownloadingDataActivity extends AppCompatActivity {
         RestaurantManager restaurantManager;
 
         String csvLine = "";
+
         try {
             reader.readLine();
             while ((csvLine = reader.readLine()) != null)
             {
-                String[] data = csvLine.split("[,|]");
-                for (int i = 0; i < data.length; i++) {
-                    data[i] = data[i].replaceAll("^\"|\"$", "");
-                }
+                String regex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+                String[] tokens = csvLine.split(regex);
+                String hazardRating = "";
+                if(tokens.length!=0) {
+                    List<Violation> result = new ArrayList<>();
+                    if (tokens.length == 5) {
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                    }
+                    else {
+                        if (tokens.length == 7) {
+                            hazardRating = tokens[6].replaceAll("[^a-zA-Z0-9 &]","");;
+                        }
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
 
-                List<Violation> violations = getViolation(data);
+                        if (tokens[5].length() > 0) {
+                            /**
+                             * CHeck if where there is more than 1 violations or not
+                             */
+                            if (!tokens[5].contains("|")) { 
+                                String[] violationStringArray = tokens[5].split(",");
 
-                Inspection inspection = new Inspection(
-                        data[0],
-                        Integer.parseInt(data[1]),
-                        data[2],
-                        Integer.parseInt(data[3]),
-                        Integer.parseInt(data[4]),
-                        data[5],
-                        violations
-                );
+                                Violation violation = readViolation(violationStringArray);
 
-                inspectionManager.add(inspection);
+                                inspection.addViolation(violation);
+                            } else {
+                                String[] allViolations = tokens[5].split("[|]");
+                                
+                                for (int i = 0; i < allViolations.length; i++) {
+                                    String[] violationStringArray = allViolations[i].split(",");
+                                    Violation violation = readViolation(violationStringArray);
+                                    inspection.addViolation(violation);
+                                }
+                            }
+                        }
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                        Log.i("AAAAAAA", "this is writeeeeee" + inspection);
 
-                restaurantManager = RestaurantManager.getInstance();
-                for (Restaurant res : restaurantManager) {
-                    if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
-                        res.addInspection(inspection);
                     }
                 }
             }
@@ -167,30 +205,15 @@ public class DownloadingDataActivity extends AppCompatActivity {
         }
     }
 
-    private List<Violation> getViolation(String[] data) {
-        List<Violation> result = new ArrayList<>();
-        final int START = 6;
-        final int COMPONENT_PER_VIOLATION = 4;
 
-        for (int i = START; i < data.length; i += COMPONENT_PER_VIOLATION) {
-            int violationNum = 0;
-            try {
-                violationNum = Integer.parseInt(data[i]);
-            } catch (Exception e) {
-                Log.wtf("InspectionManager",
-                        "Error when converting string " + data[i] + " to int");
-                e.getStackTrace();
-            }
+    private Violation readViolation(String[] violationStringArray) {
 
-            result.add(new Violation(
-                    violationNum,
-                    data[i + 1],
-                    data[i + 2],
-                    data[i + 3]
-            ));
-        }
+        int violationNum = Integer.parseInt(violationStringArray[0].replaceAll("[^0-9]", ""));
+        String criticalOrNon = violationStringArray[1];
+        String description = violationStringArray[2];
+        String isRepeat = violationStringArray[3];
 
-        return result;
+        return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
 }

@@ -33,6 +33,9 @@ public class Inspection implements Comparable<Inspection> {
         this.violations = violations;
     }
 
+    public void addViolation(Violation v) {
+        this.violations.add(v);
+    }
     public String getTrackingNumber() {
         return trackingNumber;
     }

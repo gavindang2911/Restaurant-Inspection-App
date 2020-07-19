@@ -106,8 +106,8 @@ public class DataManager {
 
         editor.apply();
 
-//        readRestaurantURL();
-//        readInspectionsURL();
+        readRestaurantURL();
+        readInspectionsURL();
     }
 
 
@@ -161,8 +161,8 @@ public class DataManager {
                         editor.apply();
 
                         setLastTimeModifiedRestaurants(lastModifiedRestaurantFromServer);
-                        Log.i("lasttime", "abc" + lastModifiedRestaurantFromServer);
-                        Log.i("lasttimelocal", "abc" + lastTimeModifiedRestaurants);
+//                        Log.i("lasttime", "abc" + lastModifiedRestaurantFromServer);
+//                        Log.i("lasttimelocal", "abc" + lastTimeModifiedRestaurants);
 
 
                         Request request3 = new Request.Builder()
@@ -293,6 +293,8 @@ public class DataManager {
                                         throw new RuntimeException("Unable to write to File " + e);
 
                                     }
+
+                                    setLastUpdateTime();
                                 }
                             }
                         });
@@ -319,10 +321,6 @@ public class DataManager {
         editor.putString("last_updated", todayString);
         editor.apply();
 
-        String lastUpdate = pref.getString("last_updated", null);
-//        Log.i("Time now", "isaaaaaaaaaaa"+ todayString);
-//        Log.i("Last update", "iszzzzzzzzzzzzz"+ lastUpdate);
-
         setUpdated(true);
     }
 
@@ -343,13 +341,15 @@ public class DataManager {
             String[] currentTimeString = formatter.format(currentTime).replace("T"," ").replace("-","").split(" ");
             String end = currentTimeString[1];
             String start = lastUpdateDate[1];
+
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-            for (String s: lastUpdateDate) {
-                Log.i("Time now", "isssssaa "+ s);
-            }
-            for (String ss: currentTimeString) {
-                Log.i("Time now", "isssssaa "+ ss);
-            }
+
+//            for (String s: lastUpdateDate) {
+//                Log.i("Time now", "isssssaa "+ s);
+//            }
+//            for (String ss: currentTimeString) {
+//                Log.i("Time now", "isssssaa "+ ss);
+//            }
             try {
                 Date date1 = format.parse(start);
                 Date date2 = format.parse(end);
@@ -357,7 +357,7 @@ public class DataManager {
                 long difference = date2.getTime() - date1.getTime();
                 int hours = (int) TimeUnit.MILLISECONDS.toHours(difference);
 
-                /** Adjusted 3 hours for EST conversion of Server time **/
+                // Convert time to EST time zone
                 if (hours >= 17) {
                     return true;
                 }
@@ -366,6 +366,61 @@ public class DataManager {
                 e.printStackTrace();
             }
         }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean checkIfUpdateNeeded() {
+        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+
+        String lastUpdateOnDevice = pref.getString("last_updated", null);
+
+        String lastModifiedRestaurantOnServer = pref.getString("last_modified_restaurants", null);
+
+        String lastModifiedInspectionOnServer = pref.getString("last_modified_inspections", null);
+
+
+        if (lastUpdateOnDevice.equals("2020-07-18 00:00:00")) {
+            return true;
+        }
+
+        if (checkIfUpdateNeededHelper(lastUpdateOnDevice, lastModifiedRestaurantOnServer)) {
+            return true;
+        }
+
+        if (checkIfUpdateNeededHelper(lastUpdateOnDevice, lastModifiedInspectionOnServer)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean checkIfUpdateNeededHelper(String lastUpdateOnDevice, String lastModifiedOnServer) {
+
+        String[] lastUpdateDate = lastUpdateOnDevice.replace("T", " ").split("\\.");
+        String[] lastModified = lastModifiedOnServer.replace("T", " ").split("\\.");
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String end = lastModified[0];
+        String start = lastUpdateDate[0];
+
+        try {
+            Date date1 = format.parse(start);
+            Date date2 = format.parse(end);
+
+            long difference = date2.getTime() - date1.getTime();
+            int hours = (int) TimeUnit.MILLISECONDS.toHours(difference);
+
+            // Convert time to EST time zone
+            if (hours >= -3) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 }
