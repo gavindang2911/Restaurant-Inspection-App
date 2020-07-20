@@ -94,12 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
-                String iconName = image + Integer.toString(i++);
-                restaurant.setIconName(iconName);
 
-
-                int id = getResources().getIdentifier(iconName,"drawable",getPackageName());
-                restaurant.setIcon(id);
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
 
@@ -140,9 +135,68 @@ public class MainActivity extends AppCompatActivity {
 
             Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
 
-            //fill the view
+            //set the view
+            /*
+            Site fr image
+            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
+            https://fontmeme.com/mcdonalds-font/
+            https://1000logos.net/starbucks-logo/
+            https://www.facebook.com/Freshslice/
+            https://www.facebook.com/BlenzCoffee/
+            https://logos.fandom.com/wiki/Safeway
+            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
+            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
+            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
+            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
+            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
+            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
+            https://www.vippng.com/ps/restaurant-icon/
+
+             */
+
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-            imageView.setImageResource(currentRestaurant.getIcon());
+
+            switch (currentRestaurant.getName()) {
+                case "Boston Pizza":
+                    imageView.setImageResource(R.drawable.boston_pizza);
+                    break;
+                case "7-Eleven":
+                    imageView.setImageResource(R.drawable.seven_eleven);
+                    break;
+                case "Safeway":
+                    imageView.setImageResource(R.drawable.safeway);
+                    break;
+                case "Tim Hortons":
+                    imageView.setImageResource(R.drawable.tim_hortons);
+                    break;
+                case "Domino's Pizza":
+                    imageView.setImageResource(R.drawable.dominos_pizza);
+                    break;
+                case "McDonald's":
+                    imageView.setImageResource(R.drawable.mcdonalds);
+                    break;
+                case "KFC":
+                    imageView.setImageResource(R.drawable.kfc);
+                    break;
+                case "Starbucks":
+                    imageView.setImageResource(R.drawable.starbucks);
+                    break;
+                case "Burger King":
+                    imageView.setImageResource(R.drawable.burger_king);
+                    break;
+                case "Blenz Coffee":
+                    imageView.setImageResource(R.drawable.blenz_coffee);
+                    break;
+                case "Save On Foods":
+                    imageView.setImageResource(R.drawable.save_on_foods);
+                    break;
+                case "Freshslice Pizza":
+                    imageView.setImageResource(R.drawable.fresh_slice_pizza);
+                    break;
+                default:
+                    imageView.setImageResource(R.drawable.restaurant);
+            }
+
 
 
             //set Name
