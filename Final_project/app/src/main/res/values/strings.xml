@@ -75,6 +75,7 @@
     <string name="not_critical">Not Critical</string>
     <string name="title_activity_maps">Map</string>
     <string name="map">Map</string>
+    <string name="title_activity_maps2">Map</string>
 
 
 </resources>
