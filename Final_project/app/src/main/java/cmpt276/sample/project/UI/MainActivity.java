@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
         readRestaurantData();
         sortRestaurants();
         readInspectionData();
+        try {
+            readRestaurantDataFromServer();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            readInspectionDataFromServer();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         restaurantListView();
         setUpMap();
     }
@@ -291,6 +305,160 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
+    }
+
+    // Bring to the main (map activity when enter the app
+    private void readRestaurantDataFromServer() throws FileNotFoundException {
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+
+        File file = new File(path, "update_restaurants.csv");
+        InputStream is = new FileInputStream(file);
+
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+        RestaurantManager restaurantManager = RestaurantManager.getInstance();
+
+        int i = 1;
+        String image = "image";
+        String line = "";
+
+        try {
+            //Step over headers
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                //Split by ','
+                line = line.replaceAll(", ", " ");
+                String[] tokens = line.split(",");
+
+                //Read the data
+                Restaurant restaurant = new Restaurant();
+                restaurant.setTrackingNumber(tokens[0].replace("\"", ""));
+                restaurant.setName(tokens[1].replace("\"", ""));
+                restaurant.setAddress(tokens[2].replace("\"", ""));
+                restaurant.setCity(tokens[3].replace("\"", ""));
+                restaurant.setType(tokens[4].replace("\"", ""));
+                restaurant.setLatitude(Double.parseDouble(tokens[5]));
+                restaurant.setLongitude(Double.parseDouble(tokens[6]));
+
+                String iconName = image + Integer.toString(i++);
+                restaurant.setIconName(iconName);
+
+                restaurantManager.add(restaurant);
+                restaurantList.add(restaurant);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readInspectionDataFromServer() throws FileNotFoundException {
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+
+        File file = new File(path, "update_inspections.csv");
+        InputStream is = new FileInputStream(file);
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+        InspectionManager inspectionManager = InspectionManager.getInstance();
+        RestaurantManager restaurantManager;
+
+        String csvLine = "";
+
+        try {
+            reader.readLine();
+            while ((csvLine = reader.readLine()) != null)
+            {
+                String regex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+                String[] tokens = csvLine.split(regex);
+                String hazardRating = "";
+                if(tokens.length!=0) {
+                    List<Violation> result = new ArrayList<>();
+                    if (tokens.length == 5) {
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                    }
+                    else {
+                        if (tokens.length == 7) {
+                            hazardRating = tokens[6].replaceAll("[^a-zA-Z0-9 &]","");;
+                        }
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
+
+                        if (tokens[5].length() > 0) {
+                            /**
+                             * CHeck if where there is more than 1 violations or not
+                             */
+                            if (!tokens[5].contains("|")) {
+                                String[] violationStringArray = tokens[5].split(",");
+
+                                Violation violation = readViolation(violationStringArray);
+
+                                inspection.addViolation(violation);
+                            } else {
+                                String[] allViolations = tokens[5].split("[|]");
+
+                                for (int i = 0; i < allViolations.length; i++) {
+                                    String[] violationStringArray = allViolations[i].split(",");
+                                    Violation violation = readViolation(violationStringArray);
+                                    inspection.addViolation(violation);
+                                }
+                            }
+                        }
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                        Log.i("AAAAAAA", "this is writeeeeee" + inspection);
+
+                    }
+                }
+            }
+        }
+        catch (IOException e) {
+            Log.wtf("InspectionManager", "Error reading file on line " + csvLine, e);
+            e.printStackTrace();
+        }
+    }
+
+
+    private Violation readViolation(String[] violationStringArray) {
+
+        int violationNum = Integer.parseInt(violationStringArray[0].replaceAll("[^0-9]", ""));
+        String criticalOrNon = violationStringArray[1];
+        String description = violationStringArray[2];
+        String isRepeat = violationStringArray[3];
+
+        return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
 }
