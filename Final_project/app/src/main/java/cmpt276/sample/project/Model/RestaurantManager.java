@@ -28,6 +28,7 @@ public class RestaurantManager implements Iterable<Restaurant>{
     }
 
     private static RestaurantManager restaurantManager = null;
+
     public static RestaurantManager getInstance(){
         if(restaurantManager==null){
             restaurantManager = new RestaurantManager();
@@ -35,6 +36,9 @@ public class RestaurantManager implements Iterable<Restaurant>{
         return restaurantManager;
     }
 
+    public void reset() {
+        restaurantManager = null;
+    }
     public Restaurant getRestaurant(int n){return restaurantList.get(n);}
     public int getAccount(){return account;}
 

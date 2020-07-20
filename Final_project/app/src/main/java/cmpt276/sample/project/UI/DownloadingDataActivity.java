@@ -46,13 +46,15 @@ public class DownloadingDataActivity extends AppCompatActivity {
         DataManager.init(this);
         dataManager = DataManager.getInstance();
 
+        SharedPreferences pref = this.getSharedPreferences("AppPrefs", 0);
+        SharedPreferences.Editor editor = pref.edit();
 
         setPopUpSize();
         setCancelButton();
-        setProcessing();
+        doInBackground();
     }
 
-    private void setProcessing() {
+    private void doInBackground() {
         download = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -71,8 +73,6 @@ public class DownloadingDataActivity extends AppCompatActivity {
                     setResult(DownloadingDataActivity.RESULT_OK, i);
                     finish();
                 }
-                setResult(RESULT_CANCELED, i);
-                finish();
             }
         });
         download.start();
@@ -81,14 +81,21 @@ public class DownloadingDataActivity extends AppCompatActivity {
 
     private void setCancelButton() {
         Button btn = findViewById(R.id.button_cancel_download);
+        SharedPreferences pref = this.getSharedPreferences("AppPrefs", 0);
+        final SharedPreferences.Editor editor = pref.edit();
         btn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 download.interrupt();
+
                 dataManager.setCancel(true);
 
+                editor.putString("last_updated", "2020-07-01 00:00:00");
+                dataManager.setUpdate(false);
+
                 Intent intent = new Intent();
-                setResult(RESULT_CANCELED, intent);
+                setResult(DownloadingDataActivity.RESULT_CANCELED, intent);
                 finish();
             }
         });

@@ -114,7 +114,7 @@ public class DataManager {
         }
 
         if (pref.getString("last_updated", null) == null) {
-            editor.putString("last_updated", "2020-07-18 00:00:00");
+            editor.putString("last_updated", "2020-07-01 00:00:00");
         }
 
         editor.apply();
@@ -171,8 +171,7 @@ public class DataManager {
                         editor.apply();
 
                         setLastTimeModifiedRestaurants(lastModifiedRestaurantFromServer);
-//                        Log.i("lasttime", "abc" + lastModifiedRestaurantFromServer);
-//                        Log.i("lasttimelocal", "abc" + lastTimeModifiedRestaurants);
+
 
 
                         Request request3 = new Request.Builder()
@@ -211,7 +210,6 @@ public class DataManager {
                                         writer.close();
                                     } catch (IOException e) {
                                         throw new RuntimeException("Unable to write to File " + e);
-
                                     }
 
                                 }
@@ -262,7 +260,7 @@ public class DataManager {
                         editor.putString("last_modified_inspections",last_modified_inspection_from_server);
                         editor.apply();
 
-                       setLastTimeModifiedInspections(last_modified_inspection_from_server);
+                        setLastTimeModifiedInspections(last_modified_inspection_from_server);
 
 
                         OkHttpClient client4 = new OkHttpClient();
@@ -389,7 +387,7 @@ public class DataManager {
         String lastModifiedInspectionOnServer = pref.getString("last_modified_inspections", null);
 
 
-        if (lastUpdateOnDevice.equals("2020-07-18 00:00:00")) {
+        if (lastUpdateOnDevice.equals("2020-07-01 00:00:00")) {
             return true;
         }
 

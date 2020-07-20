@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -15,13 +16,12 @@ import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.R;
 
 public class UpdateDataActivity extends AppCompatActivity {
-    private static final int ACTIVITY_RESULT_CALCULATE = 103;
+    private static final int ACTIVITY_RESULT_DOWNLOADING = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_data);
-
 
 
         setPopUpSize();
@@ -44,7 +44,6 @@ public class UpdateDataActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
@@ -56,7 +55,7 @@ public class UpdateDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = DownloadingDataActivity.makeIntentForDownloadingData(UpdateDataActivity.this);
-                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+                startActivityForResult(intent, ACTIVITY_RESULT_DOWNLOADING);
             }
         });
     }
@@ -65,10 +64,22 @@ public class UpdateDataActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK) {
+            Intent intent = new Intent();
+            setResult(UpdateDataActivity.RESULT_OK, intent);
+            finish();
+        }
         // Handle Cancel Button
-        if (resultCode == Activity.RESULT_CANCELED) {
-            return;
+        if (resultCode == RESULT_CANCELED) {
+            Intent intent = new Intent();
+            setResult(UpdateDataActivity.RESULT_CANCELED, intent);
+            finish();
         }
 
+    }
+
+    public static Intent makeIntentForUpdateData(Context context){
+        Intent intent = new Intent(context, UpdateDataActivity.class);
+        return intent;
     }
 }

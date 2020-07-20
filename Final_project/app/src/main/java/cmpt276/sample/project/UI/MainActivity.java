@@ -6,7 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 
+import cmpt276.sample.project.Model.DataManager;
 import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
@@ -53,34 +57,67 @@ import cmpt276.sample.project.R;
  * @author Shan Qing, sqing
  */
 public class MainActivity extends AppCompatActivity {
-    private static final int ACTIVITY_RESULT_CALCULATE = 103;
+    private static final int ACTIVITY_RESULT_UPDATE = 103;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
+    private DataManager dataManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+//        SharedPreferences settings = this.getSharedPreferences("PreferencesName", 0);
+//        settings.edit().clear().commit();
 
-        readRestaurantData();
+        dataManager = DataManager.init(this);
+        dataManager = DataManager.getInstance();
+
+        checkForUpdate();
+
+        try {
+            if (readRestaurantDataFromServer() && readInspectionDataFromServer()) { }
+            else {
+                readRestaurantData();
+                readInspectionData();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         sortRestaurants();
-        readInspectionData();
-        try {
-            readRestaurantDataFromServer();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            readInspectionDataFromServer();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         restaurantListView();
         setUpMap();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void checkForUpdate() {
+        if(dataManager.check20hour()) {
+            if(dataManager.checkIfUpdateNeeded()) {
+                Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
+                startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_UPDATE) {
+            restaurantManager.reset();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+        else if (resultCode == RESULT_CANCELED && requestCode == ACTIVITY_RESULT_UPDATE) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.downloadFailed),
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     public  void readRestaurantData(){
@@ -134,7 +171,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
-                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+//                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+                startActivity(intent);
             }
         });
     }
@@ -308,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Bring to the main (map activity when enter the app
-    private void readRestaurantDataFromServer() throws FileNotFoundException {
+    private boolean readRestaurantDataFromServer() throws FileNotFoundException {
         final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 
@@ -319,7 +357,6 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
         );
-        RestaurantManager restaurantManager = RestaurantManager.getInstance();
 
         int i = 1;
         String image = "image";
@@ -350,12 +387,14 @@ public class MainActivity extends AppCompatActivity {
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    private void readInspectionDataFromServer() throws FileNotFoundException {
+    private boolean readInspectionDataFromServer() throws FileNotFoundException {
         final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 
@@ -366,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 new InputStreamReader(is, Charset.forName("UTF-8"))
         );
         InspectionManager inspectionManager = InspectionManager.getInstance();
-        RestaurantManager restaurantManager;
+
 
         String csvLine = "";
 
@@ -443,10 +482,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+            return true;
         }
         catch (IOException e) {
             Log.wtf("InspectionManager", "Error reading file on line " + csvLine, e);
             e.printStackTrace();
+            return false;
         }
     }
 
