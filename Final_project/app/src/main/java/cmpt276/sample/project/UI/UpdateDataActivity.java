@@ -10,11 +10,12 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 
+import cmpt276.sample.project.Model.DataManager;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.R;
 
 public class UpdateDataActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_CALCULATE = 103;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,20 +23,20 @@ public class UpdateDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_data);
 
 
+
         setPopUpSize();
         setUpUpdateButton();
         setUpCancelButton();
-
     }
 
     private void setPopUpSize() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
+        int popUpWidth = dm.widthPixels;
+        int popUpHeight = dm.heightPixels;
 
-        getWindow().setLayout((int)(width * .8), (int)(height * .6));
+        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .7));
     }
 
     private void setUpCancelButton() {
@@ -43,6 +44,7 @@ public class UpdateDataActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
             }
         });

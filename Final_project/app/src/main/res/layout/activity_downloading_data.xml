@@ -8,19 +8,8 @@
     android:background="@drawable/background_popup"
     >
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="243dp"
-        android:layout_height="181dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338"
-        app:srcCompat="@drawable/loading" />
-
     <Button
-        android:id="@+id/button_cancel_popup"
+        android:id="@+id/button_cancel_download"
         android:layout_width="152dp"
         android:layout_height="54dp"
         android:layout_marginBottom="164dp"
@@ -31,7 +20,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="154dp"
+        android:layout_height="146dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_cancel_download"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.79" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.663" />
 </androidx.constraintlayout.widget.ConstraintLayout>

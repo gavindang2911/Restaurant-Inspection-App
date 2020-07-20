@@ -52,10 +52,23 @@ public class DataManager {
     private String lastTimeModifiedRestaurants;
     private String lastTimeModifiedInspections;
 
-    private boolean updated = false;
+    private boolean update = false;
+    private boolean cancel = false;
 
-    public void setUpdated(boolean updated) {
-        this.updated = updated;
+    public boolean isUpdated() {
+        return update;
+    }
+
+    public boolean isCancelled() {
+        return cancel;
+    }
+
+    public void setCancel(boolean cancelled) {
+        this.cancel= cancelled;
+    }
+
+    public void setUpdate(boolean updated) {
+        this.update = updated;
     }
 
 
@@ -105,9 +118,6 @@ public class DataManager {
         }
 
         editor.apply();
-
-        readRestaurantURL();
-        readInspectionsURL();
     }
 
 
@@ -321,7 +331,7 @@ public class DataManager {
         editor.putString("last_updated", todayString);
         editor.apply();
 
-        setUpdated(true);
+        setUpdate(true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -361,7 +371,6 @@ public class DataManager {
                 if (hours >= 17) {
                     return true;
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
