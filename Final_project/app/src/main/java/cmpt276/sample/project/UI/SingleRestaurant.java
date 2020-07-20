@@ -47,6 +47,12 @@ public class SingleRestaurant extends AppCompatActivity {
         return intent;
     }
 
+    public static Intent makeIntentForSingleRestaurantFromMap(Context context, String trackingNumber){
+        Intent intent = new Intent(context, SingleRestaurant.class);
+        intent.putExtra("trackingNumber",trackingNumber);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,12 +5,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -20,11 +24,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import cmpt276.sample.project.Model.CustomInfoAdapter;
+import cmpt276.sample.project.Model.MyItem;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;
@@ -37,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mLocationPermissionGranted;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private Location mLastKnownLocation;
+    private ClusterManager mClusterManager;
 
     private final LatLng Surrey = new LatLng(49.187500,-122.849000);
 
@@ -68,13 +78,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //get Permission
         getLocationPermission();
 
-        addRestaurantMarkers();
+//        addRestaurantMarkers();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        //cluster
+        setUpCluster();
     }
 
     //add restaurants markers
@@ -88,32 +101,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(res.getInspections().size()!=0) {
                 if(res.getInspections().get(0).getHazardRating().equals("Low")){
                     Bitmap resized = resizeMapIcon("low_hazard_marker",100,100);
-                    mMap.addMarker(new MarkerOptions().position(restaurantPosition)
-                            .title(res.getName())
-                            .snippet("Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating())
-                            .icon(BitmapDescriptorFactory.fromBitmap(resized)));
+                    MyItem cluster = new MyItem(restaurantPosition, res.getName()
+                            ,"Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating()
+                            ,"Low"
+                            ,res.getTrackingNumber());
+                    mClusterManager.addItem(cluster);
                 }
                 else if(res.getInspections().get(0).getHazardRating().equals("Moderate")){
                     Bitmap resized = resizeMapIcon("medium_hazard_marker",100,100);
-                    mMap.addMarker(new MarkerOptions().position(restaurantPosition)
-                            .title(res.getName())
-                            .snippet("Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating())
-                            .icon(BitmapDescriptorFactory.fromBitmap(resized)));
+                    MyItem cluster = new MyItem(restaurantPosition
+                            ,res.getName()
+                            ,"Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating()
+                            ,"Moderate"
+                            ,res.getTrackingNumber());
+                    mClusterManager.addItem(cluster);
                 }
                 else {
                     Bitmap resized = resizeMapIcon("high_hazard_marker",100,100);
-                    mMap.addMarker(new MarkerOptions().position(restaurantPosition)
-                            .title(res.getName())
-                            .snippet("Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating())
-                            .icon(BitmapDescriptorFactory.fromBitmap(resized)));
+                    MyItem cluster = new MyItem(restaurantPosition
+                            ,res.getName()
+                            ,"Address: " + restaurantLocation + "\n" + "Hazard Level: " + res.getInspections().get(0).getHazardRating()
+                            ,"High"
+                            ,res.getTrackingNumber());
+                    mClusterManager.addItem(cluster);
                 }
             }
             else {
                 Bitmap resized = resizeMapIcon("no_inspection_marker",100,100);
-                mMap.addMarker(new MarkerOptions().position(restaurantPosition).
-                        title(res.getName())
-                        .snippet("Address: " + restaurantLocation + "\n" + "Hazard Level: Unknown")
-                        .icon(BitmapDescriptorFactory.fromBitmap(resized)));
+                MyItem cluster = new MyItem(restaurantPosition
+                        ,res.getName()
+                        ,"Address: " + restaurantLocation + "\n" + "Hazard Level: Unknown"
+                        ,"Unknown"
+                        ,res.getTrackingNumber());
+                mClusterManager.addItem(cluster);
             }
         }
     }
@@ -209,7 +229,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void setUpCluster(){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49.27645,-122.917587),13));
+        mClusterManager = new ClusterManager<MyItem>(this,mMap);
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+        addRestaurantMarkers();
+        mClusterManager.setRenderer(new CustomClusterRenderer(getApplicationContext()));
+        clusterInfoWindow();
+    }
+    private class CustomClusterRenderer extends DefaultClusterRenderer<MyItem> {
+        public CustomClusterRenderer(Context context) {
+            super(context, mMap, mClusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(@NonNull MyItem item, @NonNull MarkerOptions markerOptions) {
+            if(item.getIcon().equals("Low")){
+                Bitmap resized = resizeMapIcon("low_hazard_marker",100,100);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resized));
+            }
+            else if(item.getIcon().equals("Moderate")){
+                Bitmap resized = resizeMapIcon("medium_hazard_marker",100,100);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resized));
+            }
+            else if(item.getIcon().equals("High")){
+                Bitmap resized = resizeMapIcon("high_hazard_marker",100,100);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resized));
+            }
+            else {
+                Bitmap resized = resizeMapIcon("no_inspection_marker",100,100);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resized));
+            }
+        }
+
+    }
+
+    private void clusterInfoWindow() {
+        mClusterManager.getMarkerCollection().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                final View view = getLayoutInflater().inflate(R.layout.custom_info_window, null);
+                TextView nameView = view.findViewById(R.id.title);
+                TextView detailsView = view.findViewById(R.id.snippet);
+
+                String name = marker.getTitle();
+                nameView.setText(name);
+                String details = marker.getSnippet();
+
+                detailsView.setText(details);
+
+                return view;
+            }
+        });
+
+        mClusterManager.setRenderer(new CustomClusterRenderer(getApplicationContext()));
 
 
+
+
+
+    }
 
 }
