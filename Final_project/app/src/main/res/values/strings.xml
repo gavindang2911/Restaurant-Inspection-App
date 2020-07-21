@@ -81,8 +81,12 @@
 
     <string name="title_activity_maps">Map</string>
     <string name="map">Map</string>
+
     <string name="cancel">Cancel</string>
     <string name="downloadFailed">Failed to download</string>
+
+    <string name="title_activity_maps2">Map</string>
+
 
 
 </resources>
