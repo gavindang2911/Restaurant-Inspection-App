@@ -73,8 +73,20 @@
     <string name="InspectionTitle">Inspection</string>
     <string name="food_premises_not_maintained_in_a_sanitary_condition">Food premises not maintained in a sanitary condition.</string>
     <string name="not_critical">Not Critical</string>
+
+    <string name="update_popup">Update</string>
+    <string name="ignore_popup">Ignore</string>
+    <string name="update_available">Update Available</string>
+    <string name="image_download">image download</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="map">Map</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="downloadFailed">Failed to download</string>
+
+    <string name="title_activity_maps2">Map</string>
+    <string name="restaurant">Restaurant</string>
 
 
 </resources>

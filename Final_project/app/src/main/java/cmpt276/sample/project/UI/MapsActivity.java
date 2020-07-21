@@ -5,7 +5,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+
 import android.content.Context;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,7 +16,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.TextView;
+
+import android.widget.Button;
+
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -32,7 +38,9 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-import cmpt276.sample.project.Model.CustomInfoAdapter;
+
+import cmpt276.sample.project.Adapter.CustomInfoAdapter;
+import cmpt276.sample.project.Adapter.CustomInfoAdapter;
 import cmpt276.sample.project.Model.MyItem;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
@@ -58,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -86,8 +95,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
+
         //cluster
         setUpCluster();
+
+        setUpRestaurant();
+
     }
 
     //add restaurants markers
@@ -229,6 +242,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
     private void setUpCluster(){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(49.27645,-122.917587),13));
         mClusterManager = new ClusterManager<MyItem>(this,mMap);
@@ -262,8 +276,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resized));
             }
         }
-
     }
+
+    private void setUpRestaurant(){
+        Button button = (Button) findViewById(R.id.buttonGoToList);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, MainActivity.class));
+            }
+        });
+    }
+
 
     private void clusterInfoWindow() {
         mClusterManager.getMarkerCollection().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -290,10 +314,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mClusterManager.setRenderer(new CustomClusterRenderer(getApplicationContext()));
 
+        mClusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
+            @Override
+            public void onClusterItemInfoWindowClick(MyItem item) {
+                String resId = item.getTrackingNumber();
+                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MapsActivity.this, resId);
+                startActivity(intent);
+            }
+        });
 
 
+    }
 
-
+    public void onBackPressed(){
+        finishAffinity();
     }
 
 }

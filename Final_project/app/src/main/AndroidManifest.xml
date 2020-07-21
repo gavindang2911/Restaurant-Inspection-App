@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cmpt276.sample.project">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!--        <activity android:name=".UI.DownloadingDataActivity"></activity>-->
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -31,7 +32,8 @@
 
         <activity
             android:name=".UI.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/ProjectTitle">
@@ -41,16 +43,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".UI.UpdateDataActivity"
+            android:theme="@style/AppTheme.PopUpTheme">
+        </activity>
+
         <activity
             android:name=".UI.SingleInspection"
             android:label="@string/inspectionTitleName"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
+
         <activity
             android:name=".UI.SingleRestaurant"
             android:label="@string/title_activity_restaurant"
             android:launchMode="singleTop">
 
-            <!-- android:theme="@style/AppTheme.NoActionBar" -->
+
+        </activity>
+
+        <activity android:name=".UI.DownloadingDataActivity"
+            tools:ignore="DuplicateActivity"
+            android:theme="@style/AppTheme.PopUpTheme">
 
         </activity>
     </application>

@@ -1,11 +1,10 @@
-package cmpt276.sample.project.UI;
+package cmpt276.sample.project.Adapter;
 
 
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.RestaurantManager;
 /**
@@ -28,24 +27,6 @@ import cmpt276.sample.project.Model.RestaurantManager;
  */
 
 
-
-
-import android.os.Build;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
-import cmpt276.sample.project.Model.Date;
-import cmpt276.sample.project.Model.Inspection;
-import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;
 
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
@@ -103,7 +84,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.In
         Inspection inspection = inspectionList.get(position);
 
         holder.textViewDate.setText (
-                Date.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate())
+                DateUtils.DAY_MONTH_YEAR.getDateString(inspection.getInspectionDate())
         );
         holder.textViewNumOfCritical.setText (
                 String.valueOf(inspection.getNumOfCritical())

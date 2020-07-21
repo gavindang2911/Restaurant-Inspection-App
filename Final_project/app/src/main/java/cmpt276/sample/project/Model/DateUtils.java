@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit;
  * @author Lu Xi Wang, lxwang
  * @author Shan Qing, sqing
  */
-public enum Date {
+public enum DateUtils {
     DAY_MONTH{
         @RequiresApi(api = Build.VERSION_CODES.O)
         public String getDateString(int date){

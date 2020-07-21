@@ -22,6 +22,7 @@ import com.google.android.material.appbar.AppBarLayout;
 
  */
 
+import cmpt276.sample.project.Adapter.InspectionAdapter;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;
@@ -36,22 +37,21 @@ import cmpt276.sample.project.R;
  */
 public class SingleRestaurant extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_CALCULATE = 103;
-    private static final String RESTAURANT_POSITION = "Position";
+    private static final String RESTAURANT = "Restaurant";
+
+    private String restaurantIDString;
     private int positionRestaurant;
     private Restaurant restaurant = null;
     private RestaurantManager restaurantMan;
 
-    public static Intent makeIntentForSingleRestaurant(Context context, int restaurantPosition) {
+
+
+    public static Intent makeIntentForSingleRestaurant(Context context, String restaurantID) {
         Intent intent = new Intent(context, SingleRestaurant.class);
-        intent.putExtra(RESTAURANT_POSITION, restaurantPosition);
+        intent.putExtra(RESTAURANT, restaurantID);
         return intent;
     }
 
-    public static Intent makeIntentForSingleRestaurantFromMap(Context context, String trackingNumber){
-        Intent intent = new Intent(context, SingleRestaurant.class);
-        intent.putExtra("trackingNumber",trackingNumber);
-        return intent;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +116,16 @@ public class SingleRestaurant extends AppCompatActivity {
 
     private void extractDataFromIntent(Intent intent)
     {
-        positionRestaurant = intent.getIntExtra(RESTAURANT_POSITION, -1);
-
+        restaurantIDString = intent.getStringExtra(RESTAURANT);
         restaurantMan = RestaurantManager.getInstance();
-
-        restaurant = restaurantMan.getRestaurant(positionRestaurant);
+        int count = 0;
+        for (Restaurant temp : restaurantMan) {
+            if (temp.getTrackingNumber().equals(restaurantIDString)) {
+                restaurant = temp;
+                positionRestaurant = count;
+            }
+            count++;
+        }
     }
 }
 

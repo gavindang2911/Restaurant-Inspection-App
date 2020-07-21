@@ -6,11 +6,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,8 +23,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,7 +40,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-import cmpt276.sample.project.Model.Date;
+import cmpt276.sample.project.Model.DataManager;
+import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
 import cmpt276.sample.project.Model.InspectionManager;
 import cmpt276.sample.project.Model.Restaurant;
@@ -49,22 +57,55 @@ import cmpt276.sample.project.R;
  * @author Shan Qing, sqing
  */
 public class MainActivity extends AppCompatActivity {
-    private static final int ACTIVITY_RESULT_CALCULATE = 103;
+    private static final int ACTIVITY_RESULT_UPDATE = 103;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
+    private DataManager dataManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        readRestaurantData();
+
+        dataManager = DataManager.init(this);
+        dataManager = DataManager.getInstance();
+
+        /**
+         * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
+         * CANNOT USE BOTH AT THE SAME TIME
+         */
+//        clearStorage();
+
+        /**
+         * Comment everything below to start the app again
+         * CANNOT USE BOTH AT THE SAME TIME
+         */
+        // --------------------------------------------------------------------------------------------------------
+        checkForUpdate();
+        try {
+            restaurantManager.reset();
+            restaurantManager = RestaurantManager.getInstance();
+            readRestaurantDataFromServer();
+            readInspectionDataFromServer();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(path, "update_restaurants.csv");
+
+        if (!file.exists()) {
+            readRestaurantData();
+            readInspectionData();
+        }
         sortRestaurants();
-        readInspectionData();
         restaurantListView();
         setUpMap();
+        // --------------------------------------------------------------------------------------------------------
     }
 
     public  void readRestaurantData(){
@@ -94,12 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
-                String iconName = image + Integer.toString(i++);
-                restaurant.setIconName(iconName);
 
-
-                int id = getResources().getIdentifier(iconName,"drawable",getPackageName());
-                restaurant.setIcon(id);
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
 
@@ -117,8 +153,13 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
-                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
+//                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
+//                startActivity(intent);
+
+                    String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
+
+                    Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
+                    startActivity(intent);
             }
         });
     }
@@ -140,9 +181,68 @@ public class MainActivity extends AppCompatActivity {
 
             Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
 
-            //fill the view
+            //set the view
+            /*
+            Site fr image
+            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
+            https://fontmeme.com/mcdonalds-font/
+            https://1000logos.net/starbucks-logo/
+            https://www.facebook.com/Freshslice/
+            https://www.facebook.com/BlenzCoffee/
+            https://logos.fandom.com/wiki/Safeway
+            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
+            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
+            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
+            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
+            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
+            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
+            https://www.vippng.com/ps/restaurant-icon/
+
+             */
+
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-            imageView.setImageResource(currentRestaurant.getIcon());
+
+            switch (currentRestaurant.getName()) {
+                case "Boston Pizza":
+                    imageView.setImageResource(R.drawable.boston_pizza);
+                    break;
+                case "7-Eleven":
+                    imageView.setImageResource(R.drawable.seven_eleven);
+                    break;
+                case "Safeway":
+                    imageView.setImageResource(R.drawable.safeway);
+                    break;
+                case "Tim Hortons":
+                    imageView.setImageResource(R.drawable.tim_hortons);
+                    break;
+                case "Domino's Pizza":
+                    imageView.setImageResource(R.drawable.dominos_pizza);
+                    break;
+                case "McDonald's":
+                    imageView.setImageResource(R.drawable.mcdonalds);
+                    break;
+                case "KFC":
+                    imageView.setImageResource(R.drawable.kfc);
+                    break;
+                case "Starbucks":
+                    imageView.setImageResource(R.drawable.starbucks);
+                    break;
+                case "Burger King":
+                    imageView.setImageResource(R.drawable.burger_king);
+                    break;
+                case "Blenz Coffee":
+                    imageView.setImageResource(R.drawable.blenz_coffee);
+                    break;
+                case "Save On Foods":
+                    imageView.setImageResource(R.drawable.save_on_foods);
+                    break;
+                case "Freshslice Pizza":
+                    imageView.setImageResource(R.drawable.fresh_slice_pizza);
+                    break;
+                default:
+                    imageView.setImageResource(R.drawable.restaurant);
+            }
+
 
 
             //set Name
@@ -166,15 +266,15 @@ public class MainActivity extends AppCompatActivity {
                 numberOfIssues.setText(numberOfIssuesFound+" issues found");
 
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
-                long date = Date.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+                long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
                 if(date<=30){
                     lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
                 }
                 else if(date<365){
-                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 else{
-                    lastDateOfInspection.setText("latest inspection: "+Date.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
@@ -289,6 +389,201 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
+    }
+
+    /**
+     * _____________________________________________________________________________________________________________________________________________________________
+     */
+    private void clearStorage() {
+        SharedPreferences settings = this.getSharedPreferences("AppPrefs", 0);
+        settings.edit().clear().commit();
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/update_inspections.csv");
+        File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/update_restaurants.csv");
+
+        boolean d = file.delete();
+        boolean f = file2.delete();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void checkForUpdate() {
+        if(dataManager.check20hour()) {
+            if(dataManager.checkIfUpdateNeeded()) {
+                Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
+                startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_UPDATE) {
+//            restaurantManager.reset();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+        else if (resultCode == RESULT_CANCELED && requestCode == ACTIVITY_RESULT_UPDATE) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.downloadFailed),
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    // Bring to the main (map activity when enter the app
+    private boolean readRestaurantDataFromServer() throws FileNotFoundException {
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+
+        File file = new File(path, "update_restaurants.csv");
+        InputStream is = new FileInputStream(file);
+
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+
+        int i = 1;
+        String image = "image";
+        String line = "";
+        try {
+            //Step over headers
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                //Split by ','
+                line = line.replaceAll(", ", " ");
+                String[] tokens = line.split(",");
+
+                //Read the data
+                Restaurant restaurant = new Restaurant();
+                restaurant.setTrackingNumber(tokens[0].replace("\"", ""));
+                restaurant.setName(tokens[1].replace("\"", ""));
+                restaurant.setAddress(tokens[2].replace("\"", ""));
+                restaurant.setCity(tokens[3].replace("\"", ""));
+                restaurant.setType(tokens[4].replace("\"", ""));
+                restaurant.setLatitude(Double.parseDouble(tokens[5]));
+                restaurant.setLongitude(Double.parseDouble(tokens[6]));
+
+                String iconName = image + Integer.toString(i++);
+                restaurant.setIconName(iconName);
+
+                restaurantManager.add(restaurant);
+                restaurantList.add(restaurant);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean readInspectionDataFromServer() throws FileNotFoundException {
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+
+        File file = new File(path, "update_inspections.csv");
+        InputStream is = new FileInputStream(file);
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+        InspectionManager inspectionManager = InspectionManager.getInstance();
+
+
+        String csvLine = "";
+
+        try {
+            reader.readLine();
+            while ((csvLine = reader.readLine()) != null)
+            {
+                String regex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+                String[] tokens = csvLine.split(regex);
+                String hazardRating = "";
+                if(tokens.length!=0) {
+                    List<Violation> result = new ArrayList<>();
+                    if (tokens.length == 5) {
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                    }
+                    else {
+                        if (tokens.length == 7) {
+                            hazardRating = tokens[6].replaceAll("[^a-zA-Z0-9 &]","");;
+                        }
+                        Inspection inspection = new Inspection(
+                                tokens[0],
+                                Integer.parseInt(tokens[1]),
+                                tokens[2].replaceAll("[^a-zA-Z0-9 &]", ""),
+                                Integer.parseInt(tokens[3]),
+                                Integer.parseInt(tokens[4]),
+                                hazardRating,
+                                result
+                        );
+
+                        if (tokens[5].length() > 0) {
+                            /**
+                             * CHeck if where there is more than 1 violations or not
+                             */
+                            if (!tokens[5].contains("|")) {
+                                String[] violationStringArray = tokens[5].split(",");
+
+                                Violation violation = readViolation(violationStringArray);
+
+                                inspection.addViolation(violation);
+                            } else {
+                                String[] allViolations = tokens[5].split("[|]");
+
+                                for (int i = 0; i < allViolations.length; i++) {
+                                    String[] violationStringArray = allViolations[i].split(",");
+                                    Violation violation = readViolation(violationStringArray);
+                                    inspection.addViolation(violation);
+                                }
+                            }
+                        }
+                        inspectionManager.add(inspection);
+                        restaurantManager = RestaurantManager.getInstance();
+                        for (Restaurant res : restaurantManager) {
+                            if (res.getTrackingNumber().equals(inspection.getTrackingNumber())) {
+                                res.addInspection(inspection);
+                            }
+                        }
+                        Log.i("AAAAAAA", "this is writeeeeee" + inspection);
+
+                    }
+                }
+            }
+            return true;
+        }
+        catch (IOException e) {
+            Log.wtf("InspectionManager", "Error reading file on line " + csvLine, e);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    private Violation readViolation(String[] violationStringArray) {
+
+        int violationNum = Integer.parseInt(violationStringArray[0].replaceAll("[^0-9]", ""));
+        String criticalOrNon = violationStringArray[1];
+        String description = violationStringArray[2];
+        String isRepeat = violationStringArray[3];
+
+        return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
 }
