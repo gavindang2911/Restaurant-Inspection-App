@@ -45,12 +45,7 @@
         </activity>
 
         <activity android:name=".UI.UpdateDataActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+            android:theme="@style/AppTheme.PopUpTheme">
         </activity>
 
         <activity
@@ -63,18 +58,12 @@
             android:label="@string/title_activity_restaurant"
             android:launchMode="singleTop">
 
-            <!-- android:theme="@style/AppTheme.NoActionBar" -->
 
         </activity>
 
         <activity android:name=".UI.DownloadingDataActivity"
             tools:ignore="DuplicateActivity"
-            android:label="Downloading">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            android:theme="@style/AppTheme.PopUpTheme">
 
         </activity>
     </application>

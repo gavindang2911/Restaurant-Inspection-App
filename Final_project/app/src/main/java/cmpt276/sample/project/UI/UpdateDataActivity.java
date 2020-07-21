@@ -32,11 +32,9 @@ public class UpdateDataActivity extends AppCompatActivity {
     private void setPopUpSize() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-
         int popUpWidth = dm.widthPixels;
         int popUpHeight = dm.heightPixels;
-
-        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .7));
+        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .6));
     }
 
     private void setUpCancelButton() {

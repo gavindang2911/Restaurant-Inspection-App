@@ -71,60 +71,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//        SharedPreferences settings = this.getSharedPreferences("AppPrefs", 0);
-//        settings.edit().clear().commit();
-
         dataManager = DataManager.init(this);
         dataManager = DataManager.getInstance();
-//
-//        SharedPreferences pref = this.getSharedPreferences("AppPrefs", 0);
-//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_modified_restaurants", null));
-//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_modified_inspections", null));
-//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_updated", null));
 
+        /**
+         * To start the app again uncomment this function
+         */
+//        clearStorage();
+
+
+        /**
+         * Comment everything below to start the app again
+         */
+        // --------------------------------------------------------------------------------------------------------
         checkForUpdate();
-
         try {
-            if (readRestaurantDataFromServer() && readInspectionDataFromServer()) { }
-            else {
-                readRestaurantData();
-                readInspectionData();
-            }
+            restaurantManager.reset();
+            restaurantManager = RestaurantManager.getInstance();
+            readRestaurantDataFromServer();
+            readInspectionDataFromServer();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        readRestaurantData();
-        readInspectionData();
+        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(path, "update_restaurants.csv");
+
+        if (!file.exists()) {
+            readRestaurantData();
+            readInspectionData();
+        }
         sortRestaurants();
         restaurantListView();
         setUpMap();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void checkForUpdate() {
-        if(dataManager.check20hour()) {
-            if(dataManager.checkIfUpdateNeeded()) {
-                Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
-                startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_UPDATE) {
-            restaurantManager.reset();
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
-        else if (resultCode == RESULT_CANCELED && requestCode == ACTIVITY_RESULT_UPDATE) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    getResources().getString(R.string.downloadFailed),
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        // --------------------------------------------------------------------------------------------------------
     }
 
     public  void readRestaurantData(){
@@ -410,6 +390,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * _____________________________________________________________________________________________________________________________________________________________
+     */
+    private void clearStorage() {
+        SharedPreferences settings = this.getSharedPreferences("AppPrefs", 0);
+        settings.edit().clear().commit();
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/update_inspections.csv");
+        File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/update_restaurants.csv");
+
+        boolean d = file.delete();
+        boolean f = file2.delete();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void checkForUpdate() {
+        if(dataManager.check20hour()) {
+            if(dataManager.checkIfUpdateNeeded()) {
+                Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
+                startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_UPDATE) {
+//            restaurantManager.reset();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+        else if (resultCode == RESULT_CANCELED && requestCode == ACTIVITY_RESULT_UPDATE) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.downloadFailed),
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
     // Bring to the main (map activity when enter the app
     private boolean readRestaurantDataFromServer() throws FileNotFoundException {
         final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -426,7 +445,6 @@ public class MainActivity extends AppCompatActivity {
         int i = 1;
         String image = "image";
         String line = "";
-
         try {
             //Step over headers
             reader.readLine();
