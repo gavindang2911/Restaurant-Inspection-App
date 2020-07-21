@@ -1,6 +1,7 @@
 package cmpt276.sample.project.Model;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import cmpt276.sample.project.R;
+import cmpt276.sample.project.UI.DownloadingDataActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -44,6 +46,7 @@ import okhttp3.Response;
 
 public class DataManager {
     private Context context;
+    private Activity activity;
     private static DataManager instance;
 
     private String urlForRestaurant; // URL for restaurant
@@ -192,24 +195,31 @@ public class DataManager {
                                     throw new IOException("Unexpected errors " + response);
                                 } else {
                                     final String restaurantCSV = response.body().string();
+                                    if (ActivityCompat.checkSelfPermission((Activity)context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                        int request_code = 0;
 
-                                    File file = new File(path, "update_restaurants.csv");
+                                        ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, request_code);
+                                    } else {
 
-                                    try {
-                                        file.createNewFile();
-                                    } catch (IOException e) {
-                                        System.out.println("Can not create files.");
-                                        e.printStackTrace();
-                                    }
-                                    try {
+                                        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-                                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                                        writer.write(restaurantCSV);
-                                        writer.close();
-                                    } catch (IOException e) {
-                                        throw new RuntimeException("Unable to write to File " + e);
+                                        File file = new File(path, "update_restaurants.csv");
+
+                                        try {
+                                            file.createNewFile();
+                                        } catch (IOException e) {
+                                            System.out.println("Can not create files.");
+                                            e.printStackTrace();
+                                        }
+                                        try {
+
+                                            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                            writer.write(restaurantCSV);
+                                            writer.close();
+                                        } catch (IOException e) {
+                                            throw new RuntimeException("Unable to write to File " + e);
+                                        }
                                     }
 
                                 }
@@ -280,29 +290,35 @@ public class DataManager {
                                     throw new IOException("Unexpected errors " + response);
                                 } else {
                                     final String inspectionCSV = response.body().string();
+                                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                                    final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                        int request_code = 0;
+
+                                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, request_code);
+                                    } else {
+                                        final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 
-                                    File file = new File(path, "update_inspections.csv");
+                                        File file = new File(path, "update_inspections.csv");
 
-                                    try {
-                                        file.createNewFile();
-                                    } catch (IOException e) {
-                                        System.out.println("Can not create files.");
-                                        e.printStackTrace();
+                                        try {
+                                            file.createNewFile();
+                                        } catch (IOException e) {
+                                            System.out.println("Can not create files.");
+                                            e.printStackTrace();
+                                        }
+                                        try {
+
+                                            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                            writer.write(inspectionCSV);
+                                            writer.close();
+                                        } catch (IOException e) {
+                                            throw new RuntimeException("Unable to write to File " + e);
+
+                                        }
+
+                                        setLastUpdateTime();
                                     }
-                                    try {
-
-                                        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                                        writer.write(inspectionCSV);
-                                        writer.close();
-                                    } catch (IOException e) {
-                                        throw new RuntimeException("Unable to write to File " + e);
-
-                                    }
-
-                                    setLastUpdateTime();
                                 }
                             }
                         });
