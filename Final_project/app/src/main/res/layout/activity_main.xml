@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:divider="@null"
@@ -20,11 +20,24 @@
 
     <Button
         android:id="@+id/goToMapButton"
-        android:layout_width="121dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="50dp"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="10dp"
-        android:text="@string/map" />
+        android:text="@string/map"
+        android:background="@drawable/button_list_togo"
+        android:textColor="#FFFFFF"/>
+
+    <Button
+        android:id="@+id/buttonList"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="210dp"
+        android:text="@string/restaurant"
+        android:enabled="false"
+        android:background="@drawable/button_list_current"
+        android:textColor="#87ceeb"/>
 
     <!--    <TextView-->
 <!--        android:id="@+id/allRestaurantTextView"-->
