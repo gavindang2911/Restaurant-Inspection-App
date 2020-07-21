@@ -201,46 +201,44 @@ public class MainActivity extends AppCompatActivity {
              */
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-
-            switch (currentRestaurant.getName()) {
-                case "Boston Pizza":
-                    imageView.setImageResource(R.drawable.boston_pizza);
-                    break;
-                case "7-Eleven":
-                    imageView.setImageResource(R.drawable.seven_eleven);
-                    break;
-                case "Safeway":
-                    imageView.setImageResource(R.drawable.safeway);
-                    break;
-                case "Tim Hortons":
-                    imageView.setImageResource(R.drawable.tim_hortons);
-                    break;
-                case "Domino's Pizza":
-                    imageView.setImageResource(R.drawable.dominos_pizza);
-                    break;
-                case "McDonald's":
-                    imageView.setImageResource(R.drawable.mcdonalds);
-                    break;
-                case "KFC":
-                    imageView.setImageResource(R.drawable.kfc);
-                    break;
-                case "Starbucks":
-                    imageView.setImageResource(R.drawable.starbucks);
-                    break;
-                case "Burger King":
-                    imageView.setImageResource(R.drawable.burger_king);
-                    break;
-                case "Blenz Coffee":
-                    imageView.setImageResource(R.drawable.blenz_coffee);
-                    break;
-                case "Save On Foods":
-                    imageView.setImageResource(R.drawable.save_on_foods);
-                    break;
-                case "Freshslice Pizza":
-                    imageView.setImageResource(R.drawable.fresh_slice_pizza);
-                    break;
-                default:
-                    imageView.setImageResource(R.drawable.restaurant);
+            if(currentRestaurant.getName().contains("Boston Pizza")){
+                imageView.setImageResource(R.drawable.boston_pizza);
+            }
+            else if(currentRestaurant.getName().contains("7-Eleven")){
+                imageView.setImageResource(R.drawable.seven_eleven);
+            }
+            else if(currentRestaurant.getName().contains("Tim Hortons")) {
+                imageView.setImageResource(R.drawable.tim_hortons);
+            }
+            else if(currentRestaurant.getName().contains("Safeway")){
+                imageView.setImageResource(R.drawable.safeway);
+            }
+            else if(currentRestaurant.getName().contains("Domino's Pizza")) {
+                imageView.setImageResource(R.drawable.dominos_pizza);
+            }
+            else if(currentRestaurant.getName().contains("McDonald's")) {
+                imageView.setImageResource(R.drawable.mcdonalds);
+            }
+            else if(currentRestaurant.getName().contains("KFC")) {
+                imageView.setImageResource(R.drawable.kfc);
+            }
+            else if(currentRestaurant.getName().contains("Starbucks")) {
+                imageView.setImageResource(R.drawable.starbucks);
+            }
+            else if(currentRestaurant.getName().contains("Burger King")) {
+                imageView.setImageResource(R.drawable.burger_king);
+            }
+            else if(currentRestaurant.getName().contains("Blenz Coffee")) {
+                imageView.setImageResource(R.drawable.blenz_coffee);
+            }
+            else if(currentRestaurant.getName().contains("Save On Foods")) {
+                imageView.setImageResource(R.drawable.save_on_foods);
+            }
+            else if(currentRestaurant.getName().contains("Freshslice Pizza")) {
+                imageView.setImageResource(R.drawable.fresh_slice_pizza);
+            }
+            else {
+                imageView.setImageResource(R.drawable.restaurant);
             }
 
 
