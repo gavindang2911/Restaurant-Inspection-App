@@ -5,12 +5,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -49,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
@@ -75,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        setUpRestaurant();
     }
 
     //add restaurants markers
@@ -209,7 +215,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void setUpRestaurant(){
+        Button button = (Button) findViewById(R.id.buttonGoToList);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, MainActivity.class));
+            }
+        });
+    }
 
 
+    public void onBackPressed(){
+        finishAffinity();
+    }
 
 }
