@@ -75,13 +75,14 @@ public class MainActivity extends AppCompatActivity {
         dataManager = DataManager.getInstance();
 
         /**
-         * To start the app again uncomment this function
+         * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
+         * CANNOT USE BOTH AT THE SAME TIME
          */
 //        clearStorage();
 
-
         /**
          * Comment everything below to start the app again
+         * CANNOT USE BOTH AT THE SAME TIME
          */
         // --------------------------------------------------------------------------------------------------------
         checkForUpdate();

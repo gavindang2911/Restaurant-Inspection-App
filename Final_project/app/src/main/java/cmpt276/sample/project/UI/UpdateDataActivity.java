@@ -21,7 +21,7 @@ public class UpdateDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_data);
+        setContentView(R.layout.activity_pop_up_dowload);
 
 
         setPopUpSize();
@@ -34,7 +34,7 @@ public class UpdateDataActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int popUpWidth = dm.widthPixels;
         int popUpHeight = dm.heightPixels;
-        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .6));
+        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .5));
     }
 
     private void setUpCancelButton() {

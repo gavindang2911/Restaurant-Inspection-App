@@ -104,7 +104,7 @@ public class DownloadingDataActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int popUpWidth = dm.widthPixels;
         int popUpHeight = dm.heightPixels;
-        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .6));
+        getWindow().setLayout((int)(popUpWidth * .8), (int)(popUpHeight * .5));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
