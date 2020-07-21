@@ -71,11 +71,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//        SharedPreferences settings = this.getSharedPreferences("PreferencesName", 0);
+//        SharedPreferences settings = this.getSharedPreferences("AppPrefs", 0);
 //        settings.edit().clear().commit();
 
         dataManager = DataManager.init(this);
         dataManager = DataManager.getInstance();
+//
+//        SharedPreferences pref = this.getSharedPreferences("AppPrefs", 0);
+//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_modified_restaurants", null));
+//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_modified_inspections", null));
+//        Log.i("HEREE", "ISSSSSSS " + pref.getString("last_updated", null));
 
         checkForUpdate();
 
@@ -89,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        readRestaurantData();
+        readInspectionData();
         sortRestaurants();
         restaurantListView();
         setUpMap();
@@ -170,9 +177,13 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
-//                startActivityForResult(intent, ACTIVITY_RESULT_CALCULATE);
-                startActivity(intent);
+//                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
+//                startActivity(intent);
+
+                    String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
+
+                    Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
+                    startActivity(intent);
             }
         });
     }
