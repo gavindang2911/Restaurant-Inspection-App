@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         sortRestaurants();
         restaurantListView();
         setUpMap();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // --------------------------------------------------------------------------------------------------------
     }
 
@@ -587,13 +586,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed(){
+        finishAffinity();
     }
 
 }

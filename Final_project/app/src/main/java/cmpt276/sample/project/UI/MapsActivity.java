@@ -321,6 +321,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
     public void onBackPressed(){
         finishAffinity();
     }
