@@ -1,6 +1,7 @@
 package cmpt276.sample.project.UI;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -50,7 +51,7 @@ import cmpt276.sample.project.R;
  * Reference Document: Google Maps Platform Documentation: https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial#connect-client
  */
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
@@ -327,5 +328,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onBackPressed(){
         finishAffinity();
     }
+
+
 
 }
