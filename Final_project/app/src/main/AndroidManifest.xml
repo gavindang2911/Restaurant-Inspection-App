@@ -60,6 +60,8 @@
             android:label="@string/title_activity_restaurant"
             android:launchMode="singleTop">
 
+<!--            android:parentActivityName=".UI.MainActivity"-->
+
 
         </activity>
 

@@ -58,6 +58,7 @@ public class SingleRestaurant extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
+//        getSupportActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         extractDataFromIntent(this.getIntent());
@@ -67,9 +68,9 @@ public class SingleRestaurant extends AppCompatActivity {
 
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
         return true;
     }
 

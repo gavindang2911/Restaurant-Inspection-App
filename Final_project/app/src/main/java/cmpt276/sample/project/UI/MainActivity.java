@@ -564,8 +564,6 @@ public class MainActivity extends AppCompatActivity {
                                 res.addInspection(inspection);
                             }
                         }
-                        Log.i("AAAAAAA", "this is writeeeeee" + inspection);
-
                     }
                 }
             }
