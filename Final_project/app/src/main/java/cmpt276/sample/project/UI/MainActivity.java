@@ -59,6 +59,7 @@ import cmpt276.sample.project.R;
  */
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_UPDATE = 103;
+    private static final int ACTIVITY_RESULT_MAP = 105;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -386,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                startActivityForResult((new Intent(MainActivity.this, MapsActivity.class)), ACTIVITY_RESULT_MAP);
             }
         });
     }
@@ -418,7 +419,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_UPDATE) {
-//            restaurantManager.reset();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -427,6 +427,10 @@ public class MainActivity extends AppCompatActivity {
                     getResources().getString(R.string.downloadFailed),
                     Toast.LENGTH_SHORT);
             toast.show();
+        }
+        else if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_MAP) {
+
+            return;
         }
     }
 
