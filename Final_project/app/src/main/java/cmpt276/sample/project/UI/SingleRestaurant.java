@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,12 +67,17 @@ public class SingleRestaurant extends AppCompatActivity {
 
         displayRecyclerViewInspection();
 
+        setUpGPS();
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
@@ -124,5 +131,24 @@ public class SingleRestaurant extends AppCompatActivity {
             count++;
         }
     }
+
+    private void setUpGPS(){
+        TextView text1 = (TextView) findViewById(R.id.textView_Single_Restaurant_longitude);
+        TextView text2 = (TextView) findViewById(R.id.textView_Single_Restaurant_latitude);
+        text1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SingleRestaurant.this, MapsActivity.class));
+            }
+        });
+        text2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SingleRestaurant.this, MapsActivity.class));
+            }
+        });
+    }
+
+
 }
 
