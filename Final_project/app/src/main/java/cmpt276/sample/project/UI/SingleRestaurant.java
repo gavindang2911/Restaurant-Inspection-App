@@ -52,7 +52,8 @@ public class SingleRestaurant extends AppCompatActivity {
         return intent;
     }
 
-
+    //https://stackoverflow.com/questions/14545139/android-back-button-in-the-title-bar#:~:text
+    // =There%20are%20two%20simple%20steps,setDisplayHomeAsUpEnabled(true)%3B
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +67,10 @@ public class SingleRestaurant extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(myIntent, 0);
+        return true;
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example

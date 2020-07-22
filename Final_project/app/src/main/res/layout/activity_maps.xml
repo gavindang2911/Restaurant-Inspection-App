@@ -20,10 +20,10 @@
 
     <Button
         android:id="@+id/MapButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="170dp"
+        android:layout_width="172dp"
         android:layout_height="55dp"
-        android:layout_marginStart="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_current"
         android:enabled="false"
@@ -32,11 +32,12 @@
 
     <Button
         android:id="@+id/buttonGoToList"
-        android:layout_width="170dp"
+        android:layout_width="172dp"
         android:layout_height="55dp"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_togo"
-        android:layout_marginStart="210dp"
+        android:layout_marginEnd="30dp"
         android:text="@string/restaurant"
         android:textColor="#FFFFFF"/>
 
