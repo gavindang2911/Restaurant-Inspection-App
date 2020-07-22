@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         sortRestaurants();
         restaurantListView();
         setUpMap();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // --------------------------------------------------------------------------------------------------------
     }
 
@@ -582,6 +584,16 @@ public class MainActivity extends AppCompatActivity {
         String isRepeat = violationStringArray[3];
 
         return new Violation(violationNum , criticalOrNon, description, isRepeat);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
