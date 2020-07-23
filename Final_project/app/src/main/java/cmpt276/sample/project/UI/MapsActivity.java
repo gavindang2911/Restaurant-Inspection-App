@@ -339,7 +339,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (resultCode == RESULT_OK && requestCode == MAP_ACTIVITY_RESULT_MAP) {
             String id = data.getStringExtra("restaurantID");
             if (!id.equals(null)){
-                HandleReceivingCoordinates(id);
             }
         }
     }
