@@ -96,18 +96,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 //        addRestaurantMarkers();
 
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
+        Intent intent = getIntent();
+        String restaurantID = intent.getStringExtra("PassingID");
 
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+        if (restaurantID != null) {
+            HandleReceivingCoordinates(restaurantID);
+        }
+
+        else {
+            // Turn on the My Location layer and the related control on the map.
+            updateLocationUI();
+
+            // Get the current location of the device and set the position of the map.
+            getDeviceLocation();
 
 
-        //cluster
-        setUpCluster();
+            //cluster
+            setUpCluster();
+        }
 
         setUpRestaurant();
-
     }
 
     //add restaurants markers
@@ -333,8 +341,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (!id.equals(null)){
                 HandleReceivingCoordinates(id);
             }
-
-            finish();
         }
     }
 
@@ -349,7 +355,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
         if (found) {
-            clusterInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(returnRestaurant.getLatitude(),
+                            returnRestaurant.getLongitude()), 13));
         }
     }
 
