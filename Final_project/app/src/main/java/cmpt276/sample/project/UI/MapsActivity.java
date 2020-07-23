@@ -100,6 +100,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String restaurantID = intent.getStringExtra("PassingID");
 
         if (restaurantID != null) {
+            //cluster
+            setUpCluster();
+
             HandleReceivingCoordinates(restaurantID);
         }
 
@@ -109,7 +112,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // Get the current location of the device and set the position of the map.
             getDeviceLocation();
-
 
             //cluster
             setUpCluster();
@@ -327,7 +329,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClusterItemInfoWindowClick(MyItem item) {
                 String resId = item.getTrackingNumber();
                 Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MapsActivity.this, resId);
-//                startActivity(intent);
                 startActivityForResult(intent, MAP_ACTIVITY_RESULT_MAP);
             }
         });
@@ -362,6 +363,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     returnRestaurant.getLongitude())).title(returnRestaurant.getName())
                     .snippet("Address: " + returnRestaurant.getAddress() + "\n" + "Hazard Level: "
                             + returnRestaurant.getInspections().get(0).getHazardRating());
+
             Marker mMarker;
             mMarker = mMap.addMarker(options);
             mMarker.showInfoWindow();
@@ -375,7 +377,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onBackPressed(){
         finishAffinity();
     }
-
-
-
 }
