@@ -1,6 +1,7 @@
 
 package cmpt276.sample.project.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,6 +85,13 @@ public class SingleRestaurant extends AppCompatActivity {
 
     }
 
+    private void goToMap() {
+        Intent i = new Intent();
+        i.putExtra("restaurantID", restaurant.getTrackingNumber());
+        setResult(Activity.RESULT_OK, i);
+        finish();
+    }
+
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
     private void displayRecyclerViewInspection() {
 
@@ -142,13 +150,13 @@ public class SingleRestaurant extends AppCompatActivity {
         text1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SingleRestaurant.this, MapsActivity.class));
+                goToMap();
             }
         });
         text2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SingleRestaurant.this, MapsActivity.class));
+                goToMap();
             }
         });
     }

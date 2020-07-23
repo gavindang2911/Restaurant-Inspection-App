@@ -15,6 +15,14 @@ import cmpt276.sample.project.Model.DataManager;
 import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.R;
 
+/**
+ * UpdateDataActivity class is the pop up for the app whenever it's been 20 hours from the last update
+ * and there is new data on server
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class UpdateDataActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_DOWNLOADING = 100;
 
@@ -22,7 +30,6 @@ public class UpdateDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_dowload);
-
 
         setPopUpSize();
         setUpUpdateButton();
@@ -57,7 +64,7 @@ public class UpdateDataActivity extends AppCompatActivity {
             }
         });
     }
-    // Gets called when the Lens Details activity we started, finishes.
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

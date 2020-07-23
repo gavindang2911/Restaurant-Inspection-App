@@ -44,6 +44,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * DataManager class is the class where the data will be downloaded and save it
+ * to local. This class holding information about last update and last modified ..
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class DataManager {
     private Context context;
     private Activity activity;
@@ -107,7 +115,7 @@ public class DataManager {
         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
         SharedPreferences.Editor editor = pref.edit();
 
-        /** Set some default last updated date **/
+        // Set default last updated date and last modified for the first time run the app
         if (pref.getString("last_modified_restaurants", null) == null) {
             editor.putString("last_modified_restaurants", "2010-01-01 00:00:00");
         }
@@ -125,17 +133,14 @@ public class DataManager {
 
 
 
+    // https://www.youtube.com/watch?v=a6jMS_Jc5aQ&t=573s
     public void readRestaurantURL() {
-
-        /** Create okHttp to make get request **/
         OkHttpClient client = new OkHttpClient();
 
-        /** To hold request **/
         final Request request = new Request.Builder()
                 .url(urlForRestaurant)
                 .build();
 
-        /** Make get request **/
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -149,19 +154,15 @@ public class DataManager {
 
                     throw new IOException("Unexpected error " + response);
                 } else {
-                    /** Store the response String. **/
+                    // Store the response String
                     final String myResponse = response.body().string();
                     try {
-                        /** Read whole file as a JsonObject **/
+                        //Read whole file as a JsonObject
                         JSONObject obj = new JSONObject(myResponse);
 
 
                         /** Get real url to read actual data. **/
                         String urlReturn = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("url").toString();
-
-//                        if (!urlReturn.contains("https")) {
-//                            urlReturn = urlReturn.replace("http", "https");
-//                        }
 
                         String lastModifiedRestaurantFromServer = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
 
@@ -348,12 +349,11 @@ public class DataManager {
         setUpdate(true);
     }
 
+    // https://stackoverflow.com/questions/4927856/how-to-calculate-time-difference-in-java#:~:text=String%20start%20%3D%20%2212%3A00,getTime()%20%2D%20date1.
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean check20hour() {
-
         SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
         String[] lastUpdateDate = pref.getString("last_updated", null).replace("T", " ").replace("-", "").split(" ");
-
 
         long dateFromCurrent = DateUtils.dayFromCurrent(Integer.parseInt(lastUpdateDate[0]));
         if (dateFromCurrent >= 1) {
@@ -368,12 +368,6 @@ public class DataManager {
 
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
-//            for (String s: lastUpdateDate) {
-//                Log.i("Time now", "isssssaa "+ s);
-//            }
-//            for (String ss: currentTimeString) {
-//                Log.i("Time now", "isssssaa "+ ss);
-//            }
             try {
                 Date date1 = format.parse(start);
                 Date date2 = format.parse(end);
@@ -418,6 +412,8 @@ public class DataManager {
         return false;
     }
 
+
+    // https://stackoverflow.com/questions/4927856/how-to-calculate-time-difference-in-java#:~:text=String%20start%20%3D%20%2212%3A00,getTime()%20%2D%20date1.
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean checkIfUpdateNeededHelper(String lastUpdateOnDevice, String lastModifiedOnServer) {
 
@@ -435,7 +431,7 @@ public class DataManager {
             long difference = date2.getTime() - date1.getTime();
             int hours = (int) TimeUnit.MILLISECONDS.toHours(difference);
 
-            // Convert time to EST time zone
+            // Convert time to fit EST time zone
             if (hours >= -3) {
                 return true;
             }

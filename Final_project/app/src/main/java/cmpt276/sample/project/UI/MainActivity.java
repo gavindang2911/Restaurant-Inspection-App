@@ -60,6 +60,7 @@ import cmpt276.sample.project.R;
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_UPDATE = 103;
     private static final int ACTIVITY_RESULT_MAP = 105;
+    private static final int ACTIVITY_RESULT_SINGLE_RESTAURANT = 100;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
 
                     Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
-                    startActivity(intent);
+                    startActivityForResult(intent, ACTIVITY_RESULT_SINGLE_RESTAURANT);
             }
         });
     }
@@ -386,7 +387,8 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult((new Intent(MainActivity.this, MapsActivity.class)), ACTIVITY_RESULT_MAP);
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivityForResult(intent, ACTIVITY_RESULT_MAP);
             }
         });
     }
@@ -428,8 +430,16 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
         else if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_MAP) {
-
             return;
+        }
+        else if (resultCode == RESULT_OK && requestCode == ACTIVITY_RESULT_SINGLE_RESTAURANT) {
+            String id = data.getStringExtra("restaurantID");
+            if (!id.equals(null)){
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                String message = id;
+                intent.putExtra("PassingID", message);
+                MainActivity.this.startActivityForResult(intent, ACTIVITY_RESULT_MAP);
+            }
         }
     }
 

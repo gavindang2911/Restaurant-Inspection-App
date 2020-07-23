@@ -34,6 +34,14 @@ import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.Model.Violation;
 import cmpt276.sample.project.R;
 
+/**
+ * Downloading class is the pop up for downloading data from server, which is called
+ * whenever there is a new update data on server and user agree to update
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class DownloadingDataActivity extends AppCompatActivity {
     private DataManager dataManager;
 
@@ -77,7 +85,6 @@ public class DownloadingDataActivity extends AppCompatActivity {
         });
     }
 
-
     private void setCancelButton() {
         Button btn = findViewById(R.id.button_cancel_download);
         SharedPreferences pref = this.getSharedPreferences("AppPrefs", 0);
@@ -86,7 +93,6 @@ public class DownloadingDataActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 dataManager.setCancel(true);
 
                 editor.putString("last_updated", "2020-07-01 00:00:00");
@@ -112,6 +118,7 @@ public class DownloadingDataActivity extends AppCompatActivity {
         dataManager.readRestaurantURL();
         dataManager.readInspectionsURL();
     }
+
 
     public static Intent makeIntentForDownloadingData(Context context){
         Intent intent = new Intent(context, DownloadingDataActivity.class);

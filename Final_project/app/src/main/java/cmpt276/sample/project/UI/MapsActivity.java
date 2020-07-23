@@ -1,6 +1,7 @@
 package cmpt276.sample.project.UI;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -53,6 +54,7 @@ import cmpt276.sample.project.R;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final int MAP_ACTIVITY_RESULT_MAP = 200;
     private GoogleMap mMap;
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -317,11 +319,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClusterItemInfoWindowClick(MyItem item) {
                 String resId = item.getTrackingNumber();
                 Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MapsActivity.this, resId);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, MAP_ACTIVITY_RESULT_MAP);
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == MAP_ACTIVITY_RESULT_MAP) {
+            String id = data.getStringExtra("restaurantID");
+            if (!id.equals(null)){
+                HandleReceivingCoordinates(id);
+            }
 
+            finish();
+        }
+    }
+
+    private void HandleReceivingCoordinates(String ID) {
+        Restaurant returnRestaurant = null;
+        boolean found = false;
+        for (Restaurant temp : restaurantManager) {
+            if (ID.equals(temp.getTrackingNumber())) {
+                returnRestaurant = temp;
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            clusterInfoWindow();
+        }
     }
 
     @Override
