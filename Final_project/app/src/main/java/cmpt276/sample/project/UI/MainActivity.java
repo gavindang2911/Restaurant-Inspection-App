@@ -444,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Bring to the main (map activity when enter the app
+    // Bring to the main (map activity when enter the app)
     private boolean readRestaurantDataFromServer() throws FileNotFoundException {
         final File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
