@@ -357,7 +357,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (found) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(returnRestaurant.getLatitude(),
-                            returnRestaurant.getLongitude()), 13));
+                            returnRestaurant.getLongitude()), 30));
+
+            MarkerOptions options = new MarkerOptions().position(new LatLng(returnRestaurant.getLatitude(),
+                    returnRestaurant.getLongitude())).title(returnRestaurant.getName());
+            Marker mMarker;
+            mMarker = mMap.addMarker(options);
+            mMarker.showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(returnRestaurant.getLatitude(),
+                            returnRestaurant.getLongitude()), 30));
         }
     }
 
