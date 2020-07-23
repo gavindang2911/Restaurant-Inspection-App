@@ -60,7 +60,6 @@ public class SingleRestaurant extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_restaurant);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         extractDataFromIntent(this.getIntent());
@@ -72,8 +71,6 @@ public class SingleRestaurant extends AppCompatActivity {
     }
 
     @Override
-
-
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
@@ -81,7 +78,6 @@ public class SingleRestaurant extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
