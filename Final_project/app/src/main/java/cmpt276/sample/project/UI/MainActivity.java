@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             //set the view
             /*
             Site fr image
+            https://www.flaticon.com/free-icon/diet_2906325
             https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
             https://fontmeme.com/mcdonalds-font/
             https://1000logos.net/starbucks-logo/
