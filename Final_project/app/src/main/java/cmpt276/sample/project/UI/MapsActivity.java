@@ -359,7 +359,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             returnRestaurant.getLongitude()), 30));
 
             MarkerOptions options = new MarkerOptions().position(new LatLng(returnRestaurant.getLatitude(),
-                    returnRestaurant.getLongitude())).title(returnRestaurant.getName());
+                    returnRestaurant.getLongitude())).title(returnRestaurant.getName())
+                    .snippet("Address: " + returnRestaurant.getAddress() + "\n" + "Hazard Level: "
+                            + returnRestaurant.getInspections().get(0).getHazardRating());
             Marker mMarker;
             mMarker = mMap.addMarker(options);
             mMarker.showInfoWindow();
