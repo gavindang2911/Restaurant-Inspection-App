@@ -303,9 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 lastDateOfInspection.setText(noInspectionString);
                 numberOfIssues.setText(noIssuesFoundString);
             }
-
-
-
+            
             return itemView;
         }
     }
