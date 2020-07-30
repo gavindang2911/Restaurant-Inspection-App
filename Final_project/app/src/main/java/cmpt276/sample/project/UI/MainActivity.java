@@ -265,18 +265,22 @@ public class MainActivity extends AppCompatActivity {
             if(currentRestaurant.getInspections().size()!=0) {
                 //set number of issues
                 int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
-                numberOfIssues.setText(numberOfIssuesFound+" issues found");
+                String issuesFoundString = getString(R.string.numOfIssuesFound_Main);
+                numberOfIssues.setText(numberOfIssuesFound+ issuesFoundString);
 
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
                 long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+                String latestInspectionString = getString(R.string.latest_inspection_Main);
+
                 if(date<=30){
-                    lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
+                    String dayAgoString = getString(R.string.daysAgo);
+                    lastDateOfInspection.setText(latestInspectionString +String.format(Locale.ENGLISH,"%d"+ dayAgoString, date));
                 }
                 else if(date<365){
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText(latestInspectionString + DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 else{
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText(latestInspectionString + DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
@@ -290,10 +294,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                hazardLevelText.setText("Unknown");
+                String unKnownString = getString(R.string.unKnown_Main);
+                String noInspectionString = getString(R.string.noInspection_Main);
+                String noIssuesFoundString = getString(R.string.noIssues_Main);
+
+                hazardLevelText.setText(unKnownString);
                 imageIcon.setImageResource(R.drawable.gray_circle);
-                lastDateOfInspection.setText("No Inspections");
-                numberOfIssues.setText("0 issues found");
+                lastDateOfInspection.setText(noInspectionString);
+                numberOfIssues.setText(noIssuesFoundString);
             }
 
 
