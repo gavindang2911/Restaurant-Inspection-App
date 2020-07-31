@@ -131,7 +131,53 @@ public class DataManager {
         editor.apply();
     }
 
+    public void readLastModifiedRestaurant() {
+        urlForRestaurant = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
+        OkHttpClient client = new OkHttpClient();
 
+        final Request request = new Request.Builder()
+                .url(urlForRestaurant)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    Log.i("NOT RESPONSE", "abc");
+
+                    throw new IOException("Unexpected error " + response);
+                } else {
+                    // Store the response String
+                    final String myResponse = response.body().string();
+                    try {
+                        //Read whole file as a JsonObject
+                        JSONObject obj = new JSONObject(myResponse);
+
+                        String lastModifiedRestaurantFromServer = obj.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+
+                        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+
+                        SharedPreferences.Editor editor = pref.edit();
+
+                        editor.putString("last_modified_restaurants", lastModifiedRestaurantFromServer);
+                        editor.apply();
+
+
+                        setLastTimeModifiedRestaurants(lastModifiedRestaurantFromServer);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
     // https://www.youtube.com/watch?v=a6jMS_Jc5aQ&t=573s
     public void readRestaurantURL() {
@@ -235,6 +281,44 @@ public class DataManager {
         });
     }
 
+    public void readLastModifiedInspection(){
+        OkHttpClient client2 = new OkHttpClient();
+        Request request2 = new Request.Builder()
+                .url(urlForInspection)
+                .build();
+        client2.newCall(request2).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    final String myResponse = response.body().string();
+                    try {
+                        JSONObject obj2 = new JSONObject(myResponse);
+
+                        String last_modified_inspection_from_server = obj2.getJSONObject("result").getJSONArray("resources").getJSONObject(0).get("last_modified").toString();
+
+                        SharedPreferences pref = context.getSharedPreferences("AppPrefs", 0);
+
+                        SharedPreferences.Editor editor = pref.edit();
+
+                        editor.putString("last_modified_inspections",last_modified_inspection_from_server);
+                        editor.apply();
+
+                        setLastTimeModifiedInspections(last_modified_inspection_from_server);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
     public void readInspectionsURL() {
         OkHttpClient client2 = new OkHttpClient();
@@ -394,7 +478,9 @@ public class DataManager {
 
         String lastModifiedRestaurantOnServer = pref.getString("last_modified_restaurants", null);
 
+
         String lastModifiedInspectionOnServer = pref.getString("last_modified_inspections", null);
+
 
 
         if (lastUpdateOnDevice.equals("2020-07-01 00:00:00")) {

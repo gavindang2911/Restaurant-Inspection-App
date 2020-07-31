@@ -4,9 +4,9 @@
     <string name="DateOfInspection">22 tháng 1 năm 2020</string>
     <string name="NameInspType">Loại kiểm tra:</string>
     <string name="InspType">Thường lệ</string>
-    <string name="NameNumCritical">Số lượng các vấn đề quan trọng được tìm thấy:</string>
+    <string name="NameNumCritical">Các vấn đề quan trọng tìm thấy:</string>
     <string name="NumCritical">0</string>
-    <string name="NameNumNonCritical">Số lượng các vấn đề không quan trọng được tìm thấy:</string>
+    <string name="NameNumNonCritical">Các vấn đề không quan trọng tìm thấy:</string>
     <string name="NumNonCritical">0</string>
     <string name="NameHazard">Cấp độ nguy hiểm:</string>
     <string name="Hazard">Trung bình</string>
@@ -97,7 +97,7 @@
 </string>
     <string name="num_of_noncritical_found"># không quan trọng:
 </string>
-    <string name="last_inspection">Lần kiểm tra cuối:
+    <string name="last_inspection">Kiểm tra cuối:
 </string>
 
     <string name="restaurantAddressTextView">Xem văn bản

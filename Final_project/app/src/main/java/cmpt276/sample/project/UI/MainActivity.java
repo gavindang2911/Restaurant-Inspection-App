@@ -74,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        dataManager = DataManager.init(this);
+        DataManager.init(this);
         dataManager = DataManager.getInstance();
+
 
         /**
          * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
          * CANNOT USE BOTH AT THE SAME TIME
          */
         // --------------------------------------------------------------------------------------------------------
+
         checkForUpdate();
         try {
             restaurantManager.reset();
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
+
 
     public  void readRestaurantData(){
         InputStream is = getResources().openRawResource(R.raw.restaurants_itr1);
@@ -416,6 +419,8 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkForUpdate() {
         if(dataManager.check20hour()) {
+            dataManager.readLastModifiedRestaurant();
+            dataManager.readLastModifiedInspection();
             if(dataManager.checkIfUpdateNeeded()) {
                 Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
                 startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
