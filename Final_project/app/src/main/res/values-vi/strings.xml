@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name">Dự án</string>
+    <string name="NameDateOfInspection">Ngày kiểm tra:</string>
+    <string name="DateOfInspection">22 tháng 1 năm 2020</string>
+    <string name="NameInspType">Loại kiểm tra:</string>
+    <string name="InspType">Thường lệ</string>
+    <string name="NameNumCritical">Số lượng các vấn đề quan trọng được tìm thấy:</string>
+    <string name="NumCritical">0</string>
+    <string name="NameNumNonCritical">Số lượng các vấn đề không quan trọng được tìm thấy:</string>
+    <string name="NumNonCritical">0</string>
+    <string name="NameHazard">Cấp độ nguy hiểm:</string>
+    <string name="Hazard">Trung bình</string>
+    <string name="ViolationName">vi phạm</string>
+    <string name="emptyStatus">Không vi phạm!</string>
+    <string name="inspectionTitleName">Vi phạm kiểm tra</string>
+
+    <string name="violation101">Tòa nhà không theo Quy định.</string>
+    <string name="violation102">Hoạt động của một cơ sở thực phẩm không được phê duyệt.</string>
+    <string name="violation103">Không giữ được giấy phép hợp lệ.</string>
+    <string name="violation104">Giấy phép không được đăng ở vị trí dễ thấy.</string>
+    <string name="violation201">Thực phẩm bị ô nhiễm hoặc không phù hợp cho con người.</string>
+    <string name="violation202">Thực phẩm không được chế biến một cách an toàn.</string>
+    <string name="violation203">Thực phẩm không được làm lạnh theo cách chấp nhận được.</string>
+    <string name="violation204">Thực phẩm không được nấu chín hoặc hâm nóng một cách an toàn.</string>
+    <string name="violation205">Thực phẩm lạnh có khả năng gây nguy hiểm được bảo quản trên 4 ° C.</string>
+    <string name="violation206">Thực phẩm nóng có khả năng gây nguy hiểm được bảo quản dưới 60 ° C.</string>
+    <string name="violation208">Thực phẩm thu được từ các nguồn không được chấp thuận.</string>
+    <string name="violation209">Thực phẩm không được bảo vệ khỏi ô nhiễm.</string>
+    <string name="violation210">Thực phẩm không tan theo cách chấp nhận được.</string>
+    <string name="violation211">Thực phẩm có khả năng đông lạnh được bảo quản trên -18 ° C.</string>
+    <string name="violation212">Nhà điều hành đã không cung cấp xử lý thực phẩm chấp nhận được.
+</string>
+    <string name="violation301">Các bề mặt không được duy trì trong điều kiện vệ sinh.
+</string>
+    <string name="violation302">Các bề mặt không được rửa và khử trùng đúng cách.
+</string>
+    <string name="violation303">Việc bảo trì vệ sinh không đầy đủ.
+</string>
+    <string name="violation304">Mặt bằng không có sâu bệnh.
+</string>
+    <string name="violation305">Có thể cho phép lối vào / bến cảng / sinh sản của sâu bệnh.
+</string>
+    <string name="violation306">Cơ sở thực phẩm không được duy trì trong điều kiện vệ sinh.
+</string>
+    <string name="violation307">Các bề mặt không có thiết kế / vật liệu phù hợp.
+</string>
+    <string name="violation308">Các bề mặt không hoạt động tốt.
+</string>
+    <string name="violation309">Chất tẩy rửa hóa chất được lưu trữ hoặc dán nhãn không đúng cách.
+</string>
+    <string name="violation310">Container sử dụng một lần được sử dụng nhiều lần.
+</string>
+    <string name="violation311">Mặt bằng không được duy trì theo kế hoạch được phê duyệt.
+</string>
+    <string name="violation312">Các mặt hàng không mong muốn được lưu trữ tại cơ sở thực phẩm.
+</string>
+    <string name="violation313">Động vật sống trong khuôn viên.
+</string>
+    <string name="violation314">Nhà điều hành đã không cung cấp các thủ tục chấp nhận được.
+</string>
+    <string name="violation315">Thiết bị thiếu nhiệt kế chính xác.
+</string>
+    <string name="violation401">Không đủ trạm rửa tay cho nhân viên.
+</string>
+    <string name="violation402">Nhân viên không rửa tay đúng cách.
+</string>
+    <string name="violation403">Nhân viên thiếu vệ sinh cá nhân tốt.
+</string>
+    <string name="violation404">Nhân viên hút thuốc trong chế biến thực phẩm.
+</string>
+    <string name="violation501">Toán tử không có FOODSAFE Cấp 1.
+</string>
+    <string name="violation502">Trong sự vắng mặt của nhà điều hành, không có nhân viên nào có FOODSAFE Cấp 1.
+</string>
+    <string name="name1">Tên
+</string>
+
+    <string name="all_restaurantTextView">Tất cả các nhà hàng
+</string>
+    <string name="restaurantName">tên nhà hàng
+</string>
+    <string name="name2">Tên
+</string>
+    <string name="restaurantNameSingleRestaurant">tên nhà hàng
+</string>
+    <string name="restaurantAddress">12808 King George Blvd, Surrey
+</string>
+    <string name="latitude">Vĩ độ:
+</string>
+    <string name="longitude">Kinh độ:
+</string>
+    <string name="title_activity_restaurant">Chi tiết nhà hàng
+</string>
+    <string name="single_restaurant_hazard_icon">single_Jet_hazard_icon
+</string>
+    <string name="num_of_critical_found"># quan trọng:
+</string>
+    <string name="num_of_noncritical_found"># không quan trọng:
+</string>
+    <string name="last_inspection">Lần kiểm tra cuối:
+</string>
+
+    <string name="restaurantAddressTextView">Xem văn bản
+</string>
+    <string name="numberOfIssuesFound">Xem văn bản
+</string>
+    <string name="hazardLevel">Xem văn bản
+</string>
+    <string name="lastDateInspection">Xem văn bản
+</string>
+    <string name="ProjectTitle">Ứng dụng nhà hàng
+</string>
+    <string name="InspectionTitle">Kiểm tra
+</string>
+    <string name="food_premises_not_maintained_in_a_sanitary_condition">Cơ sở thực phẩm không được duy trì trong điều kiện vệ sinh.
+</string>
+    <string name="not_critical">Không quan trọng
+</string>
+
+    <string name="update_popup">Cập nhật
+</string>
+    <string name="ignore_popup">Bỏ qua
+</string>
+    <string name="update_available">Cập nhật có sẵn
+</string>
+    <string name="image_download">tải hình ảnh
+</string>
+
+    <string name="title_activity_maps">Bản đồ
+</string>
+    <string name="map">Bản đồ
+</string>
+
+    <string name="cancel">Hủy bỏ
+</string>
+    <string name="downloadFailed">Không thể tải xuống
+</string>
+
+    <string name="title_activity_maps2">Bản đồ
+</string>
+    <string name="restaurant">Nhà hàng
+</string>
+
+    <string name="numOfIssuesFound_Main"> vấn đề được tìm thấy
+</string>
+    <string name="latest_inspection_Main">kiểm tra mới nhất: </string>
+    <string name="daysAgo"> ngày trước
+</string>
+    <string name="unKnown_Main">Không biết
+</string>
+    <string name="noInspection_Main">Không kiểm tra
+</string>
+    <string name="noIssues_Main">0 vấn đề được tìm thấy</string>
+
+
+</resources>
