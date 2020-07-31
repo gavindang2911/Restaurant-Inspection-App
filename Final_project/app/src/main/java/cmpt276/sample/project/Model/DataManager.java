@@ -132,7 +132,6 @@ public class DataManager {
     }
 
     public void readLastModifiedRestaurant() {
-        urlForRestaurant = "https://data.surrey.ca/api/3/action/package_show?id=restaurants";
         OkHttpClient client = new OkHttpClient();
 
         final Request request = new Request.Builder()
