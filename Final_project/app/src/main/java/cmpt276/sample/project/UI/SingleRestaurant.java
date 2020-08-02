@@ -44,7 +44,7 @@ public class SingleRestaurant extends AppCompatActivity {
 
     private String restaurantIDString;
     private int positionRestaurant;
-    private Restaurant restaurant = null;
+    private Restaurant restaurant;
     private RestaurantManager restaurantMan;
 
 
@@ -68,6 +68,7 @@ public class SingleRestaurant extends AppCompatActivity {
 
         displayRecyclerViewInspection();
 
+        setUpFavoriteBtn();
         setUpGPS();
     }
 
@@ -109,7 +110,6 @@ public class SingleRestaurant extends AppCompatActivity {
         });
 
     }
-
 
 
     private void displayRestaurantInfo() {
@@ -155,6 +155,17 @@ public class SingleRestaurant extends AppCompatActivity {
                 goToMap();
             }
         });
+    }
+
+
+
+    private void setUpFavoriteBtn() {
+        Button btn_favorite = findViewById(R.id.btn_favorite);
+        if (restaurant.isFavourite()) {
+            btn_favorite.setBackgroundResource(R.drawable.star_on);
+        } else {
+            btn_favorite.setBackgroundResource(R.drawable.star_off);
+        }
     }
 
 
