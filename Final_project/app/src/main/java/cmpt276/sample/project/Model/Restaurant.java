@@ -27,6 +27,9 @@ public class Restaurant {
     private List<Inspection> inspections = new ArrayList<>();
     private int numOfViolations;
 
+    private boolean isFavourite;
+
+
     public void addInspection(Inspection inspection)
     {
         inspections.add(inspection);
@@ -56,6 +59,14 @@ public class Restaurant {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
     public void setAddress(String address) {
