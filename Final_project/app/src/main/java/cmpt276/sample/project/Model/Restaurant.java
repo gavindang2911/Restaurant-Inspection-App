@@ -27,7 +27,7 @@ public class Restaurant {
     private List<Inspection> inspections = new ArrayList<>();
     private int numOfViolations;
 
-    private boolean isFavourite;
+    private boolean isFavourite = false;
 
 
     public void addInspection(Inspection inspection)

@@ -84,8 +84,8 @@
             android:text="@string/lastDateInspection" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
+            android:id="@+id/imageViewFavouriteMain"
+            android:layout_width="78dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/hazardLevelTextView"
             android:layout_alignParentEnd="true"

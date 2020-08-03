@@ -483,14 +483,20 @@ public class DataManager {
 
 
         if (lastUpdateOnDevice.equals("2020-07-01 00:00:00")) {
+            Log.i("AAAAA", "aaaa1 " );
+
             return true;
         }
 
         if (checkIfUpdateNeededHelper(lastUpdateOnDevice, lastModifiedRestaurantOnServer)) {
+            Log.i("AAAAA", "aaaa2 " );
+
             return true;
         }
 
         if (checkIfUpdateNeededHelper(lastUpdateOnDevice, lastModifiedInspectionOnServer)) {
+            Log.i("AAAAA", "aaaa3 " );
+
             return true;
         }
 

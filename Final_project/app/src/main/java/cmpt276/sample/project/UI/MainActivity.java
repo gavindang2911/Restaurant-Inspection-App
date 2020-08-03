@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,8 +40,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 import cmpt276.sample.project.Model.DataManager;
@@ -91,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
         // --------------------------------------------------------------------------------------------------------
 
         checkForUpdate();
+//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
+//        String a = pref.getString("last_updated", null);
+//        String b = pref.getString("last_modified_inspections", null);
+//        String c = pref.getString("last_modified_restaurants", null);
+//        Log.i("AAAAA", "aaaa " + a);
+//        Log.i("AAAAA", "aaaa " + b);
+//        Log.i("AAAAA", "aaaa " + c);
         try {
             restaurantManager.reset();
             restaurantManager = RestaurantManager.getInstance();
@@ -206,6 +218,12 @@ public class MainActivity extends AppCompatActivity {
             https://www.vippng.com/ps/restaurant-icon/
 
              */
+            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
+            if (currentRestaurant.isFavourite()) {
+                imageViewFavourite.setVisibility(View.VISIBLE);
+            } else {
+                imageViewFavourite.setVisibility(View.INVISIBLE);
+            }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
             if(currentRestaurant.getName().contains("Boston Pizza")){
@@ -257,6 +275,8 @@ public class MainActivity extends AppCompatActivity {
             //set Address
             TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
             addressText.setText(currentRestaurant.getAddress());
+
+
 
 
 
@@ -418,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkForUpdate() {
+
         if(dataManager.check20hour()) {
             dataManager.readLastModifiedRestaurant();
             dataManager.readLastModifiedInspection();
@@ -489,10 +510,21 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+                restaurant.setFavourite(false);
 
                 String iconName = image + Integer.toString(i++);
                 restaurant.setIconName(iconName);
 
+                SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+                Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+
+                for(String favRestaurantString: favourites_list) {
+                    Gson gson = new Gson();
+                    Restaurant favRestaurant = gson.fromJson(favRestaurantString, Restaurant.class);
+                    if(favRestaurant.getTrackingNumber().equals(restaurant.getTrackingNumber())) {
+                        restaurant.setFavourite(true);
+                    }
+                }
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
             }

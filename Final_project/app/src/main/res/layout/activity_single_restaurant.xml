@@ -98,12 +98,12 @@
         />
 
     <Button
-        android:id="@+id/btn_favorite"
+        android:id="@+id/btn_favourite"
         android:layout_width="51dp"
         android:layout_height="42dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/star_off"
-        android:backgroundTint="#F3F1F1"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/star_on"
+        android:backgroundTint="#EDED55"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_Single_Restaurant_longitude" />
