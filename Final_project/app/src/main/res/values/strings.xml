@@ -87,6 +87,11 @@
 
     <string name="title_activity_maps2">Map</string>
     <string name="restaurant">Restaurants</string>
+    
+    <string name="hazard_level">Select Hazard Level of Restaurant:</string>
+    <string name="critical_violation">Number of Critical Violations in Last Year:</string>
+    <string name="larger_than">&gt;=:</string>
+    <string name="less_than">&lt;=:</string>
 
     <string name="numOfIssuesFound_Main"> issues found</string>
     <string name="latest_inspection_Main">latest inspection: </string>

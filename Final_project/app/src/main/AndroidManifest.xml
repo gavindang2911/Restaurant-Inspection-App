@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- <activity android:name=".UI.DownloadingDataActivity"></activity> -->
+<!--        <activity android:name=".UI.DownloadingDataActivity"></activity>-->
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,6 +35,7 @@
         <activity
             android:name=".UI.MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity
             android:name=".UI.MainActivity"
             android:label="@string/ProjectTitle">
@@ -43,29 +45,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.UpdateDataActivity"
-            android:theme="@style/AppTheme.PopUpTheme" />
+
+        <activity android:name=".UI.UpdateDataActivity"
+            android:theme="@style/AppTheme.PopUpTheme">
+        </activity>
+
         <activity
             android:name=".UI.SingleInspection"
             android:label="@string/inspectionTitleName"
             android:launchMode="singleTop" />
+
         <activity
             android:name=".UI.SingleRestaurant"
             android:label="@string/title_activity_restaurant"
             android:launchMode="singleTop">
 
-            <!-- android:parentActivityName=".UI.MainActivity" -->
+<!--            android:parentActivityName=".UI.MainActivity"-->
+
 
         </activity>
-        <activity
-            android:name=".UI.DownloadingDataActivity"
-            android:theme="@style/AppTheme.PopUpTheme"
-            tools:ignore="DuplicateActivity" />
-        <activity android:name=".UI.NewInspectionActivity"
-            android:label="New Inspections"
-            android:launchMode="singleTop"/>
 
+        <activity android:name=".UI.DownloadingDataActivity"
+            tools:ignore="DuplicateActivity"
+            android:theme="@style/AppTheme.PopUpTheme">
+
+        </activity>
     </application>
 
 </manifest>
