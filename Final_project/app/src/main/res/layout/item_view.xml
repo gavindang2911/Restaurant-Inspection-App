@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/hazardLevelIcon"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="20dp"
             android:text="@string/hazardLevel" />
 
@@ -85,11 +85,11 @@
 
         <ImageView
             android:id="@+id/imageViewFavouriteMain"
-            android:layout_width="78dp"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/hazardLevelTextView"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
             app:srcCompat="@android:drawable/btn_star_big_on" />
 
