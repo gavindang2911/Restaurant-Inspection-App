@@ -6,13 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".UI.SearchActivity">
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+    <ImageView
+        android:id="@+id/imageViewSearchIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:layout_marginTop="30dp"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/imageViewSearchIcon"
+        android:ems="14"
+        android:inputType="textPersonName"
+         />
+
+
 
     <TextView
         android:id="@+id/textViewHazardLevel"
@@ -28,35 +40,38 @@
         android:id="@+id/buttonGreen"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:background="@drawable/red_outline_button"
+        android:background="@drawable/green_outline_button"
         android:layout_marginTop="130dp"
-        android:layout_marginStart="30dp"
-        android:text="Button" />
+        android:layout_marginStart="40dp"
+         />
 
     <Button
         android:id="@+id/buttonOrange"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_alignBottom="@id/buttonGreen"
+        android:background="@drawable/orange_outline_button"
         android:layout_centerHorizontal="true"
-        android:text="Button" />
+        />
 
     <Button
         android:id="@+id/buttonRed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_alignBottom="@id/buttonGreen"
+        android:background="@drawable/red_outline_button"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:text="Button" />
+        android:layout_marginEnd="40dp"
+         />
 
     <TextView
         android:id="@+id/textViewLow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="47dp"
         android:layout_marginTop="180dp"
-        android:layout_marginStart="45dp"
-        android:text="@string/low" />
+        android:text="@string/low"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textViewModerate"
@@ -64,7 +79,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/textViewLow"
         android:layout_centerHorizontal="true"
-        android:text="@string/moderate" />
+        android:text="@string/moderate"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textViewHigh"
@@ -72,8 +88,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonGreen"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="45dp"
-        android:text="@string/high" />
+        android:layout_marginEnd="50dp"
+        android:text="@string/high"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textViewCriticalText"
@@ -131,7 +148,8 @@
         android:layout_marginStart="30dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
-        android:text="@string/reset_button" />
+        android:text="@string/reset_button"
+        android:background="@drawable/button_view"/>
 
     <Button
         android:id="@+id/buttonSearch"
@@ -141,7 +159,8 @@
         android:layout_marginBottom="50dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
-        android:text="@string/search_button" />
+        android:text="@string/search_button"
+        android:background="@drawable/button_view"/>
 
     <TextView
         android:id="@+id/textViewFavourite"
@@ -152,13 +171,15 @@
         android:text="@string/favourite_text"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <ImageButton
+        android:id="@+id/imageButtonFav"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="360dp"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        android:background="@drawable/favourite_outline_button"
+        app:srcCompat="@drawable/star_unclick" />
 
 
 </RelativeLayout>
