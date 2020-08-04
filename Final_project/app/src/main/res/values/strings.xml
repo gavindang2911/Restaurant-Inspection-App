@@ -88,5 +88,13 @@
     <string name="title_activity_maps2">Map</string>
     <string name="restaurant">Restaurants</string>
 
+    <string name="numOfIssuesFound_Main"> issues found</string>
+    <string name="latest_inspection_Main">latest inspection: </string>
+    <string name="daysAgo"> days ago</string>
+    <string name="unKnown_Main">Unknown</string>
+    <string name="noInspection_Main">No Inspections</string>
+    <string name="noIssues_Main">0 issues found</string>
+    <string name="restaurant_name">Restaurant Name</string>
+
 
 </resources>

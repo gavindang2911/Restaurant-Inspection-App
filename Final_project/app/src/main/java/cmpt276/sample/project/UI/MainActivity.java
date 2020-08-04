@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,8 +40,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 import cmpt276.sample.project.Model.DataManager;
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
+    private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
 
@@ -74,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        dataManager = DataManager.init(this);
+        DataManager.init(this);
         dataManager = DataManager.getInstance();
+
 
         /**
          * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
@@ -88,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
          * CANNOT USE BOTH AT THE SAME TIME
          */
         // --------------------------------------------------------------------------------------------------------
+
         checkForUpdate();
+
         try {
             restaurantManager.reset();
             restaurantManager = RestaurantManager.getInstance();
@@ -105,11 +114,15 @@ public class MainActivity extends AppCompatActivity {
             readRestaurantData();
             readInspectionData();
         }
+        checkForUpdateFavRestaurant();
         sortRestaurants();
         restaurantListView();
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
+
+
+
 
     public  void readRestaurantData(){
         InputStream is = getResources().openRawResource(R.raw.restaurants_itr1);
@@ -203,6 +216,12 @@ public class MainActivity extends AppCompatActivity {
             https://www.vippng.com/ps/restaurant-icon/
 
              */
+            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
+            if (currentRestaurant.isFavourite()) {
+                imageViewFavourite.setVisibility(View.VISIBLE);
+            } else {
+                imageViewFavourite.setVisibility(View.INVISIBLE);
+            }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
             if(currentRestaurant.getName().contains("Boston Pizza")){
@@ -257,6 +276,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
             //set icon of hazard level and date of inspection
             ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
             TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
@@ -265,18 +286,22 @@ public class MainActivity extends AppCompatActivity {
             if(currentRestaurant.getInspections().size()!=0) {
                 //set number of issues
                 int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
-                numberOfIssues.setText(numberOfIssuesFound+" issues found");
+                String issuesFoundString = getString(R.string.numOfIssuesFound_Main);
+                numberOfIssues.setText(numberOfIssuesFound+" "+ issuesFoundString);
 
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
                 long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+                String latestInspectionString = getString(R.string.latest_inspection_Main);
+
                 if(date<=30){
-                    lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
+                    String dayAgoString = getString(R.string.daysAgo);
+                    lastDateOfInspection.setText(latestInspectionString + " " +String.format(Locale.ENGLISH,"%d "+ dayAgoString, date));
                 }
                 else if(date<365){
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 else{
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
@@ -290,13 +315,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                hazardLevelText.setText("Unknown");
+                String unKnownString = getString(R.string.unKnown_Main);
+                String noInspectionString = getString(R.string.noInspection_Main);
+                String noIssuesFoundString = getString(R.string.noIssues_Main);
+
+                hazardLevelText.setText(unKnownString);
                 imageIcon.setImageResource(R.drawable.gray_circle);
-                lastDateOfInspection.setText("No Inspections");
-                numberOfIssues.setText("0 issues found");
+                lastDateOfInspection.setText(noInspectionString);
+                numberOfIssues.setText(noIssuesFoundString);
             }
-
-
 
             return itemView;
         }
@@ -409,7 +436,10 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkForUpdate() {
+
         if(dataManager.check20hour()) {
+            dataManager.readLastModifiedRestaurant();
+            dataManager.readLastModifiedInspection();
             if(dataManager.checkIfUpdateNeeded()) {
                 Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
                 startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
@@ -478,10 +508,24 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+                restaurant.setFavourite(false);
 
                 String iconName = image + Integer.toString(i++);
                 restaurant.setIconName(iconName);
 
+                SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+                Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+
+                /**
+                 * _________________________ I T E R A T I O N 3 _____________________________________________
+                 */
+                for(String favRestaurantString: favourites_list) {
+                    Gson gson = new Gson();
+                    Restaurant favRestaurant = gson.fromJson(favRestaurantString, Restaurant.class);
+                    if(favRestaurant.getTrackingNumber().equals(restaurant.getTrackingNumber())) {
+                        restaurant.setFavourite(true);
+                    }
+                }
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
             }
@@ -549,9 +593,6 @@ public class MainActivity extends AppCompatActivity {
                         );
 
                         if (tokens[5].length() > 0) {
-                            /**
-                             * CHeck if where there is more than 1 violations or not
-                             */
                             if (!tokens[5].contains("|")) {
                                 String[] violationStringArray = tokens[5].split(",");
 
@@ -598,6 +639,61 @@ public class MainActivity extends AppCompatActivity {
         return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
+
+
+    /**
+     * _____________________________ I T E R A T I O N 3 _______________________________________________________________
+     */
+    private void checkForUpdateFavRestaurant() {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        boolean checkForFav = false;
+        for (String resString: favourites_list) {
+            Gson gson = new Gson();
+            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
+            for (Restaurant newRestaurant: restaurantManager) {
+                if (newRestaurant.getTrackingNumber().equals(oldRestaurant.getTrackingNumber())) {
+                    if (newRestaurant.getInspections().size() != oldRestaurant.getInspections().size()) {
+                        newRestaurantList.add(newRestaurant);
+                        checkForFav = true;
+                        removeFromFavourites(oldRestaurant);
+                        addToFavourites(newRestaurant);
+                    }
+                }
+            }
+        }
+        editor.putStringSet("Favourites", favourites_list).apply();
+        /**
+         * https://stackoverflow.com/questions/5374546/passing-arraylist-through-intent Passing array list through intent
+         */
+        if (checkForFav == true) {
+            Gson g = new Gson();
+            String newRestaurantListString = g.toJson(newRestaurantList);
+            Intent intent = new Intent(this, NewInspectionActivity.class);
+            intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
+            startActivity(intent);
+        }
+    }
+    private void addToFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.add(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
+
+    private void removeFromFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.remove(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
     @Override
     public void onBackPressed(){
         finishAffinity();
@@ -605,3 +701,21 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
+
+
+
+
+
+
+/**
+ * __________ IGNORE BELOW _________
+ * Bring these to onCreate to test for update function
+ */
+
+//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
+//        String a = pref.getString("last_updated", null);
+//        String b = pref.getString("last_modified_inspections", null);
+//        String c = pref.getString("last_modified_restaurants", null);
+//        Log.i("AAAAA", "aaaa " + a);
+//        Log.i("AAAAA", "aaaa " + b);
+//        Log.i("AAAAA", "aaaa " + c);
