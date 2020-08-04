@@ -17,6 +17,9 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.TextView;
@@ -55,6 +58,7 @@ import cmpt276.sample.project.R;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int MAP_ACTIVITY_RESULT_MAP = 200;
+    private static final int MAP_ACTIVITY_RESULT_SEARCH = 115;
     private GoogleMap mMap;
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -287,7 +291,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void setUpRestaurant(){
-        Button button = (Button) findViewById(R.id.buttonGoToList);
+        Button button = findViewById(R.id.buttonGoToList);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,6 +375,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new LatLng(returnRestaurant.getLatitude(),
                             returnRestaurant.getLongitude()), 30));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.search_restaurant){
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivityForResult(intent, MAP_ACTIVITY_RESULT_SEARCH);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

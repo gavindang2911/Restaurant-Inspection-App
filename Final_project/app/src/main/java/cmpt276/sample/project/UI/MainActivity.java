@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_UPDATE = 103;
     private static final int ACTIVITY_RESULT_MAP = 105;
     private static final int ACTIVITY_RESULT_SINGLE_RESTAURANT = 100;
+    private static final int ACTIVITY_RESULT_SEARCH = 110;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -111,10 +115,26 @@ public class MainActivity extends AppCompatActivity {
         // --------------------------------------------------------------------------------------------------------
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.search_restaurant){
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivityForResult(intent, ACTIVITY_RESULT_SEARCH);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public  void readRestaurantData(){
         InputStream is = getResources().openRawResource(R.raw.restaurants_itr1);
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
+                new InputStreamReader(is, StandardCharsets.UTF_8)
         );
 
         int i=1;
@@ -151,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void restaurantListView(){
         ArrayAdapter<Restaurant> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.restaurantListView);
+        ListView list = findViewById(R.id.restaurantListView);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -204,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
              */
 
-            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
+            ImageView imageView = itemView.findViewById(R.id.item_image);
             if(currentRestaurant.getName().contains("Boston Pizza")){
                 imageView.setImageResource(R.drawable.boston_pizza);
             }
@@ -248,20 +268,20 @@ public class MainActivity extends AppCompatActivity {
 
 
             //set Name
-            TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);
+            TextView nameText = itemView.findViewById(R.id.restaurantName);
             nameText.setText(currentRestaurant.getName());
 
             //set Address
-            TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
+            TextView addressText = itemView.findViewById(R.id.restaurantAddress);
             addressText.setText(currentRestaurant.getAddress());
 
 
 
             //set icon of hazard level and date of inspection
-            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
-            TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
-            TextView lastDateOfInspection = (TextView) itemView.findViewById(R.id.lastDateInspectionTextView);
-            TextView numberOfIssues = (TextView) itemView.findViewById(R.id.numberOfIssuesTextView);
+            ImageView imageIcon = itemView.findViewById(R.id.hazardLevelIcon);
+            TextView hazardLevelText = itemView.findViewById(R.id.hazardLevelTextView);
+            TextView lastDateOfInspection = itemView.findViewById(R.id.lastDateInspectionTextView);
+            TextView numberOfIssues = itemView.findViewById(R.id.numberOfIssuesTextView);
             if(currentRestaurant.getInspections().size()!=0) {
                 //set number of issues
                 int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
@@ -317,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         InputStream inputStream = getResources().openRawResource(R.raw.inspectionreports_itr1);
 
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(inputStream, Charset.forName("UTF-8"))
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8)
         );
         String csvLine = "";
         try {
@@ -384,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpMap(){
-        Button button = (Button) findViewById(R.id.goToMapButton);
+        Button button = findViewById(R.id.goToMapButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -454,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
+                new InputStreamReader(is, StandardCharsets.UTF_8)
         );
 
         int i = 1;
@@ -479,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
 
-                String iconName = image + Integer.toString(i++);
+                String iconName = image + i++;
                 restaurant.setIconName(iconName);
 
                 restaurantManager.add(restaurant);
@@ -500,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
         InputStream is = new FileInputStream(file);
 
         BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, Charset.forName("UTF-8"))
+                new InputStreamReader(is, StandardCharsets.UTF_8)
         );
         InspectionManager inspectionManager = InspectionManager.getInstance();
 
@@ -536,7 +556,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
                         if (tokens.length == 7) {
-                            hazardRating = tokens[6].replaceAll("[^a-zA-Z0-9 &]","");;
+                            hazardRating = tokens[6].replaceAll("[^a-zA-Z0-9 &]","");
                         }
                         Inspection inspection = new Inspection(
                                 tokens[0],
