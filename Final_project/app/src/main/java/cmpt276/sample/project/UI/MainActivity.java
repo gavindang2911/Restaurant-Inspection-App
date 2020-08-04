@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +29,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,13 +37,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 
 import cmpt276.sample.project.Model.DataManager;
@@ -66,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_UPDATE = 103;
     private static final int ACTIVITY_RESULT_MAP = 105;
     private static final int ACTIVITY_RESULT_SINGLE_RESTAURANT = 100;
+    private static final int ACTIVITY_RESULT_SEARCH = 110;
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
-    private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
 
@@ -80,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        DataManager.init(this);
+        dataManager = DataManager.init(this);
         dataManager = DataManager.getInstance();
-
 
         /**
          * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
@@ -95,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
          * CANNOT USE BOTH AT THE SAME TIME
          */
         // --------------------------------------------------------------------------------------------------------
-
         checkForUpdate();
-
         try {
             restaurantManager.reset();
             restaurantManager = RestaurantManager.getInstance();
@@ -114,15 +110,27 @@ public class MainActivity extends AppCompatActivity {
             readRestaurantData();
             readInspectionData();
         }
-        checkForUpdateFavRestaurant();
         sortRestaurants();
         restaurantListView();
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        return true;
+    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.search_restaurant){
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivityForResult(intent, ACTIVITY_RESULT_SEARCH);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public  void readRestaurantData(){
         InputStream is = getResources().openRawResource(R.raw.restaurants_itr1);
@@ -216,12 +224,6 @@ public class MainActivity extends AppCompatActivity {
             https://www.vippng.com/ps/restaurant-icon/
 
              */
-            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
-            if (currentRestaurant.isFavourite()) {
-                imageViewFavourite.setVisibility(View.VISIBLE);
-            } else {
-                imageViewFavourite.setVisibility(View.INVISIBLE);
-            }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
             if(currentRestaurant.getName().contains("Boston Pizza")){
@@ -276,8 +278,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
             //set icon of hazard level and date of inspection
             ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
             TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
@@ -286,22 +286,18 @@ public class MainActivity extends AppCompatActivity {
             if(currentRestaurant.getInspections().size()!=0) {
                 //set number of issues
                 int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
-                String issuesFoundString = getString(R.string.numOfIssuesFound_Main);
-                numberOfIssues.setText(numberOfIssuesFound+" "+ issuesFoundString);
+                numberOfIssues.setText(numberOfIssuesFound+" issues found");
 
                 hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
                 long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
-                String latestInspectionString = getString(R.string.latest_inspection_Main);
-
                 if(date<=30){
-                    String dayAgoString = getString(R.string.daysAgo);
-                    lastDateOfInspection.setText(latestInspectionString + " " +String.format(Locale.ENGLISH,"%d "+ dayAgoString, date));
+                    lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
                 }
                 else if(date<365){
-                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 else{
-                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
                 }
                 if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
@@ -315,15 +311,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                String unKnownString = getString(R.string.unKnown_Main);
-                String noInspectionString = getString(R.string.noInspection_Main);
-                String noIssuesFoundString = getString(R.string.noIssues_Main);
-
-                hazardLevelText.setText(unKnownString);
+                hazardLevelText.setText("Unknown");
                 imageIcon.setImageResource(R.drawable.gray_circle);
-                lastDateOfInspection.setText(noInspectionString);
-                numberOfIssues.setText(noIssuesFoundString);
+                lastDateOfInspection.setText("No Inspections");
+                numberOfIssues.setText("0 issues found");
             }
+
+
 
             return itemView;
         }
@@ -701,21 +695,3 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-
-
-
-
-
-
-/**
- * __________ IGNORE BELOW _________
- * Bring these to onCreate to test for update function
- */
-
-//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
-//        String a = pref.getString("last_updated", null);
-//        String b = pref.getString("last_modified_inspections", null);
-//        String c = pref.getString("last_modified_restaurants", null);
-//        Log.i("AAAAA", "aaaa " + a);
-//        Log.i("AAAAA", "aaaa " + b);
-//        Log.i("AAAAA", "aaaa " + c);
