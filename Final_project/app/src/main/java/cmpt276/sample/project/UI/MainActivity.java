@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
+    private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
 
@@ -119,12 +120,29 @@ public class MainActivity extends AppCompatActivity {
             readRestaurantData();
             readInspectionData();
         }
-        checkForUpdateFavRestaurant();
+//        checkForUpdateFavRestaurant();
+        a();
         sortRestaurants();
         restaurantListView();
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
+
+    private void a() {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        for (String resString: favourites_list) {
+            Gson gson = new Gson();
+            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
+            newRestaurantList.add(oldRestaurant);
+        }
+        Gson g = new Gson();
+        String newRestaurantListString = g.toJson(newRestaurantList);
+        Intent intent = new Intent(this, NewInspectionActivity.class);
+        intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
+        startActivity(intent);
+    }
+
 
     private void checkForUpdateFavRestaurant() {
         SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
@@ -137,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             for (Restaurant newRestaurant: restaurantManager) {
                 if (newRestaurant.getTrackingNumber().equals(oldRestaurant.getTrackingNumber())) {
                     if (newRestaurant.getInspections().size() != oldRestaurant.getInspections().size()) {
+                        newRestaurantList.add(newRestaurant);
                         checkForFav = true;
                         removeFromFavourites(oldRestaurant);
                         addToFavourites(newRestaurant);
@@ -145,8 +164,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         editor.putStringSet("Favourites", favourites_list).apply();
+        /**
+         * https://stackoverflow.com/questions/5374546/passing-arraylist-through-intent Passing array list through intent
+         */
         if (checkForFav == true) {
+            Gson g = new Gson();
+            String newRestaurantListString = g.toJson(newRestaurantList);
             Intent intent = new Intent(this, NewInspectionActivity.class);
+            intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
             startActivity(intent);
         }
     }

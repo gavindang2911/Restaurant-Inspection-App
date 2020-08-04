@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.NewInspectionActivity"></activity>
         <!-- <activity android:name=".UI.DownloadingDataActivity"></activity> -->
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -46,7 +45,7 @@
         </activity>
         <activity
             android:name=".UI.UpdateDataActivity"
-            android:theme="@style/AppTheme.PopUpTheme"></activity>
+            android:theme="@style/AppTheme.PopUpTheme" />
         <activity
             android:name=".UI.SingleInspection"
             android:label="@string/inspectionTitleName"
@@ -62,7 +61,11 @@
         <activity
             android:name=".UI.DownloadingDataActivity"
             android:theme="@style/AppTheme.PopUpTheme"
-            tools:ignore="DuplicateActivity"></activity>
+            tools:ignore="DuplicateActivity" />
+        <activity android:name=".UI.NewInspectionActivity"
+            android:label="New Favourite Restaurant's Inspections"
+            android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>
