@@ -63,7 +63,7 @@
             android:theme="@style/AppTheme.PopUpTheme"
             tools:ignore="DuplicateActivity" />
         <activity android:name=".UI.NewInspectionActivity"
-            android:label="New Favourite Restaurant's Inspections"
+            android:label="New Inspections"
             android:launchMode="singleTop"/>
 
     </application>

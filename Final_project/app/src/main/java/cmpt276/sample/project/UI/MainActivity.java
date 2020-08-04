@@ -97,13 +97,7 @@ public class MainActivity extends AppCompatActivity {
         // --------------------------------------------------------------------------------------------------------
 
         checkForUpdate();
-//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
-//        String a = pref.getString("last_updated", null);
-//        String b = pref.getString("last_modified_inspections", null);
-//        String c = pref.getString("last_modified_restaurants", null);
-//        Log.i("AAAAA", "aaaa " + a);
-//        Log.i("AAAAA", "aaaa " + b);
-//        Log.i("AAAAA", "aaaa " + c);
+
         try {
             restaurantManager.reset();
             restaurantManager = RestaurantManager.getInstance();
@@ -120,80 +114,14 @@ public class MainActivity extends AppCompatActivity {
             readRestaurantData();
             readInspectionData();
         }
-//        checkForUpdateFavRestaurant();
-        a();
+        checkForUpdateFavRestaurant();
         sortRestaurants();
         restaurantListView();
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
 
-    private void a() {
-        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
-        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
-        for (String resString: favourites_list) {
-            Gson gson = new Gson();
-            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
-            newRestaurantList.add(oldRestaurant);
-        }
-        Gson g = new Gson();
-        String newRestaurantListString = g.toJson(newRestaurantList);
-        Intent intent = new Intent(this, NewInspectionActivity.class);
-        intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
-        startActivity(intent);
-    }
 
-
-    private void checkForUpdateFavRestaurant() {
-        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
-        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
-        SharedPreferences.Editor editor = pref.edit();
-        boolean checkForFav = false;
-        for (String resString: favourites_list) {
-            Gson gson = new Gson();
-            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
-            for (Restaurant newRestaurant: restaurantManager) {
-                if (newRestaurant.getTrackingNumber().equals(oldRestaurant.getTrackingNumber())) {
-                    if (newRestaurant.getInspections().size() != oldRestaurant.getInspections().size()) {
-                        newRestaurantList.add(newRestaurant);
-                        checkForFav = true;
-                        removeFromFavourites(oldRestaurant);
-                        addToFavourites(newRestaurant);
-                    }
-                }
-            }
-        }
-        editor.putStringSet("Favourites", favourites_list).apply();
-        /**
-         * https://stackoverflow.com/questions/5374546/passing-arraylist-through-intent Passing array list through intent
-         */
-        if (checkForFav == true) {
-            Gson g = new Gson();
-            String newRestaurantListString = g.toJson(newRestaurantList);
-            Intent intent = new Intent(this, NewInspectionActivity.class);
-            intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
-            startActivity(intent);
-        }
-    }
-    private void addToFavourites(Restaurant restaurant) {
-        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
-        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
-        SharedPreferences.Editor editor = pref.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(restaurant);
-        favourites_list.add(json);
-        editor.putStringSet("favourites", favourites_list).apply();
-    }
-
-    private void removeFromFavourites(Restaurant restaurant) {
-        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
-        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
-        SharedPreferences.Editor editor = pref.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(restaurant);
-        favourites_list.remove(json);
-        editor.putStringSet("favourites", favourites_list).apply();
-    }
 
 
     public  void readRestaurantData(){
@@ -588,6 +516,9 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
                 Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
 
+                /**
+                 * _________________________ I T E R A T I O N 3 _____________________________________________
+                 */
                 for(String favRestaurantString: favourites_list) {
                     Gson gson = new Gson();
                     Restaurant favRestaurant = gson.fromJson(favRestaurantString, Restaurant.class);
@@ -708,6 +639,61 @@ public class MainActivity extends AppCompatActivity {
         return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
+
+
+    /**
+     * _____________________________ I T E R A T I O N 3 _______________________________________________________________
+     */
+    private void checkForUpdateFavRestaurant() {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        boolean checkForFav = false;
+        for (String resString: favourites_list) {
+            Gson gson = new Gson();
+            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
+            for (Restaurant newRestaurant: restaurantManager) {
+                if (newRestaurant.getTrackingNumber().equals(oldRestaurant.getTrackingNumber())) {
+                    if (newRestaurant.getInspections().size() != oldRestaurant.getInspections().size()) {
+                        newRestaurantList.add(newRestaurant);
+                        checkForFav = true;
+                        removeFromFavourites(oldRestaurant);
+                        addToFavourites(newRestaurant);
+                    }
+                }
+            }
+        }
+        editor.putStringSet("Favourites", favourites_list).apply();
+        /**
+         * https://stackoverflow.com/questions/5374546/passing-arraylist-through-intent Passing array list through intent
+         */
+        if (checkForFav == true) {
+            Gson g = new Gson();
+            String newRestaurantListString = g.toJson(newRestaurantList);
+            Intent intent = new Intent(this, NewInspectionActivity.class);
+            intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
+            startActivity(intent);
+        }
+    }
+    private void addToFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.add(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
+
+    private void removeFromFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.remove(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
     @Override
     public void onBackPressed(){
         finishAffinity();
@@ -715,3 +701,21 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
+
+
+
+
+
+
+/**
+ * __________ IGNORE BELOW _________
+ * Bring these to onCreate to test for update function
+ */
+
+//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
+//        String a = pref.getString("last_updated", null);
+//        String b = pref.getString("last_modified_inspections", null);
+//        String c = pref.getString("last_modified_restaurants", null);
+//        Log.i("AAAAA", "aaaa " + a);
+//        Log.i("AAAAA", "aaaa " + b);
+//        Log.i("AAAAA", "aaaa " + c);
