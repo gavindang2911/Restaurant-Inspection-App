@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 
 
+import cmpt276.sample.project.Adapter.DBAdapter;
 import cmpt276.sample.project.Model.DataManager;
 import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Inspection;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Restaurant> restaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
+    private DBAdapter myDB;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         dataManager = DataManager.init(this);
         dataManager = DataManager.getInstance();
+
+        openDB();
 
         /**
          * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
@@ -111,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         // --------------------------------------------------------------------------------------------------------
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public  void readRestaurantData(){
         InputStream is = getResources().openRawResource(R.raw.restaurants_itr1);
         BufferedReader reader = new BufferedReader(
@@ -137,6 +142,18 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+
+                long date = DateUtils.dayFromCurrent(restaurant.getInspections().get(0).getInspectionDate());
+                int numberOfIssuesFound = restaurant.getInspections().get(0).getNumOfCritical() + restaurant.getInspections().get(0).getNumOfNonCritical();
+                if(date<=30){
+                    myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,String.format(Locale.ENGLISH,"%d days ago",date),restaurant.getInspections().get(0).getHazardRating());
+                }
+                else if(date<365){
+                    myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,DateUtils.DAY_MONTH.getDateString(restaurant.getInspections().get(0).getInspectionDate()),restaurant.getInspections().get(0).getHazardRating());
+                }
+                else{
+                    myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,DateUtils.DAY_MONTH_YEAR.getDateString(restaurant.getInspections().get(0).getInspectionDate()),restaurant.getInspections().get(0).getHazardRating());
+                }
 
 
                 restaurantManager.add(restaurant);
@@ -603,5 +620,19 @@ public class MainActivity extends AppCompatActivity {
         finishAffinity();
     }
 
+    private void openDB(){
+        myDB = new DBAdapter(this);
+        myDB.open();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+    private void closeDB(){
+        myDB.close();
+    }
 }
 
