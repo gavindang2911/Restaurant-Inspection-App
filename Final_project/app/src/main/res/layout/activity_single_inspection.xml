@@ -88,48 +88,48 @@
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/DateOfInspection"
-        android:textSize="18sp"
         android:textColor="#fff"
-        app:layout_constraintStart_toEndOf="@+id/textViewDateN"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/InspType"
-        android:textSize="18sp"
         android:textColor="#fff"
-        app:layout_constraintStart_toEndOf="@+id/textViewtypeN"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
     <TextView
         android:id="@+id/textViewNumCritical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/NumCritical"
-        android:textSize="18sp"
         android:textColor="#fff"
-        app:layout_constraintStart_toEndOf="@+id/textViewNumCriticalN"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewType" />
 
     <TextView
         android:id="@+id/textViewNumNonCr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/NumNonCritical"
-        android:textSize="18sp"
         android:textColor="#fff"
-        app:layout_constraintStart_toEndOf="@+id/textViewNumNonCriN"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNumCritical" />
 
 
@@ -138,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/Hazard"
         android:textColor="#459E48"
         android:textSize="18sp"

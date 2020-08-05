@@ -35,11 +35,12 @@ public class DBAdapter {
 
 
     // TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
-    public static final int COL_NAME = 1;
-    public static final int COL_ADDRESS = 2;
-    public static final int COL_ISSUE = 3;
-    public static final int COL_LATESTINSPECTION = 4;
-    public static final int COL_HAZARDLEVEL = 5;
+    public static final int COL_TRACKINGNUMBER = 1;
+    public static final int COL_NAME = 2;
+    public static final int COL_ADDRESS = 3;
+    public static final int COL_ISSUE = 4;
+    public static final int COL_LATESTINSPECTION = 5;
+    public static final int COL_HAZARDLEVEL = 6;
 
 
     public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_TRACKINGNUMBER, KEY_NAME, KEY_ADDRESS, KEY_ISSUE, KEY_LATESTINSPECTION, KEY_HAZARDLEVEL};
@@ -48,7 +49,7 @@ public class DBAdapter {
     public static final String DATABASE_NAME = "MyDb";
     public static final String DATABASE_TABLE = "mainTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_CREATE_SQL =
             "create table " + DATABASE_TABLE
@@ -64,12 +65,12 @@ public class DBAdapter {
                     //		(http://www.sqlite.org/datatype3.html)
                     //  - "not null" means it is a required field (must be given a value).
                     // NOTE: All must be comma separated (end of line!) Last one must have NO comma!!
-                    + KEY_TRACKINGNUMBER + "string not null unique,"
-                    + KEY_NAME + " text not null, "
-                    + KEY_ADDRESS + "string not null, "
+                    + KEY_TRACKINGNUMBER + " string not null unique,"
+                    + KEY_NAME + " string not null, "
+                    + KEY_ADDRESS + " string not null, "
                     + KEY_ISSUE + " int not null,"
-                    + KEY_LATESTINSPECTION + "string not null,"
-                    + KEY_HAZARDLEVEL + "string not null"
+                    + KEY_LATESTINSPECTION + " string not null,"
+                    + KEY_HAZARDLEVEL + " string not null"
 
                     // Rest  of creation:
                     + ");";

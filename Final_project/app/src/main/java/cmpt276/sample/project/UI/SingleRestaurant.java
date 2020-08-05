@@ -4,10 +4,13 @@ package cmpt276.sample.project.UI;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,10 +28,17 @@ import com.google.android.material.appbar.AppBarLayout;
 
  */
 
+import com.google.gson.Gson;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import cmpt276.sample.project.Adapter.InspectionAdapter;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;
+
+
 /**
  * SingleRestaurant class is the second screen of the app, which displays the detail
  * of the specific restaurant when user click on from first screen. It also shows
@@ -44,7 +54,7 @@ public class SingleRestaurant extends AppCompatActivity {
 
     private String restaurantIDString;
     private int positionRestaurant;
-    private Restaurant restaurant = null;
+    private Restaurant restaurant;
     private RestaurantManager restaurantMan;
 
 
@@ -68,6 +78,7 @@ public class SingleRestaurant extends AppCompatActivity {
 
         displayRecyclerViewInspection();
 
+        setUpFavouriteBtn();
         setUpGPS();
     }
 
@@ -109,7 +120,6 @@ public class SingleRestaurant extends AppCompatActivity {
         });
 
     }
-
 
 
     private void displayRestaurantInfo() {
@@ -157,6 +167,50 @@ public class SingleRestaurant extends AppCompatActivity {
         });
     }
 
+
+
+    private void setUpFavouriteBtn() {
+        final Button btn_favourite = findViewById(R.id.btn_favourite);
+        if (restaurant.isFavourite()) {
+            btn_favourite.setBackgroundResource(R.drawable.star_on);
+        } else {
+            btn_favourite.setBackgroundResource(R.drawable.star_off);
+        }
+        btn_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (restaurant.isFavourite()) {
+                    restaurant.setFavourite(false);
+                    btn_favourite.setBackgroundResource(R.drawable.star_off);
+                    removeFromFavourites(restaurant);
+                } else {
+                    restaurant.setFavourite(true);
+                    btn_favourite.setBackgroundResource(R.drawable.star_on);
+                    addToFavourites(restaurant);
+                }
+            }
+        });
+    }
+
+    private void addToFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.add(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
+
+    private void removeFromFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.remove(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
 
 }
 

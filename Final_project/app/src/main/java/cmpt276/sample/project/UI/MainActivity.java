@@ -7,8 +7,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,8 +25,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,8 +42,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 import cmpt276.sample.project.Adapter.DBAdapter;
@@ -65,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
+    private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
     private DBAdapter myDB;
@@ -76,10 +84,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        dataManager = DataManager.init(this);
+        DataManager.init(this);
         dataManager = DataManager.getInstance();
 
         openDB();
+
 
         /**
          * To start the app again uncomment this function, REMEMBER TO COMMENT WHEN USE THE APP.
@@ -92,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
          * CANNOT USE BOTH AT THE SAME TIME
          */
         // --------------------------------------------------------------------------------------------------------
+
         checkForUpdate();
+
         try {
             restaurantManager.reset();
             restaurantManager = RestaurantManager.getInstance();
@@ -109,11 +120,15 @@ public class MainActivity extends AppCompatActivity {
             readRestaurantData();
             readInspectionData();
         }
+        checkForUpdateFavRestaurant();
         sortRestaurants();
-        restaurantListView();
+//        restaurantListView();
+        Cursor cursor = myDB.getAllRows();
+        populateListView(cursor);
         setUpMap();
         // --------------------------------------------------------------------------------------------------------
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public  void readRestaurantData(){
@@ -145,8 +160,9 @@ public class MainActivity extends AppCompatActivity {
 
                 long date = DateUtils.dayFromCurrent(restaurant.getInspections().get(0).getInspectionDate());
                 int numberOfIssuesFound = restaurant.getInspections().get(0).getNumOfCritical() + restaurant.getInspections().get(0).getNumOfNonCritical();
+                String dayAgoString = getString(R.string.daysAgo);
                 if(date<=30){
-                    myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,String.format(Locale.ENGLISH,"%d days ago",date),restaurant.getInspections().get(0).getHazardRating());
+                    myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,String.format(Locale.ENGLISH,"%d "+ dayAgoString, date),restaurant.getInspections().get(0).getHazardRating());
                 }
                 else if(date<365){
                     myDB.insertRow(restaurant.getTrackingNumber(),restaurant.getName(),restaurant.getAddress(),numberOfIssuesFound,DateUtils.DAY_MONTH.getDateString(restaurant.getInspections().get(0).getInspectionDate()),restaurant.getInspections().get(0).getHazardRating());
@@ -166,112 +182,118 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void restaurantListView(){
-        ArrayAdapter<Restaurant> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.restaurantListView);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//    private void restaurantListView(){
+//        ArrayAdapter<Restaurant> adapter = new MyListAdapter();
+//        ListView list = (ListView) findViewById(R.id.restaurantListView);
+//        list.setAdapter(adapter);
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
+////                startActivity(intent);
+//
+//                String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
+//
+//                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
+//                startActivityForResult(intent, ACTIVITY_RESULT_SINGLE_RESTAURANT);
+//            }
+//        });
+//    }
+
+    private void populateListView(Cursor cursor) {
+
+        ListView listView = (ListView) findViewById(R.id.restaurantListView);
+
+        listView.setAdapter(new CursorAdapter(this, R.layout.item_view, cursor, 0));
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, position);
 //                startActivity(intent);
 
-                    String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
+                String message = restaurantManager.getRestaurantList().get(position).getTrackingNumber();
 
-                    Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
-                    startActivityForResult(intent, ACTIVITY_RESULT_SINGLE_RESTAURANT);
+                Intent intent = SingleRestaurant.makeIntentForSingleRestaurant(MainActivity.this, message);
+                startActivityForResult(intent, ACTIVITY_RESULT_SINGLE_RESTAURANT);
             }
         });
+        cursor.close();
     }
 
-    private class MyListAdapter extends ArrayAdapter<Restaurant>{
+    public class CursorAdapter extends ResourceCursorAdapter {
 
-        public MyListAdapter(){
-            super(MainActivity.this,R.layout.item_view,restaurantList);
+        public CursorAdapter(Context context, int layout, Cursor cursor, int flags) {
+            super(context, layout, cursor, flags);
         }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            View itemView = convertView;
-            if(itemView == null){
-                itemView = getLayoutInflater().inflate(R.layout.item_view,parent,false);
+        public void bindView(View view, Context context, Cursor cursor) {
+            View itemView = view;
+            String id = cursor.getString(0);
+            String trackingNumber = cursor.getString(1);
+            String name = cursor.getString(2);
+            String address = cursor.getString(3);
+            String issues = cursor.getString(4);
+            String lastIns = cursor.getString(5);
+            String hazardLevel = cursor.getString(6);
+
+            Restaurant currentRestaurant = restaurantManager.getRestaurant(trackingNumber);
+
+            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
+            if (currentRestaurant.isFavourite()) {
+                imageViewFavourite.setVisibility(View.VISIBLE);
+            } else {
+                imageViewFavourite.setVisibility(View.INVISIBLE);
             }
-
-            Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
-
-            //set the view
-            /*
-            Site fr image
-            https://www.flaticon.com/free-icon/diet_2906325
-            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
-            https://fontmeme.com/mcdonalds-font/
-            https://1000logos.net/starbucks-logo/
-            https://www.facebook.com/Freshslice/
-            https://www.facebook.com/BlenzCoffee/
-            https://logos.fandom.com/wiki/Safeway
-            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
-            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
-            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
-            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
-            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
-            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
-            https://www.vippng.com/ps/restaurant-icon/
-
-             */
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
-            if(currentRestaurant.getName().contains("Boston Pizza")){
+            if(name.contains("Boston Pizza")){
                 imageView.setImageResource(R.drawable.boston_pizza);
             }
-            else if(currentRestaurant.getName().contains("7-Eleven")){
+            else if(name.contains("7-Eleven")){
                 imageView.setImageResource(R.drawable.seven_eleven);
             }
-            else if(currentRestaurant.getName().contains("Tim Hortons")) {
+            else if(name.contains("Tim Hortons")) {
                 imageView.setImageResource(R.drawable.tim_hortons);
             }
-            else if(currentRestaurant.getName().contains("Safeway")){
+            else if(name.contains("Safeway")){
                 imageView.setImageResource(R.drawable.safeway);
             }
-            else if(currentRestaurant.getName().contains("Domino's Pizza")) {
+            else if(name.contains("Domino's Pizza")) {
                 imageView.setImageResource(R.drawable.dominos_pizza);
             }
-            else if(currentRestaurant.getName().contains("McDonald's")) {
+            else if(name.contains("McDonald's")) {
                 imageView.setImageResource(R.drawable.mcdonalds);
             }
-            else if(currentRestaurant.getName().contains("KFC")) {
+            else if(name.contains("KFC")) {
                 imageView.setImageResource(R.drawable.kfc);
             }
-            else if(currentRestaurant.getName().contains("Starbucks")) {
+            else if(name.contains("Starbucks")) {
                 imageView.setImageResource(R.drawable.starbucks);
             }
-            else if(currentRestaurant.getName().contains("Burger King")) {
+            else if(name.contains("Burger King")) {
                 imageView.setImageResource(R.drawable.burger_king);
             }
-            else if(currentRestaurant.getName().contains("Blenz Coffee")) {
+            else if(name.contains("Blenz Coffee")) {
                 imageView.setImageResource(R.drawable.blenz_coffee);
             }
-            else if(currentRestaurant.getName().contains("Save On Foods")) {
+            else if(name.contains("Save On Foods")) {
                 imageView.setImageResource(R.drawable.save_on_foods);
             }
-            else if(currentRestaurant.getName().contains("Freshslice Pizza")) {
+            else if(name.contains("Freshslice Pizza")) {
                 imageView.setImageResource(R.drawable.fresh_slice_pizza);
             }
             else {
                 imageView.setImageResource(R.drawable.restaurant);
             }
 
-
-
             //set Name
             TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);
-            nameText.setText(currentRestaurant.getName());
+            nameText.setText(name);
 
             //set Address
             TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
-            addressText.setText(currentRestaurant.getAddress());
-
+            addressText.setText(address);
 
 
             //set icon of hazard level and date of inspection
@@ -281,24 +303,17 @@ public class MainActivity extends AppCompatActivity {
             TextView numberOfIssues = (TextView) itemView.findViewById(R.id.numberOfIssuesTextView);
             if(currentRestaurant.getInspections().size()!=0) {
                 //set number of issues
-                int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
-                numberOfIssues.setText(numberOfIssuesFound+" issues found");
+                numberOfIssues.setText(issues + "issues found");
 
-                hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
+                hazardLevelText.setText(hazardLevel);
                 long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
-                if(date<=30){
-                    lastDateOfInspection.setText("latest inspection: "+String.format(Locale.ENGLISH,"%d days ago",date));
-                }
-                else if(date<365){
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
-                }
-                else{
-                    lastDateOfInspection.setText("latest inspection: "+ DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
-                }
-                if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
+                String latestInspectionString = getString(R.string.latest_inspection_Main);
+                lastDateOfInspection.setText(latestInspectionString + " " + lastIns);
+
+                if (hazardLevel.equals("Low")) {
                     imageIcon.setImageResource(R.drawable.green_circle);
                     hazardLevelText.setTextColor(Color.parseColor("#459E48"));
-                } else if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Moderate")) {
+                } else if (hazardLevel.equals("Moderate")) {
                     imageIcon.setImageResource(R.drawable.orange_circle);
                     hazardLevelText.setTextColor(Color.parseColor("#FF6722"));
                 } else {
@@ -307,17 +322,167 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                hazardLevelText.setText("Unknown");
+                String unKnownString = getString(R.string.unKnown_Main);
+                String noInspectionString = getString(R.string.noInspection_Main);
+                String noIssuesFoundString = getString(R.string.noIssues_Main);
+
+                hazardLevelText.setText(unKnownString);
                 imageIcon.setImageResource(R.drawable.gray_circle);
-                lastDateOfInspection.setText("No Inspections");
-                numberOfIssues.setText("0 issues found");
+                lastDateOfInspection.setText(noInspectionString);
+                numberOfIssues.setText(noIssuesFoundString);
             }
-
-
-
-            return itemView;
         }
     }
+
+//    private class MyListAdapter extends ArrayAdapter<Restaurant>{
+//
+//        public MyListAdapter(){
+//            super(MainActivity.this,R.layout.item_view,restaurantList);
+//        }
+//
+//        @RequiresApi(api = Build.VERSION_CODES.O)
+//        @NonNull
+//        @Override
+//        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//            View itemView = convertView;
+//            if(itemView == null){
+//                itemView = getLayoutInflater().inflate(R.layout.item_view,parent,false);
+//            }
+//
+//            Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
+//
+//
+//            //set the view
+//            /*
+//            Site fr image
+//            https://www.flaticon.com/free-icon/diet_2906325
+//            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
+//            https://fontmeme.com/mcdonalds-font/
+//            https://1000logos.net/starbucks-logo/
+//            https://www.facebook.com/Freshslice/
+//            https://www.facebook.com/BlenzCoffee/
+//            https://logos.fandom.com/wiki/Safeway
+//            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
+//            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
+//            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
+//            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
+//            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
+//            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
+//            https://www.vippng.com/ps/restaurant-icon/
+//
+//             */
+//            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
+//            if (currentRestaurant.isFavourite()) {
+//                imageViewFavourite.setVisibility(View.VISIBLE);
+//            } else {
+//                imageViewFavourite.setVisibility(View.INVISIBLE);
+//            }
+//
+//            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_image);
+//            if(currentRestaurant.getName().contains("Boston Pizza")){
+//                imageView.setImageResource(R.drawable.boston_pizza);
+//            }
+//            else if(currentRestaurant.getName().contains("7-Eleven")){
+//                imageView.setImageResource(R.drawable.seven_eleven);
+//            }
+//            else if(currentRestaurant.getName().contains("Tim Hortons")) {
+//                imageView.setImageResource(R.drawable.tim_hortons);
+//            }
+//            else if(currentRestaurant.getName().contains("Safeway")){
+//                imageView.setImageResource(R.drawable.safeway);
+//            }
+//            else if(currentRestaurant.getName().contains("Domino's Pizza")) {
+//                imageView.setImageResource(R.drawable.dominos_pizza);
+//            }
+//            else if(currentRestaurant.getName().contains("McDonald's")) {
+//                imageView.setImageResource(R.drawable.mcdonalds);
+//            }
+//            else if(currentRestaurant.getName().contains("KFC")) {
+//                imageView.setImageResource(R.drawable.kfc);
+//            }
+//            else if(currentRestaurant.getName().contains("Starbucks")) {
+//                imageView.setImageResource(R.drawable.starbucks);
+//            }
+//            else if(currentRestaurant.getName().contains("Burger King")) {
+//                imageView.setImageResource(R.drawable.burger_king);
+//            }
+//            else if(currentRestaurant.getName().contains("Blenz Coffee")) {
+//                imageView.setImageResource(R.drawable.blenz_coffee);
+//            }
+//            else if(currentRestaurant.getName().contains("Save On Foods")) {
+//                imageView.setImageResource(R.drawable.save_on_foods);
+//            }
+//            else if(currentRestaurant.getName().contains("Freshslice Pizza")) {
+//                imageView.setImageResource(R.drawable.fresh_slice_pizza);
+//            }
+//            else {
+//                imageView.setImageResource(R.drawable.restaurant);
+//            }
+//
+//
+//
+//            //set Name
+//            TextView nameText = (TextView) itemView.findViewById(R.id.restaurantName);
+//            nameText.setText(currentRestaurant.getName());
+//
+//            //set Address
+//            TextView addressText = (TextView) itemView.findViewById(R.id.restaurantAddress);
+//            addressText.setText(currentRestaurant.getAddress());
+//
+//
+//
+//
+//
+//            //set icon of hazard level and date of inspection
+//            ImageView imageIcon = (ImageView) itemView.findViewById(R.id.hazardLevelIcon);
+//            TextView hazardLevelText = (TextView) itemView.findViewById(R.id.hazardLevelTextView);
+//            TextView lastDateOfInspection = (TextView) itemView.findViewById(R.id.lastDateInspectionTextView);
+//            TextView numberOfIssues = (TextView) itemView.findViewById(R.id.numberOfIssuesTextView);
+//            if(currentRestaurant.getInspections().size()!=0) {
+//                //set number of issues
+//                int numberOfIssuesFound = currentRestaurant.getInspections().get(0).getNumOfCritical() + currentRestaurant.getInspections().get(0).getNumOfNonCritical();
+//                String issuesFoundString = getString(R.string.numOfIssuesFound_Main);
+//                numberOfIssues.setText(numberOfIssuesFound+" "+ issuesFoundString);
+//
+//                hazardLevelText.setText(currentRestaurant.getInspections().get(0).getHazardRating());
+//                long date = DateUtils.dayFromCurrent(currentRestaurant.getInspections().get(0).getInspectionDate());
+//                String latestInspectionString = getString(R.string.latest_inspection_Main);
+//
+//                if(date<=30){
+//                    String dayAgoString = getString(R.string.daysAgo);
+//                    lastDateOfInspection.setText(latestInspectionString + " " +String.format(Locale.ENGLISH,"%d "+ dayAgoString, date));
+//                }
+//                else if(date<365){
+//                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+//                }
+//                else{
+//                    lastDateOfInspection.setText(latestInspectionString + " " + DateUtils.DAY_MONTH_YEAR.getDateString(currentRestaurant.getInspections().get(0).getInspectionDate()));
+//                }
+//                if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Low")) {
+//                    imageIcon.setImageResource(R.drawable.green_circle);
+//                    hazardLevelText.setTextColor(Color.parseColor("#459E48"));
+//                } else if (currentRestaurant.getInspections().get(0).getHazardRating().equals("Moderate")) {
+//                    imageIcon.setImageResource(R.drawable.orange_circle);
+//                    hazardLevelText.setTextColor(Color.parseColor("#FF6722"));
+//                } else {
+//                    imageIcon.setImageResource(R.drawable.red_circle);
+//                    hazardLevelText.setTextColor(Color.parseColor("#C6170B"));
+//                }
+//            }
+//            else {
+//                String unKnownString = getString(R.string.unKnown_Main);
+//                String noInspectionString = getString(R.string.noInspection_Main);
+//                String noIssuesFoundString = getString(R.string.noIssues_Main);
+//
+//                hazardLevelText.setText(unKnownString);
+//                imageIcon.setImageResource(R.drawable.gray_circle);
+//                lastDateOfInspection.setText(noInspectionString);
+//                numberOfIssues.setText(noIssuesFoundString);
+//            }
+//
+//            return itemView;
+//        }
+//    }
 
     public void sortRestaurants(){
         List<Restaurant> restaurantList = restaurantManager.getRestaurantList();
@@ -426,7 +591,10 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void checkForUpdate() {
+
         if(dataManager.check20hour()) {
+            dataManager.readLastModifiedRestaurant();
+            dataManager.readLastModifiedInspection();
             if(dataManager.checkIfUpdateNeeded()) {
                 Intent i = UpdateDataActivity.makeIntentForUpdateData(MainActivity.this);
                 startActivityForResult(i, ACTIVITY_RESULT_UPDATE);
@@ -495,10 +663,24 @@ public class MainActivity extends AppCompatActivity {
                 restaurant.setType(tokens[4].replace("\"", ""));
                 restaurant.setLatitude(Double.parseDouble(tokens[5]));
                 restaurant.setLongitude(Double.parseDouble(tokens[6]));
+                restaurant.setFavourite(false);
 
                 String iconName = image + Integer.toString(i++);
                 restaurant.setIconName(iconName);
 
+                SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+                Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+
+                /**
+                 * _________________________ I T E R A T I O N 3 _____________________________________________
+                 */
+                for(String favRestaurantString: favourites_list) {
+                    Gson gson = new Gson();
+                    Restaurant favRestaurant = gson.fromJson(favRestaurantString, Restaurant.class);
+                    if(favRestaurant.getTrackingNumber().equals(restaurant.getTrackingNumber())) {
+                        restaurant.setFavourite(true);
+                    }
+                }
                 restaurantManager.add(restaurant);
                 restaurantList.add(restaurant);
             }
@@ -566,9 +748,6 @@ public class MainActivity extends AppCompatActivity {
                         );
 
                         if (tokens[5].length() > 0) {
-                            /**
-                             * CHeck if where there is more than 1 violations or not
-                             */
                             if (!tokens[5].contains("|")) {
                                 String[] violationStringArray = tokens[5].split(",");
 
@@ -615,6 +794,61 @@ public class MainActivity extends AppCompatActivity {
         return new Violation(violationNum , criticalOrNon, description, isRepeat);
     }
 
+
+
+    /**
+     * _____________________________ I T E R A T I O N 3 _______________________________________________________________
+     */
+    private void checkForUpdateFavRestaurant() {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        boolean checkForFav = false;
+        for (String resString: favourites_list) {
+            Gson gson = new Gson();
+            Restaurant oldRestaurant = gson.fromJson(resString, Restaurant.class);
+            for (Restaurant newRestaurant: restaurantManager) {
+                if (newRestaurant.getTrackingNumber().equals(oldRestaurant.getTrackingNumber())) {
+                    if (newRestaurant.getInspections().size() != oldRestaurant.getInspections().size()) {
+                        newRestaurantList.add(newRestaurant);
+                        checkForFav = true;
+                        removeFromFavourites(oldRestaurant);
+                        addToFavourites(newRestaurant);
+                    }
+                }
+            }
+        }
+        editor.putStringSet("Favourites", favourites_list).apply();
+        /**
+         * https://stackoverflow.com/questions/5374546/passing-arraylist-through-intent Passing array list through intent
+         */
+        if (checkForFav == true) {
+            Gson g = new Gson();
+            String newRestaurantListString = g.toJson(newRestaurantList);
+            Intent intent = new Intent(this, NewInspectionActivity.class);
+            intent.putExtra("list_newRestaurant_as_string", newRestaurantListString);
+            startActivity(intent);
+        }
+    }
+    private void addToFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.add(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
+
+    private void removeFromFavourites(Restaurant restaurant) {
+        SharedPreferences pref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        Set<String> favourites_list = new HashSet<>(pref.getStringSet("favourites", new HashSet<String>()));
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(restaurant);
+        favourites_list.remove(json);
+        editor.putStringSet("favourites", favourites_list).apply();
+    }
     @Override
     public void onBackPressed(){
         finishAffinity();
@@ -636,3 +870,21 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
+
+
+
+
+
+
+/**
+ * __________ IGNORE BELOW _________
+ * Bring these to onCreate to test for update function
+ */
+
+//        SharedPreferences pref = getSharedPreferences("AppPrefs", 0);
+//        String a = pref.getString("last_updated", null);
+//        String b = pref.getString("last_modified_inspections", null);
+//        String c = pref.getString("last_modified_restaurants", null);
+//        Log.i("AAAAA", "aaaa " + a);
+//        Log.i("AAAAA", "aaaa " + b);
+//        Log.i("AAAAA", "aaaa " + c);

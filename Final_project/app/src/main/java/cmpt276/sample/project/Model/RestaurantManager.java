@@ -40,11 +40,17 @@ public class RestaurantManager implements Iterable<Restaurant>{
         restaurantManager = null;
     }
     public Restaurant getRestaurant(int n){return restaurantList.get(n);}
+    public Restaurant getRestaurant(String trackingNumber){
+        for(Restaurant res : restaurantManager){
+            if(res.getTrackingNumber().equals(trackingNumber)){
+                return res;
+            }
+        }
+        return null;
+    }
     public int getAccount(){return account;}
 
-    public List<Restaurant> getRestaurantList() {
-        return restaurantList;
-    }
+    public List<Restaurant> getRestaurantList() { return restaurantList; }
 
     @Override
     public Iterator<Restaurant> iterator() {
