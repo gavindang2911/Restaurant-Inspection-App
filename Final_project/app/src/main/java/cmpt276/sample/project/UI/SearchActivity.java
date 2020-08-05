@@ -10,10 +10,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
+import cmpt276.sample.project.Model.InspectionManager;
+import cmpt276.sample.project.Model.RestaurantManager;
 import cmpt276.sample.project.R;
 
 public class SearchActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_SEARCH = 110;
+
+    private static final String FROM_ACTIVITY = "fromActivity";
+    private static final String FROM_MAP = "fromMap";
+    private static final String HAZARD_LEVEL = "hazard_level";
+    private static final String FAVOURITE = "favourite_or_not";
+    private static final String LAGER_THAN_NUM= "lager_than";
+    private static final String LESS_THAN_NUM = "less_than";
+    private static final String RESET = "reset";
+    private static final String SEARCH_TEXT = "search_text";
+
+    private static int fromActivity = -1;
+    private static int fromMap = -1;
+
     int greenButton = 0;
     int redButton = 0;
     int orangeButton = 0;
@@ -21,7 +36,8 @@ public class SearchActivity extends AppCompatActivity {
     int largerNum = -1;
     int lessNum = Integer.MAX_VALUE;
     String searchText = "";
-
+    String hazard_level = "";
+    String favourite_or_not = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +45,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         setUpSearch();
         setUpRequirement();
+        extractDataFromIntent(this.getIntent());
+        setUpReset();
     }
 
     /*
@@ -55,6 +73,7 @@ public class SearchActivity extends AppCompatActivity {
                     redButton = 1;
                     greenButton = 0;
                     orangeButton = 0;
+                    hazard_level = "High";
                 }else{
                     red.setBackgroundResource(R.drawable.red_outline_button);
                 }
@@ -71,6 +90,7 @@ public class SearchActivity extends AppCompatActivity {
                     redButton = 0;
                     greenButton = 0;
                     orangeButton = 1;
+                    hazard_level = "Moderate";
                 }else{
                     orange.setBackgroundResource(R.drawable.orange_outline_button);
                 }
@@ -87,6 +107,7 @@ public class SearchActivity extends AppCompatActivity {
                     redButton = 0;
                     greenButton = 1;
                     orangeButton = 0;
+                    hazard_level = "Low";
                 }else{
                     green.setBackgroundResource(R.drawable.green_outline_button);
                 }
@@ -99,9 +120,11 @@ public class SearchActivity extends AppCompatActivity {
                 if(favButton == 0){
                     favourite.setBackgroundResource(R.drawable.star_clicked);
                     favButton = 1;
+                    favourite_or_not = "yes";
                 }else{
                     favourite.setBackgroundResource(R.drawable.star_unclick);
                     favButton = 0;
+                    favourite_or_not = "no";
                 }
             }
         });
@@ -119,13 +142,66 @@ public class SearchActivity extends AppCompatActivity {
             searchText = searchView.getText().toString();
         }
     }
+
+    private void extractDataFromIntent(Intent intent)
+    {
+        fromActivity = intent.getIntExtra(FROM_ACTIVITY, -1);
+        fromMap = intent.getIntExtra(FROM_MAP, -1);
+
+    }
+
+    private void setUpReset(){
+        Button button = findViewById(R.id.buttonReset);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fromActivity == 1) {
+                    Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                    intent.putExtra(RESET, "yes");
+                    intent.putExtra(FAVOURITE, "");
+                    intent.putExtra(HAZARD_LEVEL, "");
+                    intent.putExtra(LAGER_THAN_NUM, -1);
+                    intent.putExtra(LESS_THAN_NUM, Integer.MAX_VALUE);
+                    intent.putExtra(SEARCH_TEXT, "");
+                    startActivityForResult(intent, 1);
+                }else if (fromMap == 1) {
+                    Intent intent = new Intent(SearchActivity.this, MapsActivity.class);
+                    intent.putExtra(RESET, "yes");
+                    intent.putExtra(FAVOURITE, "");
+                    intent.putExtra(HAZARD_LEVEL, "");
+                    intent.putExtra(LAGER_THAN_NUM, -1);
+                    intent.putExtra(LESS_THAN_NUM, Integer.MAX_VALUE);
+                    intent.putExtra(SEARCH_TEXT, "");
+                    startActivityForResult(intent, 2);
+                }
+            }
+        });
+    }
+
     private void setUpSearch(){
         Button button = findViewById(R.id.buttonSearch);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                startActivityForResult(intent, 1);
+                if (fromActivity == 1) {
+                    Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                    intent.putExtra(RESET, "no");
+                    intent.putExtra(FAVOURITE, favourite_or_not);
+                    intent.putExtra(HAZARD_LEVEL, hazard_level);
+                    intent.putExtra(LAGER_THAN_NUM, largerNum);
+                    intent.putExtra(LESS_THAN_NUM, lessNum);
+                    intent.putExtra(SEARCH_TEXT, searchText);
+                    startActivityForResult(intent, 1);
+                }else if (fromMap == 1) {
+                    Intent intent = new Intent(SearchActivity.this, MapsActivity.class);
+                    intent.putExtra(RESET, "no");
+                    intent.putExtra(FAVOURITE, favourite_or_not);
+                    intent.putExtra(HAZARD_LEVEL, hazard_level);
+                    intent.putExtra(LAGER_THAN_NUM, largerNum);
+                    intent.putExtra(LESS_THAN_NUM, lessNum);
+                    intent.putExtra(SEARCH_TEXT, searchText);
+                    startActivityForResult(intent, 2);
+                }
             }
         });
     }

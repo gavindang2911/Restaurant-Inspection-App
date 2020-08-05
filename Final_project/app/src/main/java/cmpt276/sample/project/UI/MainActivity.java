@@ -67,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_RESULT_SINGLE_RESTAURANT = 100;
     private static final int ACTIVITY_RESULT_SEARCH = 110;
 
+    private static final String FROM_ACTIVITY = "fromActivity";
+    private static final String FROM_MAP = "fromMap";
+    private static final String HAZARD_LEVEL = "hazard_level";
+    private static final String FAVOURITE = "favourite_or_not";
+    private static final String LAGER_THAN_NUM= "lager_than";
+    private static final String LESS_THAN_NUM = "less_than";
+    private static final String RESET = "reset";
+    private static final String SEARCH_TEXT = "search_text";
+
+    int largerNum = -1;
+    int lessNum = Integer.MAX_VALUE;
+    String searchText = "";
+    String hazard_level = "";
+    String favourite_or_not = "";
+    String reset = "";
+
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
@@ -113,7 +129,18 @@ public class MainActivity extends AppCompatActivity {
         sortRestaurants();
         restaurantListView();
         setUpMap();
+        extractDataFromIntent(this.getIntent());
         // --------------------------------------------------------------------------------------------------------
+    }
+
+    private void extractDataFromIntent(Intent intent)
+    {
+        largerNum = intent.getIntExtra(LAGER_THAN_NUM, -1);
+        lessNum = intent.getIntExtra(LESS_THAN_NUM, -1);
+        searchText = intent.getStringExtra(SEARCH_TEXT);
+        hazard_level = intent.getStringExtra(HAZARD_LEVEL);
+        favourite_or_not = intent.getStringExtra(FAVOURITE);
+        reset = intent.getStringExtra(RESET);
     }
 
     @Override
@@ -127,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId() == R.id.search_restaurant){
             Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(FROM_ACTIVITY, 1);
+            intent.putExtra(FROM_MAP, 0);
             startActivityForResult(intent, ACTIVITY_RESULT_SEARCH);
         }
         return super.onOptionsItemSelected(item);
