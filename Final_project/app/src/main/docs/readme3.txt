@@ -1,0 +1,1 @@
+The app supports English and Vietnamese languages
