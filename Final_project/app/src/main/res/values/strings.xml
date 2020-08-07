@@ -96,5 +96,19 @@
     <string name="noIssues_Main">0 issues found</string>
     <string name="restaurant_name">Restaurant Name</string>
 
+    <string name="hazard_level">Select Hazard Level of Restaurant:</string>
+    <string name="critical_violation">Number of Critical Violations in Last Year:</string>
+    <string name="low">Low</string>
+    <string name="moderate">Moderate</string>
+    <string name="high">High</string>
+    <string name="larger_than">&gt;=:</string>
+    <string name="input_critical_violation"># of Critical Violations</string>
+    <string name="less_than">&lt;=:</string>
+    <string name="favourite_text">Only Include ‘Favourite’ Restaurants:</string>
+    <string name="reset_button">reset</string>
+    <string name="search_button">Search</string>
+
+    <string name="search_menu">Search</string>
+
 
 </resources>

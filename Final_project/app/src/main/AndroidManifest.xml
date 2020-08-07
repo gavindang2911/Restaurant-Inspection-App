@@ -31,6 +31,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".UI.SearchActivity"
+            android:label="@string/search_menu"></activity>
+
         <activity
             android:name=".UI.MapsActivity"
             android:label="@string/title_activity_maps" />
