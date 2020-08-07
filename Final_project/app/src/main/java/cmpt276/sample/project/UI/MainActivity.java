@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
-
+ 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
