@@ -31,6 +31,13 @@ import cmpt276.sample.project.Model.DateUtils;
 import cmpt276.sample.project.Model.Restaurant;
 import cmpt276.sample.project.R;
 
+/**
+ * NewInspection Activity for new inspections of the fav restaurants.
+ *
+ * @author Gavin Dang, ttd6
+ * @author Lu Xi Wang, lxwang
+ * @author Shan Qing, sqing
+ */
 public class NewInspectionActivity extends AppCompatActivity {
     private List<Restaurant> restaurantsList = new ArrayList<>();
 
