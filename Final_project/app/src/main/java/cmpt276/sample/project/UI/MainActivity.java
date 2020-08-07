@@ -29,6 +29,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,8 +43,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 import cmpt276.sample.project.Model.DataManager;
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RestaurantManager restaurantManager = RestaurantManager.getInstance();
     private List<Restaurant> restaurantList = new ArrayList<>();
+    private List<Restaurant> newRestaurantList = new ArrayList<>();
     private InspectionManager inspectionManager = InspectionManager.getInstance();
     private DataManager dataManager;
 
@@ -234,25 +239,13 @@ public class MainActivity extends AppCompatActivity {
 
             Restaurant currentRestaurant = restaurantManager.getRestaurant(position);
 
-            //set the view
-            /*
-            Site fr image
-            https://www.flaticon.com/free-icon/diet_2906325
-            https://commons.wikimedia.org/wiki/File:7-eleven_logo.svg
-            https://fontmeme.com/mcdonalds-font/
-            https://1000logos.net/starbucks-logo/
-            https://www.facebook.com/Freshslice/
-            https://www.facebook.com/BlenzCoffee/
-            https://logos.fandom.com/wiki/Safeway
-            https://www.glassdoor.ca/Benefits/Save-On-Foods-Canada-Benefits-EI_IE316196.0,13_IL.14,20_IN3.htm
-            https://expandedramblings.com/index.php/tim-hortons-statistics-facts/
-            https://www.pngitem.com/middle/ibibJio_burger-king-logo-in-helvetica-round-brand-logo/
-            https://www.amazon.co.uk/KFC-Logo-Bumper-Sticker-12/dp/B00GAZY70S
-            https://www.tripadvisor.ca/LocationPhotoDirectLink-g312583-d8495003-i156134269-Domino_s_Pizza_Hatfield-Pretoria_Gauteng.html
-            https://getvectorlogo.com/boston-pizza-vector-logo-svg/
-            https://www.vippng.com/ps/restaurant-icon/
+            ImageView imageViewFavourite = (ImageView)itemView.findViewById(R.id.imageViewFavouriteMain);
+            if (currentRestaurant.isFavourite()) {
+                imageViewFavourite.setVisibility(View.VISIBLE);
+            } else {
+                imageViewFavourite.setVisibility(View.INVISIBLE);
+            }
 
-             */
 
             ImageView imageView = itemView.findViewById(R.id.item_image);
             if(currentRestaurant.getName().contains("Boston Pizza")){

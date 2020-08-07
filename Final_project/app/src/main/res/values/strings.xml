@@ -109,6 +109,7 @@
     <string name="noInspection_Main">No Inspections</string>
     <string name="noIssues_Main">0 issues found</string>
     <string name="restaurant_name">Restaurant Name</string>
+    <string name="search_menu">search_menu</string>
 
 
 </resources>
