@@ -28,6 +28,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,8 +42,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 import cmpt276.sample.project.Model.DataManager;
@@ -155,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(FROM_ACTIVITY, 1);
             intent.putExtra(FROM_MAP, 0);
+            intent.putExtra(FAVOURITE, favourite_or_not);
+            intent.putExtra(HAZARD_LEVEL, hazard_level);
+            intent.putExtra(LAGER_THAN_NUM, largerNum);
+            intent.putExtra(LESS_THAN_NUM, lessNum);
+            intent.putExtra(SEARCH_TEXT, searchText);
+            
             startActivityForResult(intent, ACTIVITY_RESULT_SEARCH);
         }
         return super.onOptionsItemSelected(item);

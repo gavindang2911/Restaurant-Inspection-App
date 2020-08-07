@@ -63,6 +63,44 @@ public class SearchActivity extends AppCompatActivity {
         EditText lessThan = findViewById(R.id.editTextTextLess);
 
 
+        if (hazard_level.equals("High")) {
+            red.setBackgroundResource(R.drawable.red_button);
+            redButton = 1;
+            greenButton = 0;
+            orangeButton = 0;
+        } else if (hazard_level.equals("Low")) {
+            green.setBackgroundResource(R.drawable.green_button);
+            redButton = 0;
+            greenButton = 1;
+            orangeButton = 0;
+        } else if (hazard_level.equals("Moderate")) {
+            orange.setBackgroundResource(R.drawable.orange_button);
+            redButton = 0;
+            greenButton = 0;
+            orangeButton = 1;
+        }
+
+        if (searchText != ""){
+            searchView.setText(searchText);
+        }
+
+        if (largerNum != -1) {
+            largerThan.setText(largerNum);
+        }
+
+        if (lessNum != Integer.MAX_VALUE) {
+            lessThan.setText(lessNum);
+        }
+
+        if (favourite_or_not == "yes") {
+            favourite.setBackgroundResource(R.drawable.star_clicked);
+            favButton = 1;
+        } else {
+            favourite.setBackgroundResource(R.drawable.star_unclick);
+            favButton = 0;
+            favourite_or_not = "no";
+        }
+        
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +186,11 @@ public class SearchActivity extends AppCompatActivity {
         fromActivity = intent.getIntExtra(FROM_ACTIVITY, -1);
         fromMap = intent.getIntExtra(FROM_MAP, -1);
 
+        largerNum = intent.getIntExtra(LAGER_THAN_NUM, -1);
+        lessNum = intent.getIntExtra(LESS_THAN_NUM, -1);
+        searchText = intent.getStringExtra(SEARCH_TEXT);
+        hazard_level = intent.getStringExtra(HAZARD_LEVEL);
+        favourite_or_not = intent.getStringExtra(FAVOURITE);
     }
 
     private void setUpReset(){
